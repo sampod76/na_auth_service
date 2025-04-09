@@ -1,28 +1,28 @@
-import { model, PipelineStage, Schema, Types } from 'mongoose';
+import { model, PipelineStage, Schema, Types } from "mongoose";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
+} from "../../../../global/enum_constant_type";
 
-import { LookupAnyRoleDetailsReusable } from '../../../../helper/lookUpResuable';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
-import { GroupMemberModel, IGroupMember } from './interface.groupUserMember';
+import { LookupAnyRoleDetailsReusable } from "../../../../helper/lookUpResuable";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
+import { GroupMemberModel, IGroupMember } from "./interface.groupUserMember";
 
 const GroupMemberSchema = new Schema<IGroupMember, GroupMemberModel>(
   {
     sender: mongooseIUserRef,
     receiver: mongooseIUserRef,
-    groupId: { type: Schema.Types.ObjectId, ref: 'Groups' },
+    groupId: { type: Schema.Types.ObjectId, ref: "Groups" },
     role: {
       type: String,
-      enum: ['admin', 'member'],
-      default: 'member',
+      enum: ["admin", "member"],
+      default: "member",
     },
     //
-    orderId: { type: Schema.Types.ObjectId, ref: 'Order' },
+    orderId: { type: Schema.Types.ObjectId, ref: "Order" },
     block: {
       isBlock: {
         type: Boolean,
@@ -39,7 +39,7 @@ const GroupMemberSchema = new Schema<IGroupMember, GroupMemberModel>(
       message: String,
       messageId: {
         type: Schema.Types.ObjectId,
-        ref: 'Message',
+        ref: "Message",
       },
       createdAt: Date,
     },
@@ -99,20 +99,20 @@ GroupMemberSchema.statics.isGroupMemberExistMethod = async function (
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'sender.role',
-          idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-          pipeLineMatchField: '_id', //$_id
-          outPutFieldName: 'details',
-          margeInField: 'sender',
+          roleMatchFiledName: "sender.role",
+          idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+          pipeLineMatchField: "_id", //$_id
+          outPutFieldName: "details",
+          margeInField: "sender",
           project: option.project ? option.project : { __v: 0 },
           //project: { name: 1, country: 1, profileImage: 1, email: 1 },
         },
         {
-          roleMatchFiledName: 'receiver.role',
-          idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-          pipeLineMatchField: '_id', //$_id
-          outPutFieldName: 'details',
-          margeInField: 'receiver',
+          roleMatchFiledName: "receiver.role",
+          idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+          pipeLineMatchField: "_id", //$_id
+          outPutFieldName: "details",
+          margeInField: "receiver",
           project: option.project ? option.project : { __v: 0 },
           //project: { name: 1, country: 1, profileImage: 1, email: 1 },
         },
@@ -149,7 +149,7 @@ GroupMemberSchema.statics.isGroupMemberExistMethod = async function (
 */
 
 // after save then data then call this hook
-GroupMemberSchema.post('save', async function (data: IGroupMember, next: any) {
+GroupMemberSchema.post("save", async function (data: IGroupMember, next: any) {
   try {
     /* // --baseuse frindShip data in populate details-- but this details in not details
      await redisClient.set(
@@ -166,13 +166,13 @@ GroupMemberSchema.post('save', async function (data: IGroupMember, next: any) {
 });
 // after findOneAndUpdate then data then call this hook
 GroupMemberSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: IGroupMember, next: any) {
     try {
       const delDate = [
         ENUM_REDIS_KEY.REDIS_IN_SAVE_GroupMemberAndUserId +
           data.receiver.userId +
-          ':' +
+          ":" +
           data?._id,
       ];
       if (data?.receiver?.userId) {
@@ -197,7 +197,7 @@ GroupMemberSchema.post(
 );
 // after findOneAndDelete then data then call this hook
 GroupMemberSchema.post(
-  'findOneAndDelete',
+  "findOneAndDelete",
   async function (data: IGroupMember, next: any) {
     try {
       //
@@ -213,7 +213,7 @@ GroupMemberSchema.post(
         whenMyReceiver,
         ENUM_REDIS_KEY.REDIS_IN_SAVE_GroupMemberAndUserId +
           data.receiver.userId +
-          ':' +
+          ":" +
           data?._id,
       ]);
       // await redisClient.del(
@@ -227,6 +227,6 @@ GroupMemberSchema.post(
 );
 
 export const GroupMember = model<IGroupMember, GroupMemberModel>(
-  'GroupMember',
+  "GroupMember",
   GroupMemberSchema,
 );

@@ -1,8 +1,8 @@
-import { Model } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { IUserRef } from '../allUser/typesAndConst';
-import { RoutingReminderValidation } from './validation.RoutingReminder';
+import { Model } from "mongoose";
+import { z } from "zod";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { IUserRef } from "../allUser/typesAndConst";
+import { RoutingReminderValidation } from "./validation.RoutingReminder";
 
 export type IRoutingReminderFilters = {
   searchTerm?: string;
@@ -20,8 +20,8 @@ export type IRoutingReminderFilters = {
   needProperty?: string;
   createdAtFrom?: string;
   createdAtTo?: string;
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
   children?: string; // Added children
   cache?: string; // Added cache
   productId?: string; // Added productId

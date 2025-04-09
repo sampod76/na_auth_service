@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
 
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
-import { UserLoginHistoryFilterableFields } from './loginHistory.constant';
-import { IUserLoginHistory } from './loginHistory.interface';
-import { UserLoginHistoryService } from './loginHistory.service';
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
+import { UserLoginHistoryFilterableFields } from "./loginHistory.constant";
+import { IUserLoginHistory } from "./loginHistory.interface";
+import { UserLoginHistoryService } from "./loginHistory.service";
 
 const getAllUserLoginHistorys = catchAsync(
   async (req: Request, res: Response) => {
@@ -22,7 +22,7 @@ const getAllUserLoginHistorys = catchAsync(
     sendResponse<IUserLoginHistory[]>(req, res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'UserLoginHistorys retrieved successfully !',
+      message: "UserLoginHistorys retrieved successfully !",
       meta: result.meta,
       data: result.data,
     });
@@ -38,7 +38,7 @@ const getSingleUserLoginHistory = catchAsync(
     sendResponse<IUserLoginHistory>(req, res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'UserLoginHistory retrieved successfully !',
+      message: "UserLoginHistory retrieved successfully !",
       data: result,
     });
   },
@@ -57,7 +57,7 @@ const updateUserLoginHistory = catchAsync(
     sendResponse<IUserLoginHistory>(req, res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'UserLoginHistory updated successfully !',
+      message: "UserLoginHistory updated successfully !",
       data: result,
     });
   },
@@ -75,7 +75,7 @@ const deleteUserLoginHistory = catchAsync(
     sendResponse<IUserLoginHistory>(req, res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'UserLoginHistory deleted successfully !',
+      message: "UserLoginHistory deleted successfully !",
       data: result,
     });
   },

@@ -1,8 +1,8 @@
-import { Kafka, logLevel } from 'kafkajs';
-import config from '../../config';
-import { logger } from '../share/logger';
-import { ENUM_KAFKA_TOPIC } from './consent.kafka';
-import { consumerKafka } from './consumer.kafka';
+import { Kafka, logLevel } from "kafkajs";
+import config from "../../config";
+import { logger } from "../share/logger";
+import { ENUM_KAFKA_TOPIC } from "./consent.kafka";
+import { consumerKafka } from "./consumer.kafka";
 
 export const kafkaClient = new Kafka({
   clientId: config.kafka.clientId as string, //any string example your project name: sampod
@@ -61,7 +61,7 @@ export async function kafkaInit() {
             },
           ],
         });
-        console.log('🚀 ~ kafkaInit ~ res:', res);
+        console.log("🚀 ~ kafkaInit ~ res:", res);
       } else {
         console.log(`Topic "${topic}" already exists.`);
         // Increase the number of partitions
@@ -97,10 +97,10 @@ export async function kafkaInit() {
     await admin.disconnect();
     await consumerKafka(); // accepted all message/request
   } catch (error) {
-    if (config.env === 'production') {
+    if (config.env === "production") {
       logger.error(error);
     } else {
-      console.log('🚀 ~ kafkaInit ~ error:', error);
+      console.log("🚀 ~ kafkaInit ~ error:", error);
     }
   }
 }

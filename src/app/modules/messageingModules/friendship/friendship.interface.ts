@@ -1,9 +1,9 @@
-import { Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, I_YN } from '../../../../global/enum_constant_type';
+import { Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, I_YN } from "../../../../global/enum_constant_type";
 
-import { IUserRef } from '../../allUser/typesAndConst';
-import { friendshipValidation } from './friendship.validation';
+import { IUserRef } from "../../allUser/typesAndConst";
+import { friendshipValidation } from "./friendship.validation";
 
 export type IFriendShipFilters = {
   senderUserId?: string;

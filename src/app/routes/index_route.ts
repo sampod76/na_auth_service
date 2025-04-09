@@ -1,131 +1,131 @@
-import express from 'express';
+import express from "express";
 
-import { AllTextFieldRoute } from '../modules/AllTextField/route.AllTextField';
+import { AllTextFieldRoute } from "../modules/AllTextField/route.AllTextField";
 
-import { userRoutes } from '../modules/allUser/user/user.route';
-import { AuthRoutes } from '../modules/auth/auth.route';
-import { AWSRoute } from '../modules/aws/route.AWS';
-import { CategoryRoute } from '../modules/category/route.category';
-import { UserLoginHistoryRoutes } from '../modules/loginHistory/loginHistory.route';
-import { NotificationRoute } from '../modules/notification/notification.route';
+import { userRoutes } from "../modules/allUser/user/user.route";
+import { AuthRoutes } from "../modules/auth/auth.route";
+import { AWSRoute } from "../modules/aws/route.AWS";
+import { CategoryRoute } from "../modules/category/route.category";
+import { UserLoginHistoryRoutes } from "../modules/loginHistory/loginHistory.route";
+import { NotificationRoute } from "../modules/notification/notification.route";
 
-import { adminRoutes } from '../modules/allUser/admin/admin.route';
+import { adminRoutes } from "../modules/allUser/admin/admin.route";
 
-import { AdminSettingRoute } from '../modules/adminSetting/route.adminSetting';
+import { AdminSettingRoute } from "../modules/adminSetting/route.adminSetting";
 
-import { AddToCartRoute } from '../modules/addToCart/route.addToCart';
-import { GeneralUserRoutes } from '../modules/allUser/generalUser/route.generalUser';
-import { FavoriteProductRoute } from '../modules/favoriteProduct/route.favoriteProduct';
-import { FriendShipsRoute } from '../modules/messageingModules/friendship/friendship.route';
-import { ChatMessageRoute } from '../modules/messageingModules/message/messages.route';
-import { OrdersRoute } from '../modules/paymentModule/order/route.order';
-import { PaymentRoute } from '../modules/paymentModule/payment/payment.router';
-import { PaymentHistoryRoute } from '../modules/paymentModule/paymentHistory/route.paymentHistory';
-import { ProductCategoryRoute } from '../modules/productCategory/route.productCategory';
-import { ProductRoute } from '../modules/productModule/products/route.products';
-import { UserSaveProductRoute } from '../modules/productModule/userSaveProduct/route.userSaveProduct';
-import { RoutingReminderRoute } from '../modules/routingReminder/route.RoutingReminder';
-import { ServiceLoggerRoute } from '../modules/serviceLogger/route.serviceLogger';
-import { TipsAndGuidelineRoute } from '../modules/tipsAndGuideline/route.TipsAndGuideline';
+import { AddToCartRoute } from "../modules/addToCart/route.addToCart";
+import { GeneralUserRoutes } from "../modules/allUser/generalUser/route.generalUser";
+import { FavoriteProductRoute } from "../modules/favoriteProduct/route.favoriteProduct";
+import { FriendShipsRoute } from "../modules/messageingModules/friendship/friendship.route";
+import { ChatMessageRoute } from "../modules/messageingModules/message/messages.route";
+import { OrdersRoute } from "../modules/paymentModule/order/route.order";
+import { PaymentRoute } from "../modules/paymentModule/payment/payment.router";
+import { PaymentHistoryRoute } from "../modules/paymentModule/paymentHistory/route.paymentHistory";
+import { ProductCategoryRoute } from "../modules/productCategory/route.productCategory";
+import { ProductRoute } from "../modules/productModule/products/route.products";
+import { UserSaveProductRoute } from "../modules/productModule/userSaveProduct/route.userSaveProduct";
+import { RoutingReminderRoute } from "../modules/routingReminder/route.RoutingReminder";
+import { ServiceLoggerRoute } from "../modules/serviceLogger/route.serviceLogger";
+import { TipsAndGuidelineRoute } from "../modules/tipsAndGuideline/route.TipsAndGuideline";
 
 const router = express.Router();
 
 const moduleRoutes = [
   {
-    path: '/auth',
+    path: "/auth",
     route: AuthRoutes,
   },
   {
-    path: '/users',
+    path: "/users",
     route: userRoutes,
   },
   {
-    path: '/admins',
+    path: "/admins",
     route: adminRoutes,
   },
 
   {
-    path: '/general-users',
+    path: "/general-users",
     route: GeneralUserRoutes,
   },
 
   {
-    path: '/login_history',
+    path: "/login_history",
     route: UserLoginHistoryRoutes,
   },
 
   {
-    path: '/category',
+    path: "/category",
     route: CategoryRoute,
   },
   {
-    path: '/products-category',
+    path: "/products-category",
     route: ProductCategoryRoute,
   },
   {
-    path: '/products',
+    path: "/products",
     route: ProductRoute,
   },
   {
-    path: '/user-save-products',
+    path: "/user-save-products",
     route: UserSaveProductRoute,
   },
   {
-    path: '/add-to-cart',
+    path: "/add-to-cart",
     route: AddToCartRoute,
   },
   {
-    path: '/favorite-products',
+    path: "/favorite-products",
     route: FavoriteProductRoute,
   },
   {
-    path: '/service-logger',
+    path: "/service-logger",
     route: ServiceLoggerRoute,
   },
   {
-    path: '/routing-reminder',
+    path: "/routing-reminder",
     route: RoutingReminderRoute,
   },
 
   {
-    path: '/tips-guideline',
+    path: "/tips-guideline",
     route: TipsAndGuidelineRoute,
   },
   {
-    path: '/friend-ship',
+    path: "/friend-ship",
     route: FriendShipsRoute,
   },
   {
-    path: '/chat-messages',
+    path: "/chat-messages",
     route: ChatMessageRoute,
   },
 
   {
-    path: '/all-text-fields',
+    path: "/all-text-fields",
     route: AllTextFieldRoute,
   },
   {
-    path: '/payment',
+    path: "/payment",
     route: PaymentRoute,
   },
   {
-    path: '/payment-history',
+    path: "/payment-history",
     route: PaymentHistoryRoute,
   },
   {
-    path: '/order',
+    path: "/order",
     route: OrdersRoute,
   },
   {
-    path: '/notification',
+    path: "/notification",
     route: NotificationRoute,
   },
   {
-    path: '/admin-setting',
+    path: "/admin-setting",
     route: AdminSettingRoute,
   },
   {
-    path: '/aws',
+    path: "/aws",
     route: AWSRoute,
   },
 ];

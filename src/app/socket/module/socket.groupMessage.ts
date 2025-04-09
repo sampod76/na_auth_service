@@ -1,15 +1,15 @@
-import httpStatus from 'http-status';
-import { Server, Socket } from 'socket.io';
-import { produceGroupMessageByKafka } from '../../kafka/producer.kafka';
-import { IUserRef } from '../../modules/allUser/typesAndConst';
-import { IGroupMessage } from '../../modules/messageingModules/groupMessage/interface.groupMessage';
-import { groupMessageZodData } from '../../modules/messageingModules/groupMessage/validation.groupMessage';
-import { GroupMember } from '../../modules/messageingModules/groupUserMember/models.groupUserMember';
-import { findGroupMemberInRedisOrDb } from '../../modules/messageingModules/groupUserMember/utils.groupUserMember';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
-import { redisClient } from '../../redis/redis';
-import { socketErrorHandler } from '../socket.service';
-import { ENUM_SOCKET_EMIT_ON_TYPE } from '../socketTypes';
+import httpStatus from "http-status";
+import { Server, Socket } from "socket.io";
+import { produceGroupMessageByKafka } from "../../kafka/producer.kafka";
+import { IUserRef } from "../../modules/allUser/typesAndConst";
+import { IGroupMessage } from "../../modules/messageingModules/groupMessage/interface.groupMessage";
+import { groupMessageZodData } from "../../modules/messageingModules/groupMessage/validation.groupMessage";
+import { GroupMember } from "../../modules/messageingModules/groupUserMember/models.groupUserMember";
+import { findGroupMemberInRedisOrDb } from "../../modules/messageingModules/groupUserMember/utils.groupUserMember";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
+import { redisClient } from "../../redis/redis";
+import { socketErrorHandler } from "../socket.service";
+import { ENUM_SOCKET_EMIT_ON_TYPE } from "../socketTypes";
 export const groupMessageSocket = (
   io: Server,
   socket: Socket,
@@ -20,15 +20,15 @@ export const groupMessageSocket = (
     ENUM_SOCKET_EMIT_ON_TYPE.CLIENT_TO_SERVER_GROUP_MESSAGE,
     async (messageData: IGroupMessage | string, callback: any) => {
       try {
-        if (typeof messageData === 'string') {
+        if (typeof messageData === "string") {
           messageData = JSON.parse(messageData);
         }
 
-        if (typeof messageData !== 'object' || Array.isArray(messageData)) {
+        if (typeof messageData !== "object" || Array.isArray(messageData)) {
           const errorMessage = {
             success: false,
             statusCode: httpStatus.NOT_ACCEPTABLE,
-            message: 'Invalid message data',
+            message: "Invalid message data",
           };
           return socketErrorHandler({ socket, callback, errorMessage });
           // return callback({
@@ -70,21 +70,21 @@ export const groupMessageSocket = (
               ENUM_REDIS_KEY.REDIS_IN_SAVE_FRIENDSHIP +
                 messageData?.groupMemberId,
               JSON.stringify(getGroupMember),
-              'EX',
+              "EX",
               24 * 60, // 1 day to second
             );
           } else {
             const errorMessage = {
               success: false,
               statusCode: 404,
-              message: 'Friendship not found',
+              message: "Friendship not found",
             };
             return socketErrorHandler({ socket, callback, errorMessage });
           }
         }
 
         //
-        if (typeof getGroupMember === 'string') {
+        if (typeof getGroupMember === "string") {
           getGroupMember = JSON.parse(getGroupMember);
         }
         //!-------------auth--message-----------
@@ -92,7 +92,7 @@ export const groupMessageSocket = (
           const errorMessage = {
             success: false,
             statusCode: httpStatus.FORBIDDEN,
-            message: 'Forbidden',
+            message: "Forbidden",
           };
           return socketErrorHandler({ socket, callback, errorMessage });
         } else if (
@@ -102,21 +102,21 @@ export const groupMessageSocket = (
           const errorMessage = {
             success: false,
             statusCode: httpStatus.FORBIDDEN,
-            message: 'Forbidden',
+            message: "Forbidden",
           };
           return socketErrorHandler({ socket, callback, errorMessage });
         } else if (getGroupMember?.requestAccept == false) {
           const errorMessage = {
             success: false,
             statusCode: httpStatus.FORBIDDEN,
-            message: 'You are not allowed to send message',
+            message: "You are not allowed to send message",
           };
           return socketErrorHandler({ socket, callback, errorMessage });
         } else if (getGroupMember?.block?.isBlock == true) {
           const errorMessage = {
             success: false,
             statusCode: httpStatus.FORBIDDEN,
-            message: 'Block. you are not allowed to send message',
+            message: "Block. you are not allowed to send message",
           };
           return socketErrorHandler({ socket, callback, errorMessage });
         } else {
@@ -124,10 +124,10 @@ export const groupMessageSocket = (
           messageData.sender = getGroupMember?.receiver;
         }
         //---------web or nodejs is support callback but flutter not support callback--then when request flutter then not have any callback function but same project request web --solution is check callback is function--------
-        if (callback && typeof callback === 'function') {
+        if (callback && typeof callback === "function") {
           callback({
             success: true,
-            message: 'Message delivered successfully',
+            message: "Message delivered successfully",
             data: {
               ...messageData,
               createdAt: new Date(),
@@ -140,7 +140,7 @@ export const groupMessageSocket = (
           //!--- only flutter -- because flutter is not supported callback
           socket.emit(ENUM_SOCKET_EMIT_ON_TYPE.CLIENT_TO_SERVER_GROUP_MESSAGE, {
             success: true,
-            message: 'Message delivered successfully',
+            message: "Message delivered successfully",
             data: {
               createTime: new Date(),
               ...messageData,
@@ -160,7 +160,7 @@ export const groupMessageSocket = (
               messageData.groupId,
             {
               success: true,
-              message: 'Message delivered successfully',
+              message: "Message delivered successfully",
               data: {
                 createTime: new Date(),
                 ...messageData,
@@ -183,7 +183,7 @@ export const groupMessageSocket = (
         const errorMessage = {
           success: false,
           statusCode: error?.statusCode || 400,
-          message: error?.message || 'Server error',
+          message: error?.message || "Server error",
           error,
         };
         return socketErrorHandler({ socket, callback, errorMessage });

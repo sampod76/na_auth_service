@@ -1,8 +1,8 @@
-import { Model } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { IUserRef } from '../allUser/typesAndConst';
-import { TipsAndGuidelineValidation } from './validation.TipsAndGuideline';
+import { Model } from "mongoose";
+import { z } from "zod";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { IUserRef } from "../allUser/typesAndConst";
+import { TipsAndGuidelineValidation } from "./validation.TipsAndGuideline";
 
 export type ITipsAndGuidelineFilters = {
   searchTerm?: string;
@@ -13,8 +13,8 @@ export type ITipsAndGuidelineFilters = {
   cache?: string;
   isDelete?: string | boolean;
   productId?: string;
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
   //
   myTips?: string;
   createdAtFrom?: string;

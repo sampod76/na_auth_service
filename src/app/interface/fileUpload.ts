@@ -30,8 +30,8 @@ export type IAws_MulterUploadFile = {
   location: string;
   etag: string;
 };
-export type IImagePlatform = 'imgbb' | 'cloudinary' | 'server' | 'aws' | string;
-export const I_IMAGE_PLATFORM_ARRAY = ['imgbb', 'cloudinary', 'server', 'aws'];
+export type IImagePlatform = "imgbb" | "cloudinary" | "server" | "aws" | string;
+export const I_IMAGE_PLATFORM_ARRAY = ["imgbb", "cloudinary", "server", "aws"];
 export type IFileAfterUpload = {
   mimetype: string;
   server_url?: string;

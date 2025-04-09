@@ -1,8 +1,8 @@
-import { Model } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { IUserRef } from '../allUser/typesAndConst';
-import { ServiceLoggerValidation } from './validation.serviceLogger';
+import { Model } from "mongoose";
+import { z } from "zod";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { IUserRef } from "../allUser/typesAndConst";
+import { ServiceLoggerValidation } from "./validation.serviceLogger";
 
 export type IServiceLoggerFilters = {
   searchTerm?: string;
@@ -13,8 +13,8 @@ export type IServiceLoggerFilters = {
   cache?: string;
   isDelete?: string | boolean;
 
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
   //-----category------
   Wash_Day_Mood?: string;
   Choice_of_Treatment?: string;

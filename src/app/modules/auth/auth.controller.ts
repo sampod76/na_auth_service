@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import config from '../../../config';
+import config from "../../../config";
 
-import { getDeviceInfo } from '../../../helper/getDeviceInfo';
-import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import sendResponse from '../../share/sendResponse';
-import { IUserRefAndDetails } from '../allUser/typesAndConst';
-import { User } from '../allUser/user/user.model';
-import { UserLoginHistory } from '../loginHistory/loginHistory.model';
-import { ILoginUserResponse, IRefreshTokenResponse } from './auth.interface';
-import { AuthService } from './auth.service';
+import { getDeviceInfo } from "../../../helper/getDeviceInfo";
+import ApiError from "../../errors/ApiError";
+import catchAsync from "../../share/catchAsync";
+import sendResponse from "../../share/sendResponse";
+import { IUserRefAndDetails } from "../allUser/typesAndConst";
+import { User } from "../allUser/user/user.model";
+import { UserLoginHistory } from "../loginHistory/loginHistory.model";
+import { ILoginUserResponse, IRefreshTokenResponse } from "./auth.interface";
+import { AuthService } from "./auth.service";
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   console.log(req.body);
@@ -21,15 +21,15 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   );
 
   const cookieOptions = {
-    secure: config.env === 'development' ? false : true,
+    secure: config.env === "development" ? false : true,
     httpOnly: true,
     // maxAge: parseInt(config.jwt.refresh_expires_in || '31536000000'),
     maxAge: 31536000000,
   };
 
-  if (config.env === 'production') {
+  if (config.env === "production") {
     //@ts-ignore
-    cookieOptions.sameSite = 'none';
+    cookieOptions.sameSite = "none";
   }
 
   /* 
@@ -44,19 +44,19 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
 */
 
   //@ts-ignore
-  res.cookie('refreshToken', refreshToken, cookieOptions);
-  res.cookie('ref', 'refreshTokenUnited', cookieOptions);
+  res.cookie("refreshToken", refreshToken, cookieOptions);
+  res.cookie("ref", "refreshTokenUnited", cookieOptions);
 
   sendResponse<ILoginUserResponse>(req, res, {
     statusCode: 200,
     success: true,
-    message: 'User logged in successfully',
+    message: "User logged in successfully",
     data: { userData, ...result },
   });
   if (req?.cookies?.refreshToken) {
     const checkLoginHistory = await UserLoginHistory.findOne({
       userId: userData._id,
-      user_agent: req.headers['user-agent'],
+      user_agent: req.headers["user-agent"],
       token: req?.cookies?.refreshToken,
     });
 
@@ -65,7 +65,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
       await UserLoginHistory.findOneAndUpdate(
         {
           userId: userData.userId,
-          user_agent: req.headers['user-agent'],
+          user_agent: req.headers["user-agent"],
           token: req?.cookies?.refreshToken,
         },
         {
@@ -76,12 +76,12 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     } else {
       // ! -------------- set login history function --------------
       const ip = req.clientIp;
-      const deviceInfo = getDeviceInfo(req.headers['user-agent'] as string);
+      const deviceInfo = getDeviceInfo(req.headers["user-agent"] as string);
       await UserLoginHistory.create({
         ip,
         //@ts-ignore
         userId: userData.userId,
-        user_agent: req.headers['user-agent'],
+        user_agent: req.headers["user-agent"],
         token: refreshToken,
         device_info: deviceInfo,
       });
@@ -91,12 +91,12 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   } else {
     // ! -------------- set login history function --------------
     const ip = req.clientIp;
-    const deviceInfo = getDeviceInfo(req.headers['user-agent'] as string);
+    const deviceInfo = getDeviceInfo(req.headers["user-agent"] as string);
 
     await UserLoginHistory.create({
       ip,
       userId: userData.userId,
-      user_agent: req.headers['user-agent'],
+      user_agent: req.headers["user-agent"],
       token: refreshToken,
       device_info: deviceInfo,
     });
@@ -115,15 +115,15 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   );
 
   const cookieOptions = {
-    secure: config.env === 'development' ? false : true,
+    secure: config.env === "development" ? false : true,
     httpOnly: true,
     // maxAge: parseInt(config.jwt.refresh_expires_in || '31536000000'),
     maxAge: 31536000000,
   };
 
-  if (config.env === 'production') {
+  if (config.env === "production") {
     //@ts-ignore
-    cookieOptions.sameSite = 'none';
+    cookieOptions.sameSite = "none";
   }
 
   /* 
@@ -135,13 +135,13 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
       maxAge: parseInt(config.jwt.refresh_expires_in || '31536000000'), 
   */
   //@ts-ignore
-  res.cookie('refreshToken', refreshToken, cookieOptions);
-  res.cookie('ref', 'refreshTokenUnited', cookieOptions);
+  res.cookie("refreshToken", refreshToken, cookieOptions);
+  res.cookie("ref", "refreshTokenUnited", cookieOptions);
 
   sendResponse<IRefreshTokenResponse>(req, res, {
     statusCode: 200,
     success: true,
-    message: 'User logged in successfully',
+    message: "User logged in successfully",
     data: result,
   });
 });
@@ -152,7 +152,7 @@ const logOut = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Logout successfully',
+    message: "Logout successfully",
   });
 });
 const enableTwoFactorAuth = catchAsync(async (req: Request, res: Response) => {
@@ -164,7 +164,7 @@ const enableTwoFactorAuth = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Logout successfully',
+    message: "Logout successfully",
     data: response,
   });
 });
@@ -177,7 +177,7 @@ const verifyTwoFactorAuth = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Logout successfully',
+    message: "Logout successfully",
     data: response,
   });
 });
@@ -190,7 +190,7 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Password changed successfully',
+    message: "Password changed successfully",
   });
 });
 
@@ -202,12 +202,12 @@ const forgotPass = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Check your email!',
+    message: "Check your email!",
   });
 });
 const checkOtp = catchAsync(async (req: Request, res: Response) => {
   if (isNaN(req.body.otp)) {
-    throw new ApiError(400, 'Invalid otp');
+    throw new ApiError(400, "Invalid otp");
   }
   req.body.otp = Number(req.body.otp);
 
@@ -216,7 +216,7 @@ const checkOtp = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Successfully match your OTP',
+    message: "Successfully match your OTP",
     data: { token: result?.authentication?.jwtToken },
   });
 });
@@ -226,7 +226,7 @@ const tokenToSetPassword = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Successfully change your password',
+    message: "Successfully change your password",
   });
 });
 
@@ -238,14 +238,14 @@ const profile = catchAsync(async (req: Request, res: Response) => {
     {
       isDelete: false,
       populate: true,
-      needProperty: ['rating', 'insights'],
+      needProperty: ["rating", "insights"],
     },
   );
 
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Successfully get your profile',
+    message: "Successfully get your profile",
     data: user,
   });
 });
@@ -253,7 +253,7 @@ const sendMailAuth = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Successful!',
+    message: "Successful!",
   });
 });
 

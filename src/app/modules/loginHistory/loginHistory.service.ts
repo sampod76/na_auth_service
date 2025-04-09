@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SortOrder, Types } from 'mongoose';
+import { SortOrder, Types } from "mongoose";
 
-import httpStatus from 'http-status';
+import httpStatus from "http-status";
 
-import { Request } from 'express';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import { paginationHelper } from '../../../helper/paginationHelper';
-import ApiError from '../../errors/ApiError';
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
-import { UserLoginHistorySearchableFields } from './loginHistory.constant';
+import { Request } from "express";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import { paginationHelper } from "../../../helper/paginationHelper";
+import ApiError from "../../errors/ApiError";
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
+import { UserLoginHistorySearchableFields } from "./loginHistory.constant";
 import {
   IUserLoginHistory,
   IUserLoginHistoryFilters,
-} from './loginHistory.interface';
-import { UserLoginHistory } from './loginHistory.model';
+} from "./loginHistory.interface";
+import { UserLoginHistory } from "./loginHistory.model";
 
 const getAllUserLoginHistorys = async (
   filters: IUserLoginHistoryFilters,
@@ -22,7 +22,7 @@ const getAllUserLoginHistorys = async (
 ): Promise<IGenericResponse<IUserLoginHistory[]>> => {
   const { searchTerm, ...filtersData } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -36,7 +36,7 @@ const getAllUserLoginHistorys = async (
       $or: UserLoginHistorySearchableFields.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -48,9 +48,9 @@ const getAllUserLoginHistorys = async (
         //@ts-ignore
         ([field, value]: [keyof typeof filtersData, string]) => {
           let modifyFiled;
-          if (field === 'user') {
+          if (field === "user") {
             modifyFiled = {
-              ['user']: new Types.ObjectId(value),
+              ["user"]: new Types.ObjectId(value),
             };
           } else {
             modifyFiled = { [field]: value };
@@ -99,7 +99,7 @@ const updateUserLoginHistory = async (
 ): Promise<IUserLoginHistory | null> => {
   const isExist = await UserLoginHistory.findById({ _id: id });
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'UserLoginHistory not found !');
+    throw new ApiError(httpStatus.NOT_FOUND, "UserLoginHistory not found !");
   }
 
   const { ...UserLoginHistoryData } = payload;
@@ -128,16 +128,16 @@ const deleteUserLoginHistory = async (
   const isExist = await UserLoginHistory.findById({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'UserLoginHistory not found !');
+    throw new ApiError(httpStatus.NOT_FOUND, "UserLoginHistory not found !");
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.admin &&
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
-  if (filter.delete === 'yes') {
+  if (filter.delete === "yes") {
     // await UserLoginHistory.findByIdAndDelete({ _id: id });
   } else {
     await UserLoginHistory.findByIdAndDelete({ _id: id });

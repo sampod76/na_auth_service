@@ -1,11 +1,11 @@
-import { Types } from 'mongoose';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
+import { Types } from "mongoose";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../redis/service.redis';
-import { IOoptestmodual } from './interface.Ooptestmodual';
-import { Ooptestmodual } from './model.Ooptestmodual';
+} from "../../redis/service.redis";
+import { IOoptestmodual } from "./interface.Ooptestmodual";
+import { Ooptestmodual } from "./model.Ooptestmodual";
 
 export class OoptestmodualOop {
   private id: string;

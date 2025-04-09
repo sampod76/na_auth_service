@@ -1,27 +1,27 @@
-import { Model, Types } from 'mongoose';
+import { Model, Types } from "mongoose";
 
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { IFileAfterUpload } from '../../interface/fileUpload';
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { IFileAfterUpload } from "../../interface/fileUpload";
 export const DATA_TYPE_ARRAY = [
-  'aboutUs',
-  'termsAndPolice',
-  'contactUs',
-  'support',
-  'privacyPolicy',
-  'howToWork',
-  'howToRent',
-  'adminInfo',
+  "aboutUs",
+  "termsAndPolice",
+  "contactUs",
+  "support",
+  "privacyPolicy",
+  "howToWork",
+  "howToRent",
+  "adminInfo",
 ];
 
 export type IDataType =
-  | 'aboutUs'
-  | 'termsAndPolice'
-  | 'privacyPolicy'
-  | 'contactUs'
-  | 'support'
-  | 'howToWork'
-  | 'howToRent'
-  | 'adminInfo';
+  | "aboutUs"
+  | "termsAndPolice"
+  | "privacyPolicy"
+  | "contactUs"
+  | "support"
+  | "howToWork"
+  | "howToRent"
+  | "adminInfo";
 export type IAllTextFieldFilters = {
   searchTerm?: string;
   heading?: string;

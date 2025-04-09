@@ -1,4 +1,4 @@
-import { IRoutingReminder } from './interface.RoutingReminder';
+import { IRoutingReminder } from "./interface.RoutingReminder";
 
 export const generateReminderEmail = (data: IRoutingReminder) => {
   return `
@@ -63,7 +63,7 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">Log Type:</span> ${data.reminderType}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -73,7 +73,7 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">Schedule Type:</span> ${data.scheduleType}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -83,17 +83,17 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">Month:</span> ${data.month}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
               data.daysOfWeek && data.daysOfWeek.length
                 ? `
             <div class="section">
-                <span class="label">Days of Week:</span> ${data.daysOfWeek.join(', ')}
+                <span class="label">Days of Week:</span> ${data.daysOfWeek.join(", ")}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -103,7 +103,7 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">Pick Date:</span> ${data.pickDate}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -113,7 +113,7 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">Start Time:</span> ${data.startTime}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -123,7 +123,7 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">End Time:</span> ${data.endTime}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -133,7 +133,7 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">Product Used:</span> ${data.productUseDetails}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -143,7 +143,7 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
                 <span class="label">Application Steps:</span> ${data.applicationStepsDetails}
             </div>
             `
-                : ''
+                : ""
             }
 
             ${
@@ -152,10 +152,10 @@ export const generateReminderEmail = (data: IRoutingReminder) => {
             <div class="section">
                 <span class="label">Attached Images:</span>
                 <br>
-                ${data.images.map(image => `<img src="${image}" alt="Uploaded Image" width="100%" style="border-radius: 5px; margin-top: 5px;">`).join('')}
+                ${data.images.map(image => `<img src="${image}" alt="Uploaded Image" width="100%" style="border-radius: 5px; margin-top: 5px;">`).join("")}
             </div>
             `
-                : ''
+                : ""
             }
 
             <div class="footer">

@@ -1,17 +1,17 @@
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { zodFileAfterUploadSchema } from '../../../global/schema/global.schema';
-import { CATEGORY_TYPE_ARRAY, I_CategoryType } from './interface.category';
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { zodFileAfterUploadSchema } from "../../../global/schema/global.schema";
+import { CATEGORY_TYPE_ARRAY, I_CategoryType } from "./interface.category";
 
 const createCategoryBodyData = z.object({
   categoryType: z.enum(CATEGORY_TYPE_ARRAY as [I_CategoryType]),
   label: z
     .string({
-      required_error: 'Value is required',
+      required_error: "Value is required",
     })
     .optional(),
   value: z.string({
-    required_error: 'Value is required',
+    required_error: "Value is required",
   }),
   subTitle: z.string().optional(),
   uid: z.string().or(z.string().uuid()).optional(),
@@ -20,11 +20,11 @@ const createCategoryBodyData = z.object({
       .object({
         label: z
           .string({
-            required_error: 'Value is required',
+            required_error: "Value is required",
           })
           .optional(),
         value: z.string({
-          required_error: 'Value is required',
+          required_error: "Value is required",
         }),
         subTitle: z.string().optional(),
         uid: z.string().or(z.string().uuid()).optional(),
@@ -35,11 +35,11 @@ const createCategoryBodyData = z.object({
               .object({
                 label: z
                   .string({
-                    required_error: 'Value is required',
+                    required_error: "Value is required",
                   })
                   .optional(),
                 value: z.string({
-                  required_error: 'Value is required',
+                  required_error: "Value is required",
                 }),
                 subTitle: z.string().optional(),
                 uid: z.string().or(z.string().uuid()).optional(),

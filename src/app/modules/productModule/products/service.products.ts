@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { LookupReusable } from '../../../../helper/lookUpResuable';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
-import { IUserRef, IUserRefAndDetails } from '../../allUser/typesAndConst';
-import { Product_SEARCHABLE_FIELDS } from './constant.products';
-import { IProduct, IProductFilters } from './interface.products';
-import { Product } from './model.products';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { PipelineStage, Schema, Types } from "mongoose";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { LookupReusable } from "../../../../helper/lookUpResuable";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
+import { IUserRef, IUserRefAndDetails } from "../../allUser/typesAndConst";
+import { Product_SEARCHABLE_FIELDS } from "./constant.products";
+import { IProduct, IProductFilters } from "./interface.products";
+import { Product } from "./model.products";
 
 const createProductByDb = async (
   payload: IProduct,
@@ -49,7 +49,7 @@ const getAllProductFromDb = async (
   } = filters;
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -60,7 +60,7 @@ const getAllProductFromDb = async (
       $or: Product_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -73,15 +73,15 @@ const getAllProductFromDb = async (
         let modifyFiled;
 
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productCategoryId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productCategoryId"
         ) {
           modifyFiled = { [field]: new Types.ObjectId(value) };
-        } else if (field === 'minPrice') {
-          modifyFiled = { ['pricing.price']: { $gte: parseFloat(value) } };
-        } else if (field === 'maxPrice') {
-          modifyFiled = { ['pricing.price']: { $lte: parseFloat(value) } };
+        } else if (field === "minPrice") {
+          modifyFiled = { ["pricing.price"]: { $gte: parseFloat(value) } };
+        } else if (field === "maxPrice") {
+          modifyFiled = { ["pricing.price"]: { $lte: parseFloat(value) } };
         } else {
           modifyFiled = { [field]: value };
         }
@@ -124,7 +124,7 @@ const getAllProductFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -143,55 +143,55 @@ const getAllProductFromDb = async (
     { $limit: Number(limit) || 10 },
   ];
 
-  if (needProperty && needProperty.includes('favorite')) {
+  if (needProperty && needProperty.includes("favorite")) {
     const favoriteShop: PipelineStage[] = [
       //----- is favorite shop --------
       {
         $lookup: {
-          from: 'favoriteproducts',
-          let: { id: '$_id' },
+          from: "favoriteproducts",
+          let: { id: "$_id" },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$productId', '$$id'] },
+                    { $eq: ["$productId", "$$id"] },
                     {
-                      $eq: ['$author.userId', new Types.ObjectId(user.userId)],
+                      $eq: ["$author.userId", new Types.ObjectId(user.userId)],
                     },
                   ],
                 },
               },
             },
           ],
-          as: 'favoriteProductsDetails',
+          as: "favoriteProductsDetails",
         },
       },
       {
         $addFields: {
           isFavorite: {
             $cond: {
-              if: { $eq: [{ $size: '$favoriteProductsDetails' }, 0] },
+              if: { $eq: [{ $size: "$favoriteProductsDetails" }, 0] },
               then: [false],
               else: true,
             },
           },
         },
       },
-      { $unwind: '$isFavorite' },
+      { $unwind: "$isFavorite" },
       { $project: { favoriteProductsDetails: 0 } },
       //------ is favorite shop end -----------
     ];
     pipeline.push(...favoriteShop);
   }
-  if (needProperty && needProperty.includes('productCategoryId')) {
+  if (needProperty && needProperty.includes("productCategoryId")) {
     LookupReusable(pipeline, {
       collections: [
         {
-          connectionName: 'productcategories',
-          idFiledName: 'productCategoryId',
-          pipeLineMatchField: '_id',
-          outPutFieldName: 'productCategoryDetails',
+          connectionName: "productcategories",
+          idFiledName: "productCategoryId",
+          pipeLineMatchField: "_id",
+          outPutFieldName: "productCategoryDetails",
         },
       ],
     });
@@ -242,7 +242,7 @@ const updateProductFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
   }
   if (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -250,7 +250,7 @@ const updateProductFromDb = async (
     isExist?._id?.toString() !== user?.roleBaseUserId?.toString() &&
     isExist.author.userId.toString() !== user?.userId?.toString()
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
   const result = await Product.findOneAndUpdate({ _id: id }, payload, {
     new: true,
@@ -270,7 +270,7 @@ const deleteProductByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
   }
   if (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -278,7 +278,7 @@ const deleteProductByIdFromDb = async (
     isExist?._id?.toString() !== user?.roleBaseUserId.toString() &&
     isExist.author?.userId?.toString() !== user?.userId.toString()
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const result = await Product.findOneAndUpdate(
@@ -287,7 +287,7 @@ const deleteProductByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   return result;
 };

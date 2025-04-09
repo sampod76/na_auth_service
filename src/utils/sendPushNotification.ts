@@ -1,21 +1,21 @@
-import FCM from 'fcm-node';
-import fs from 'fs';
-import path from 'path';
-import ApiError from '../app/errors/ApiError';
+import FCM from "fcm-node";
+import fs from "fs";
+import path from "path";
+import ApiError from "../app/errors/ApiError";
 export const sendPushNotification = async (
   fcm_tokens: string[],
   message: string,
 ) => {
   try {
     fs.readFile(
-      path.join(__dirname, '../../FireBaseConfig.json'),
-      'utf8',
+      path.join(__dirname, "../../FireBaseConfig.json"),
+      "utf8",
       async (err, jsonString) => {
         if (err) {
-          console.log('Error reading file from disk:', err);
+          console.log("Error reading file from disk:", err);
           throw new ApiError(
             400,
-            err?.message || 'Error reading file from disk',
+            err?.message || "Error reading file from disk",
           );
           //   return err;
         }
@@ -33,12 +33,12 @@ export const sendPushNotification = async (
               mutable_content: true,
 
               notification: {
-                body: message + 'kano dura thako ',
-                title: 'sampod chander nath title',
-                icon: 'myicon', //Default Icon
-                sound: 'mySound', //Default sound
+                body: message + "kano dura thako ",
+                title: "sampod chander nath title",
+                icon: "myicon", //Default Icon
+                sound: "mySound", //Default sound
                 imageUrl:
-                  'https://plus.unsplash.com/premium_photo-1665413643122-4a86ca3057f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=300',
+                  "https://plus.unsplash.com/premium_photo-1665413643122-4a86ca3057f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=300",
 
                 // badge: badgeCount, example:1 or 2 or 3 or etc....
               },
@@ -50,16 +50,16 @@ export const sendPushNotification = async (
 
             fcm.send(pushMessage, function (err: any, response: any) {
               if (err) {
-                console.log('Something has gone wrong!', err);
+                console.log("Something has gone wrong!", err);
                 return {
                   success: false,
-                  message: 'error sending push notification',
+                  message: "error sending push notification",
                 };
               } else {
-                console.log('Push notification sent.', response);
+                console.log("Push notification sent.", response);
                 return {
                   success: true,
-                  message: 'successfully send push notification',
+                  message: "successfully send push notification",
                 };
               }
             });
@@ -67,7 +67,7 @@ export const sendPushNotification = async (
         } catch (err: any) {
           return {
             success: false,
-            message: 'error sending push notification',
+            message: "error sending push notification",
           };
         }
       },
@@ -76,7 +76,7 @@ export const sendPushNotification = async (
     console.log(error);
     throw new ApiError(
       400,
-      error?.message || 'Something has gone wrong notification',
+      error?.message || "Something has gone wrong notification",
     );
   }
 };

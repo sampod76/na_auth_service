@@ -1,16 +1,16 @@
-import express from 'express';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import authMiddleware from '../../middlewares/authMiddleware';
+import express from "express";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import authMiddleware from "../../middlewares/authMiddleware";
 
-import { z } from 'zod';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { AddToCartController } from './controller.addToCart';
-import { AddToCartValidation } from './validation.addToCart';
+import { z } from "zod";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { AddToCartController } from "./controller.addToCart";
+import { AddToCartValidation } from "./validation.addToCart";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   // This route is open
   .get(
     authMiddleware(
@@ -30,7 +30,7 @@ router
     validateRequestZod(AddToCartValidation.createAddToCartZodSchema),
     AddToCartController.createAddToCart,
   );
-router.route('/serialnumber-update').patch(
+router.route("/serialnumber-update").patch(
   authMiddleware(
     ENUM_USER_ROLE.admin,
     ENUM_USER_ROLE.superAdmin,
@@ -46,7 +46,7 @@ router.route('/serialnumber-update').patch(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   // This route is open
   .get(
     authMiddleware(

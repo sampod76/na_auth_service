@@ -1,12 +1,12 @@
-import { model, PipelineStage, Schema, Types } from 'mongoose';
+import { model, PipelineStage, Schema, Types } from "mongoose";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../../global/schema/global.schema';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
-import { ChatMessageModel, IChatMessage } from './messages.interface';
+} from "../../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../../global/schema/global.schema";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
+import { ChatMessageModel, IChatMessage } from "./messages.interface";
 
 const ChatMessageSchema = new Schema<IChatMessage, ChatMessageModel>(
   {
@@ -15,7 +15,7 @@ const ChatMessageSchema = new Schema<IChatMessage, ChatMessageModel>(
     message: String,
     friendShipId: {
       type: Schema.Types.ObjectId,
-      ref: 'FriendShip',
+      ref: "FriendShip",
     },
     uuid: {
       type: String,
@@ -96,6 +96,6 @@ ChatMessageSchema.statics.isChatMessageExistMethod = async function (
 }); 
 */
 export const ChatMessage = model<IChatMessage, ChatMessageModel>(
-  'ChatMessage',
+  "ChatMessage",
   ChatMessageSchema,
 );

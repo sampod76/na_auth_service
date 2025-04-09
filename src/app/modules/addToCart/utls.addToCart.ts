@@ -1,11 +1,11 @@
-import { Types } from 'mongoose';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
+import { Types } from "mongoose";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../redis/service.redis';
-import { IAddToCart } from './interface.addToCart';
-import { AddToCart } from './model.addToCart';
+} from "../../redis/service.redis";
+import { IAddToCart } from "./interface.addToCart";
+import { AddToCart } from "./model.addToCart";
 
 export class AddToCartOop {
   private id: string;

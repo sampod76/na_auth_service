@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../helper/lookUpResuable';
-import { UuidUtls } from '../../../utils/uuidGenerator';
-import ApiError from '../../errors/ApiError';
-import { IUserRef } from '../allUser/typesAndConst';
-import { ServiceLogger_SEARCHABLE_FIELDS } from './constant.serviceLogger';
+} from "../../../helper/lookUpResuable";
+import { UuidUtls } from "../../../utils/uuidGenerator";
+import ApiError from "../../errors/ApiError";
+import { IUserRef } from "../allUser/typesAndConst";
+import { ServiceLogger_SEARCHABLE_FIELDS } from "./constant.serviceLogger";
 import {
   IServiceLogger,
   IServiceLoggerFilters,
-} from './interface.serviceLogger';
-import { ServiceLogger } from './model.serviceLogger';
+} from "./interface.serviceLogger";
+import { ServiceLogger } from "./model.serviceLogger";
 
 const createServiceLoggerByDb = async (
   payload: IServiceLogger,
@@ -29,7 +29,7 @@ const createServiceLoggerByDb = async (
 ): Promise<IServiceLogger | null> => {
   const user = req.user as IUserRef;
 
-  console.log('🚀 ~ payload:', payload);
+  console.log("🚀 ~ payload:", payload);
 
   const result = await ServiceLogger.create(payload);
   return result;
@@ -55,10 +55,10 @@ const getAllServiceLoggerFromDb = async (
   } = filters;
   //***********cache start************* */
   if (user.role !== ENUM_USER_ROLE.admin) {
-    filtersData['author.userId'] = user.userId.toString();
+    filtersData["author.userId"] = user.userId.toString();
   }
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -68,7 +68,7 @@ const getAllServiceLoggerFromDb = async (
       $or: ServiceLogger_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -86,29 +86,29 @@ const getAllServiceLoggerFromDb = async (
          modifyFiled = { [field]: value };
          } 
        */
-        if (field === 'author.userId' || field === 'author.roleBaseUserId') {
+        if (field === "author.userId" || field === "author.roleBaseUserId") {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
           };
         } else if (
-          field === 'Wash_Day_Mood' ||
-          field === 'Choice_of_Treatment' ||
-          field === 'Post_Wash_Day_Style' ||
-          field === 'Hair_Health' ||
-          field === 'What_Style_Did_You_Do' ||
-          field === 'Style_Rating' ||
-          field === 'Hair_Service_Quality' ||
-          field === 'Duration_of_style_wear' ||
-          field === 'Maintenance_Routine' ||
-          field === 'Haircut_Type' ||
-          field === 'Length_Cut'
+          field === "Wash_Day_Mood" ||
+          field === "Choice_of_Treatment" ||
+          field === "Post_Wash_Day_Style" ||
+          field === "Hair_Health" ||
+          field === "What_Style_Did_You_Do" ||
+          field === "Style_Rating" ||
+          field === "Hair_Service_Quality" ||
+          field === "Duration_of_style_wear" ||
+          field === "Maintenance_Routine" ||
+          field === "Haircut_Type" ||
+          field === "Length_Cut"
         ) {
           const uuid = new UuidUtls(value);
           if (uuid.isUuidValid()) {
             modifyFiled = { [`${field}.uid`]: value };
           } else {
             modifyFiled = {
-              [`${field}.value`]: { $regex: value, $options: 'i' },
+              [`${field}.value`]: { $regex: value, $options: "i" },
             };
           }
         } else {
@@ -179,7 +179,7 @@ const getAllServiceLoggerFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -198,24 +198,24 @@ const getAllServiceLoggerFromDb = async (
     { $limit: Number(limit) || 10 },
   ];
   const collections: ILookupCollection<any>[] = []; // Use the correct type here
-  if (needProperty?.includes('productId')) {
+  if (needProperty?.includes("productId")) {
     const pipelineConnection: ILookupCollection<any> = {
-      connectionName: 'products',
-      idFiledName: 'productId',
-      pipeLineMatchField: '_id',
-      outPutFieldName: 'productDetails',
+      connectionName: "products",
+      idFiledName: "productId",
+      pipeLineMatchField: "_id",
+      outPutFieldName: "productDetails",
     };
     collections.push(pipelineConnection);
   }
-  if (needProperty && needProperty.includes('author')) {
+  if (needProperty && needProperty.includes("author")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'author.role',
-          idFiledName: '$author.roleBaseUserId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'details',
-          margeInField: 'author',
+          roleMatchFiledName: "author.role",
+          idFiledName: "$author.roleBaseUserId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "details",
+          margeInField: "author",
           project: { name: 1, email: 1, profileImage: 1, userId: 1 },
         },
       ],
@@ -258,13 +258,13 @@ const getSingleServiceLoggerFromDb = async (
   const result = await ServiceLogger.aggregate(pipeline);
   const dataReturn = result.length ? result[0] : null;
   if (!dataReturn) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'ServiceLogger not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "ServiceLogger not found");
   }
   if (
     dataReturn.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   return dataReturn;
 };
@@ -280,13 +280,13 @@ const updateServiceLoggerFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist || isExist.isDelete) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'ServiceLogger not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "ServiceLogger not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   const result = await ServiceLogger.findOneAndUpdate({ _id: id }, payload, {
     new: true,
@@ -306,13 +306,13 @@ const deleteServiceLoggerByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'ServiceLogger not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "ServiceLogger not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
 
   const result = await ServiceLogger.findOneAndUpdate(
@@ -321,7 +321,7 @@ const deleteServiceLoggerByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   return result;
 };

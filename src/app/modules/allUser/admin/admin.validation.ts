@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { I_STATUS, STATUS_ARRAY } from '../../../../global/enum_constant_type';
-import { UserValidation } from '../user/user.validation';
+import { I_STATUS, STATUS_ARRAY } from "../../../../global/enum_constant_type";
+import { UserValidation } from "../user/user.validation";
 // const combinedAdminZodData = UserValidation.adminZodData.merge(
 //   UserValidation.authData
 // );

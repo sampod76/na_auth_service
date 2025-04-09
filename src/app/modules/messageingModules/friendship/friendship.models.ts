@@ -1,23 +1,23 @@
-import { model, PipelineStage, Schema, Types } from 'mongoose';
+import { model, PipelineStage, Schema, Types } from "mongoose";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
+} from "../../../../global/enum_constant_type";
 
-import { LookupAnyRoleDetailsReusable } from '../../../../helper/lookUpResuable';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
-import { FriendShipModel, IFriendShip } from './friendship.interface';
+import { LookupAnyRoleDetailsReusable } from "../../../../helper/lookUpResuable";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
+import { FriendShipModel, IFriendShip } from "./friendship.interface";
 
 const FriendShipSchema = new Schema<IFriendShip, FriendShipModel>(
   {
     sender: mongooseIUserRef,
     receiver: mongooseIUserRef,
     //
-    gigId: { type: Schema.Types.ObjectId, ref: 'Gig' },
-    orderId: { type: Schema.Types.ObjectId, ref: 'Order' },
+    gigId: { type: Schema.Types.ObjectId, ref: "Gig" },
+    orderId: { type: Schema.Types.ObjectId, ref: "Order" },
     block: {
       isBlock: {
         type: Boolean,
@@ -34,7 +34,7 @@ const FriendShipSchema = new Schema<IFriendShip, FriendShipModel>(
       message: String,
       messageId: {
         type: Schema.Types.ObjectId,
-        ref: 'Message',
+        ref: "Message",
       },
       createdAt: Date,
     },
@@ -94,20 +94,20 @@ FriendShipSchema.statics.isFriendShipExistMethod = async function (
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'sender.role',
-          idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-          pipeLineMatchField: '_id', //$_id
-          outPutFieldName: 'details',
-          margeInField: 'sender',
+          roleMatchFiledName: "sender.role",
+          idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+          pipeLineMatchField: "_id", //$_id
+          outPutFieldName: "details",
+          margeInField: "sender",
           project: option.project ? option.project : { __v: 0 },
           //project: { name: 1, country: 1, profileImage: 1, email: 1 },
         },
         {
-          roleMatchFiledName: 'receiver.role',
-          idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-          pipeLineMatchField: '_id', //$_id
-          outPutFieldName: 'details',
-          margeInField: 'receiver',
+          roleMatchFiledName: "receiver.role",
+          idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+          pipeLineMatchField: "_id", //$_id
+          outPutFieldName: "details",
+          margeInField: "receiver",
           project: option.project ? option.project : { __v: 0 },
           //project: { name: 1, country: 1, profileImage: 1, email: 1 },
         },
@@ -144,7 +144,7 @@ FriendShipSchema.statics.isFriendShipExistMethod = async function (
 */
 
 // after save then data then call this hook
-FriendShipSchema.post('save', async function (data: IFriendShip, next: any) {
+FriendShipSchema.post("save", async function (data: IFriendShip, next: any) {
   try {
     /* // --baseuse frindShip data in populate details-- but this details in not details
      await redisClient.set(
@@ -161,7 +161,7 @@ FriendShipSchema.post('save', async function (data: IFriendShip, next: any) {
 });
 // after findOneAndUpdate then data then call this hook
 FriendShipSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: IFriendShip, next: any) {
     try {
       const delDate = [ENUM_REDIS_KEY.REDIS_IN_SAVE_FRIENDSHIP + data?._id];
@@ -187,7 +187,7 @@ FriendShipSchema.post(
 );
 // after findOneAndDelete then data then call this hook
 FriendShipSchema.post(
-  'findOneAndDelete',
+  "findOneAndDelete",
   async function (data: IFriendShip, next: any) {
     try {
       //
@@ -214,6 +214,6 @@ FriendShipSchema.post(
 );
 
 export const FriendShip = model<IFriendShip, FriendShipModel>(
-  'FriendShip',
+  "FriendShip",
   FriendShipSchema,
 );

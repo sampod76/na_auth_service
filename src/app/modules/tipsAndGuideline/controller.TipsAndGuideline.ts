@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { IUserRef } from '../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../allUser/user/user.utils';
-import { TipsAndGuideline_FILTERABLE_FIELDS } from './constant.TipsAndGuideline';
-import { ITipsAndGuideline } from './interface.TipsAndGuideline';
-import { TipsAndGuidelineService } from './service.TipsAndGuideline';
+import { IUserRef } from "../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../allUser/user/user.utils";
+import { TipsAndGuideline_FILTERABLE_FIELDS } from "./constant.TipsAndGuideline";
+import { ITipsAndGuideline } from "./interface.TipsAndGuideline";
+import { TipsAndGuidelineService } from "./service.TipsAndGuideline";
 
 // import { z } from 'zod'
 const createTipsAndGuideline = catchAsync(
@@ -28,7 +28,7 @@ const createTipsAndGuideline = catchAsync(
     sendResponse<ITipsAndGuideline>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful create TipsAndGuideline',
+      message: "successful create TipsAndGuideline",
       data: result,
     });
   },
@@ -48,7 +48,7 @@ const getAllTipsAndGuideline = catchAsync(
     sendResponse<ITipsAndGuideline[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully Get all TipsAndGuideline',
+      message: "successfully Get all TipsAndGuideline",
       meta: result.meta,
       data: result.data,
     });
@@ -76,7 +76,7 @@ const getSingleTipsAndGuideline = catchAsync(
     sendResponse<ITipsAndGuideline>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get TipsAndGuideline',
+      message: "successfully get TipsAndGuideline",
       data: result,
     });
   },
@@ -95,7 +95,7 @@ const updateTipsAndGuideline = catchAsync(
     sendResponse<ITipsAndGuideline>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update TipsAndGuideline',
+      message: "successfully update TipsAndGuideline",
       data: result,
     });
   },
@@ -110,7 +110,7 @@ const updateTipsAndGuidelineSerialNumber = catchAsync(
     sendResponse<ITipsAndGuideline[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update TipsAndGuideline',
+      message: "successfully update TipsAndGuideline",
       data: result,
     });
   },
@@ -128,7 +128,7 @@ const deleteTipsAndGuideline = catchAsync(
     sendResponse<ITipsAndGuideline>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully delete TipsAndGuideline',
+      message: "successfully delete TipsAndGuideline",
       data: result,
     });
   },

@@ -1,10 +1,10 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
 import {
   IUserLoginHistory,
   UserLoginHistoryModel,
-} from './loginHistory.interface';
+} from "./loginHistory.interface";
 
 export const UserLoginHistorySchema = new Schema<
   IUserLoginHistory,
@@ -78,7 +78,7 @@ export const UserLoginHistorySchema = new Schema<
     // },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
 
     isDelete: {
@@ -95,6 +95,6 @@ export const UserLoginHistorySchema = new Schema<
 );
 
 export const UserLoginHistory = model<IUserLoginHistory, UserLoginHistoryModel>(
-  'UserLoginHistory',
+  "UserLoginHistory",
   UserLoginHistorySchema,
 );

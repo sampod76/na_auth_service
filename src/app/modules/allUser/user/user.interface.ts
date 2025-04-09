@@ -1,14 +1,14 @@
-import { Model, Types } from 'mongoose';
+import { Model, Types } from "mongoose";
 import {
   I_SOCKET_STATUS,
   I_STATUS,
   I_YN,
-} from '../../../../global/enum_constant_type';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { I_VERIFY, ILocation } from '../typesAndConst';
-import { ENUM_COMPANY_TYPE } from './user.constant';
+} from "../../../../global/enum_constant_type";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { I_VERIFY, ILocation } from "../typesAndConst";
+import { ENUM_COMPANY_TYPE } from "./user.constant";
 
-export type IGender = 'male' | 'female' | 'other';
+export type IGender = "male" | "female" | "other";
 //
 export const USER_ROLE_ARRAY = Object.values(ENUM_USER_ROLE);
 export type I_USER_ROLE = keyof typeof ENUM_USER_ROLE;
@@ -17,9 +17,9 @@ export type I_ROLE_TYPE = keyof typeof ENUM_COMPANY_TYPE;
 //
 //
 export enum ENUM_ACCOUNT_TYPE {
-  custom = 'custom',
-  google = 'google',
-  apple = 'apple',
+  custom = "custom",
+  google = "google",
+  apple = "apple",
 }
 export type IACCOUNT_TYPE = keyof typeof ENUM_ACCOUNT_TYPE;
 export const I_AccountTypeArray = Object.values(ENUM_ACCOUNT_TYPE);

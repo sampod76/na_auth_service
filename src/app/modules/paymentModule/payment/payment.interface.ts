@@ -89,6 +89,6 @@ export type IBalanceTransaction = {
   net: number;
   reporting_category: string;
   source: string;
-  status: 'available' | string;
+  status: "available" | string;
   type: string;
 };

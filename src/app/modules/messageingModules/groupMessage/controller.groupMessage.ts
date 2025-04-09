@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { groupMessageFilterableFields } from './constants.groupMessage';
-import { IGroupMessage } from './interface.groupMessage';
-import { GroupMessageService } from './service.groupMessage';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { groupMessageFilterableFields } from "./constants.groupMessage";
+import { IGroupMessage } from "./interface.groupMessage";
+import { GroupMessageService } from "./service.groupMessage";
 
 const createGroupMessage = catchAsync(async (req: Request, res: Response) => {
   // await RequestToFileDecodeAddBodyHandle(req);
@@ -24,7 +24,7 @@ const createGroupMessage = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGroupMessage>(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMessage created successfully',
+    message: "GroupMessage created successfully",
     data: result,
   });
 });
@@ -43,7 +43,7 @@ const getAllGroupMessages = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMessages found successfully',
+    message: "GroupMessages found successfully",
     data: result.data,
     meta: result.meta,
   });
@@ -59,7 +59,7 @@ const getGroupMessageById = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMessage found successfully',
+    message: "GroupMessage found successfully",
     data: result,
   });
 });
@@ -76,7 +76,7 @@ const updateGroupMessage = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMessage updated successfully',
+    message: "GroupMessage updated successfully",
     data: result,
   });
 });
@@ -93,7 +93,7 @@ const deleteGroupMessage = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMessage deleted successfully',
+    message: "GroupMessage deleted successfully",
     data: result,
   });
 });

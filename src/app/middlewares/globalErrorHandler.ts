@@ -1,30 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ErrorRequestHandler } from 'express';
+import { ErrorRequestHandler } from "express";
 // import { errorLogger } from '../share/logger'
 // import { logger } from '../share/logger'
-import { ZodError } from 'zod';
-import config from '../../config';
-import ApiError from '../errors/ApiError';
-import { handleValidationError } from '../errors/handleValidationError';
-import handleZodError from '../errors/handleZodError';
-import { IGenericErrorMessage } from '../interface/error';
+import { ZodError } from "zod";
+import config from "../../config";
+import ApiError from "../errors/ApiError";
+import { handleValidationError } from "../errors/handleValidationError";
+import handleZodError from "../errors/handleZodError";
+import { IGenericErrorMessage } from "../interface/error";
 // import { errorLogger } from '../share/logger';
-import httpStatus from 'http-status';
-import { requestToDeleteFile } from '../../helper/requestToDeleteFile';
-import handleCastError from '../errors/handleCastError';
-import handleMongoUniqueError from '../errors/handleMongoUniqueError';
-import { errorLogger } from '../share/logger';
+import httpStatus from "http-status";
+import { requestToDeleteFile } from "../../helper/requestToDeleteFile";
+import handleCastError from "../errors/handleCastError";
+import handleMongoUniqueError from "../errors/handleMongoUniqueError";
+import { errorLogger } from "../share/logger";
 
 // import path from 'path';
 
 //
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
-  config.env === 'development'
+  config.env === "development"
     ? console.log(`globalErrorHandler:`, error)
     : errorLogger.error(`globalErrorHandler:`, error);
 
   let statusCode = 500;
-  let message = 'Something went wrong';
+  let message = "Something went wrong";
 
   //! ----- if any error then remove file ----
   requestToDeleteFile(req);
@@ -32,7 +32,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   // let errorMessage:Array<IGenericErrorMessage>= []
   let errorMessage: IGenericErrorMessage[] = [];
 
-  if (error?.name === 'ValidationError') {
+  if (error?.name === "ValidationError") {
     const simplifiedError = handleValidationError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
@@ -42,19 +42,19 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessage = simplifiedError.errorMessages;
-  } else if (error?.name === 'CastError') {
+  } else if (error?.name === "CastError") {
     const simplifiedError = handleCastError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessage = simplifiedError.errorMessages;
-  } else if (error.name === 'MongoServerError' && error.code === 11000) {
+  } else if (error.name === "MongoServerError" && error.code === 11000) {
     const simplifiedError = handleMongoUniqueError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessage = simplifiedError.errorMessages;
-  } else if (error?.name === 'JsonWebTokenError') {
+  } else if (error?.name === "JsonWebTokenError") {
     statusCode = httpStatus.UNAUTHORIZED;
-    message = 'Unauthorized access';
+    message = "Unauthorized access";
     // errorMessage = "unauthorized access";
   } else if (error instanceof ApiError) {
     statusCode = error.statusCode;
@@ -62,7 +62,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     errorMessage = error?.message
       ? [
           {
-            path: '',
+            path: "",
             message: error?.message,
           },
         ]
@@ -86,7 +86,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     errorMessage = error?.message
       ? [
           {
-            path: '',
+            path: "",
             message: error?.message,
           },
         ]
@@ -105,14 +105,14 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
       success: false,
       message: req.t(message), //
       errorMessage,
-      stack: config.env !== 'production' ? error?.stack : undefined,
+      stack: config.env !== "production" ? error?.stack : undefined,
     });
   } catch (error: any) {
     res.status(statusCode).send({
       success: false,
       message: message, //
       errorMessage,
-      stack: config.env !== 'production' ? error?.stack : undefined,
+      stack: config.env !== "production" ? error?.stack : undefined,
     });
   }
 };

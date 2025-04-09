@@ -1,6 +1,6 @@
-import { ConnectionOptions } from 'bullmq';
-import Redis from 'ioredis';
-import config from '../../config';
+import { ConnectionOptions } from "bullmq";
+import Redis from "ioredis";
+import config from "../../config";
 
 export const redisConnectionString: ConnectionOptions = {
   host: config.redis.queue.host, // Provide a default value if undefined

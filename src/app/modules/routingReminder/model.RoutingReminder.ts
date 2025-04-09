@@ -1,17 +1,17 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
 import {
   ENUM_DAYS_OF_WEEK,
   ENUM_MONTH,
-} from '../../../global/enums/globalEnums';
-import { mongooseIUserRef } from '../allUser/typesAndConst';
-import { LOG_TYPE_ARRAY } from '../serviceLogger/constant.serviceLogger';
-import { ENUM_SCHEDULE_TYPE_ROUTING } from './constant.RoutingReminder';
+} from "../../../global/enums/globalEnums";
+import { mongooseIUserRef } from "../allUser/typesAndConst";
+import { LOG_TYPE_ARRAY } from "../serviceLogger/constant.serviceLogger";
+import { ENUM_SCHEDULE_TYPE_ROUTING } from "./constant.RoutingReminder";
 import {
   IRoutingReminder,
   RoutingReminderModel,
-} from './interface.RoutingReminder';
+} from "./interface.RoutingReminder";
 
 const RoutingReminderSchema = new Schema<
   IRoutingReminder,
@@ -84,7 +84,7 @@ const RoutingReminderSchema = new Schema<
   },
 );
 // after findOneAndDelete then data then call this hook
-RoutingReminderSchema.post('findOneAndDelete', async function () {
+RoutingReminderSchema.post("findOneAndDelete", async function () {
   try {
     // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
   } catch (error: any) {
@@ -93,7 +93,7 @@ RoutingReminderSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 RoutingReminderSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: any & { _id: string }, next: any) {
     try {
       // console.log('update');
@@ -105,7 +105,7 @@ RoutingReminderSchema.post(
 );
 // before save/create then data then call this hook
 RoutingReminderSchema.post(
-  'save',
+  "save",
   async function (data: IRoutingReminder, next) {
     try {
       // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
@@ -118,7 +118,7 @@ RoutingReminderSchema.post(
 );
 
 export const RoutingReminder = model<IRoutingReminder, RoutingReminderModel>(
-  'RoutingReminder',
+  "RoutingReminder",
   RoutingReminderSchema,
 );
 

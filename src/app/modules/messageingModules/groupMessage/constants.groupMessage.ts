@@ -1,18 +1,18 @@
-export const groupMessageSearchableFields = ['message'];
+export const groupMessageSearchableFields = ["message"];
 
 export const groupMessageFilterableFields = [
-  'senderRoleBaseId',
-  'senderUserId',
-  'groupMemberId',
-  'groupId',
+  "senderRoleBaseId",
+  "senderUserId",
+  "groupMemberId",
+  "groupId",
   //
-  'orderId',
-  'isSeen',
-  'findMyChats',
+  "orderId",
+  "isSeen",
+  "findMyChats",
   // always required filter
-  'searchTerm',
-  'delete', // for permanent delete
-  'status',
-  'type',
-  'isDelete',
+  "searchTerm",
+  "delete", // for permanent delete
+  "status",
+  "type",
+  "isDelete",
 ];

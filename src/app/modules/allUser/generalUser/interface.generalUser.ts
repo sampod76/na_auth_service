@@ -1,11 +1,11 @@
-import { Model, Types } from 'mongoose';
+import { Model, Types } from "mongoose";
 
-import { z } from 'zod';
-import { I_STATUS } from '../../../../global/enum_constant_type';
-import { ICommonUser } from '../typesAndConst';
-import { I_ROLE_TYPE, IACCOUNT_TYPE } from '../user/user.interface';
-import { UserValidation } from '../user/user.validation';
-import { GeneralUserValidation } from './validation.generalUser';
+import { z } from "zod";
+import { I_STATUS } from "../../../../global/enum_constant_type";
+import { ICommonUser } from "../typesAndConst";
+import { I_ROLE_TYPE, IACCOUNT_TYPE } from "../user/user.interface";
+import { UserValidation } from "../user/user.validation";
+import { GeneralUserValidation } from "./validation.generalUser";
 
 export type IGeneralUserFilters = {
   searchTerm?: string;

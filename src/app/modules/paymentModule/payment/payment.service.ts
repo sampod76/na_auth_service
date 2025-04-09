@@ -1,18 +1,18 @@
-import { Request } from 'express';
-import Stripe from 'stripe';
-import config from '../../../../config';
+import { Request } from "express";
+import Stripe from "stripe";
+import config from "../../../../config";
 
-import { ICreateStripeConnectAccount } from './payment.interface';
-import { stripe } from './payment.utls';
-import { IStripePaymentData } from './payment.validation';
+import { ICreateStripeConnectAccount } from "./payment.interface";
+import { stripe } from "./payment.utls";
+import { IStripePaymentData } from "./payment.validation";
 
-import httpStatus from 'http-status';
-import { encryptCryptoData } from '../../../../utils/cryptoEncryptDecrypt';
-import ApiError from '../../../errors/ApiError';
-import { IUserRef } from '../../allUser/typesAndConst';
+import httpStatus from "http-status";
+import { encryptCryptoData } from "../../../../utils/cryptoEncryptDecrypt";
+import ApiError from "../../../errors/ApiError";
+import { IUserRef } from "../../allUser/typesAndConst";
 
-import { Types } from 'mongoose';
-import { Product } from '../../productModule/products/model.products';
+import { Types } from "mongoose";
+import { Product } from "../../productModule/products/model.products";
 export type IStripeMetaData = {
   products: string;
   userId: string;
@@ -51,7 +51,7 @@ const createPaymentStripeService = async (
           `Product ${product.name} is not available `,
         );
       }
-      if (product.status !== 'active') {
+      if (product.status !== "active") {
         throw new ApiError(
           httpStatus.FORBIDDEN,
           `Product ${product.name} is not active `,
@@ -81,14 +81,14 @@ const createPaymentStripeService = async (
 
     items.push({
       price_data: {
-        currency: item.pricing.currency || 'usd',
+        currency: item.pricing.currency || "usd",
         product_data: {
           //@ts-ignore
           name: findProduct?.name || `${item?.name}`,
           images: [
             item?.images
               ? item?.images[0]?.url
-              : 'https://d43af62ilhxe5.cloudfront.net/upload/images/1733552328394-logo.jpg', //not support any cdn image
+              : "https://d43af62ilhxe5.cloudfront.net/upload/images/1733552328394-logo.jpg", //not support any cdn image
           ],
         },
         unit_amount: parseFloat((Number(amount) * 100).toFixed(2)),
@@ -97,7 +97,7 @@ const createPaymentStripeService = async (
     });
     metaProducts.push({
       productId: item._id.toString(),
-      currency: item.pricing.currency || 'usd',
+      currency: item.pricing.currency || "usd",
       name: findProduct?.name || `${item?.name}`,
       quantity: findProduct?.quantity || 1,
       price: item.pricing.price,
@@ -106,16 +106,16 @@ const createPaymentStripeService = async (
 
   const metadata: IStripeMetaData = {
     products: JSON.stringify(metaProducts),
-    userId: user?.userId?.toString() || '',
-    roleBaseUserId: user?.roleBaseUserId?.toString() || '',
-    role: user?.role || '',
-    currency: products[0]?.currency || 'usd',
+    userId: user?.userId?.toString() || "",
+    roleBaseUserId: user?.roleBaseUserId?.toString() || "",
+    role: user?.role || "",
+    currency: products[0]?.currency || "usd",
   };
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
+    payment_method_types: ["card"],
     line_items: items,
-    mode: 'payment',
+    mode: "payment",
     success_url: `${config.payment_url.stripe_success_url}?sessionId={CHECKOUT_SESSION_ID}&metadataV2=${encryptCryptoData(metadata, config.crypto_key as string)}`, // Stripe will replace {CHECKOUT_SESSION_ID} with the actual session ID,
     cancel_url: config.payment_url.stripe_cancel_url,
     //metadata is very important because in this object in you are input any value

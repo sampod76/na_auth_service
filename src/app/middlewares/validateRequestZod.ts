@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from 'express';
-import { AnyZodObject, ZodEffects } from 'zod';
-import config from '../../config';
+import { NextFunction, Request, Response } from "express";
+import { AnyZodObject, ZodEffects } from "zod";
+import config from "../../config";
 
 //
 const validateRequestZod =
   (schema: AnyZodObject | ZodEffects<AnyZodObject>) =>
   async (req: Request, res: Response, next: NextFunction) => {
-    if (config.env !== 'production') {
+    if (config.env !== "production") {
       // console.log('req---body ---.', JSON.stringify(req.body), '---body end--');
-      console.log('req---body ---.', req.body, '---body end--');
+      console.log("req---body ---.", req.body, "---body end--");
     }
 
     try {

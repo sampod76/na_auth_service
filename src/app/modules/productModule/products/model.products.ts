@@ -1,15 +1,15 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { RedisAllSetterServiceOop } from '../../../redis/service.redis';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
+import { RedisAllSetterServiceOop } from "../../../redis/service.redis";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../../global/schema/global.schema';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { IProduct, ProductModel } from './interface.products';
+} from "../../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../../global/schema/global.schema";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { IProduct, ProductModel } from "./interface.products";
 const ProductSchema = new Schema<IProduct, ProductModel>(
   {
     name: {
@@ -29,7 +29,7 @@ const ProductSchema = new Schema<IProduct, ProductModel>(
     },
     productCategoryId: {
       type: Schema.Types.ObjectId,
-      ref: 'ProductCategory',
+      ref: "ProductCategory",
     },
     productCategoryName: {
       type: String,
@@ -59,7 +59,7 @@ const ProductSchema = new Schema<IProduct, ProductModel>(
   },
 );
 
-ProductSchema.post('findOneAndDelete', async function () {
+ProductSchema.post("findOneAndDelete", async function () {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     /*  
@@ -90,7 +90,7 @@ ProductSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 ProductSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: IProduct & { _id: string }, next: any) {
     try {
       const redisSetterOop = new RedisAllSetterServiceOop();
@@ -105,7 +105,7 @@ ProductSchema.post(
   },
 );
 ProductSchema.post(
-  'save',
+  "save",
   async function (data: any & { _id: string }, next: any) {
     try {
       const redisSetterOop = new RedisAllSetterServiceOop();
@@ -124,8 +124,8 @@ ProductSchema.post(
   },
 );
 
-export const Product = model<IProduct, ProductModel>('Product', ProductSchema);
+export const Product = model<IProduct, ProductModel>("Product", ProductSchema);
 export const TrashProduct = model<IProduct, ProductModel>(
-  'TrashProduct',
+  "TrashProduct",
   ProductSchema,
 );

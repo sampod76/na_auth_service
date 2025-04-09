@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
+import { Request } from "express";
+import httpStatus from "http-status";
 
-import ApiError from '../../errors/ApiError';
-import { ALL_TEXT_FIELD_SEARCHABLE_FIELDS } from './constant.AllTextField';
-import { IAllTextField, IAllTextFieldFilters } from './interface.AllTextField';
-import { AllTextField } from './model.AllTextField';
+import ApiError from "../../errors/ApiError";
+import { ALL_TEXT_FIELD_SEARCHABLE_FIELDS } from "./constant.AllTextField";
+import { IAllTextField, IAllTextFieldFilters } from "./interface.AllTextField";
+import { AllTextField } from "./model.AllTextField";
 
 const createAllTextFieldByDb = async (
   payload: IAllTextField,
@@ -36,7 +36,7 @@ const getAllAllTextFieldFromDb = async (
   //****************search and filters start************/
   const { searchTerm, ...filtersData } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -46,7 +46,7 @@ const getAllAllTextFieldFromDb = async (
       $or: ALL_TEXT_FIELD_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -68,7 +68,7 @@ const getAllAllTextFieldFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -139,14 +139,14 @@ const deleteAllTextFieldByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, req.t('Not found TextField'));
+    throw new ApiError(httpStatus.NOT_FOUND, req.t("Not found TextField"));
   }
 
   let result;
-  if (query.delete == 'yes') {
+  if (query.delete == "yes") {
     result = await AllTextField.findByIdAndDelete(id);
     if (!result) {
-      throw new ApiError(httpStatus.NOT_FOUND, req.t('Failed to delete'));
+      throw new ApiError(httpStatus.NOT_FOUND, req.t("Failed to delete"));
     }
     return result;
   } else {
@@ -155,7 +155,7 @@ const deleteAllTextFieldByIdFromDb = async (
       { isDelete: true },
     );
     if (!result) {
-      throw new ApiError(httpStatus.NOT_FOUND, req.t('Failed to delete'));
+      throw new ApiError(httpStatus.NOT_FOUND, req.t("Failed to delete"));
     }
     return result;
   }

@@ -1,15 +1,15 @@
-import express from 'express';
+import express from "express";
 
-import authMiddleware from '../../../middlewares/authMiddleware';
+import authMiddleware from "../../../middlewares/authMiddleware";
 
-import { PaymentHistoryController } from './constroller.paymentHistory';
+import { PaymentHistoryController } from "./constroller.paymentHistory";
 
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   // This route is open
   .get(
     authMiddleware(
@@ -21,20 +21,20 @@ router
   );
 
 router
-  .route('/get-all-chart-value')
+  .route("/get-all-chart-value")
   .get(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.superAdmin),
     PaymentHistoryController.getAllChartOfValue,
   );
 router
-  .route('/get-all-time-group-amount')
+  .route("/get-all-time-group-amount")
   .get(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.superAdmin),
     PaymentHistoryController.getAllTimeToGroupPaymentHistory,
   );
 
 router
-  .route('/transaction')
+  .route("/transaction")
   .get(
     authMiddleware(
       ENUM_USER_ROLE.admin,
@@ -45,7 +45,7 @@ router
   );
 
 router
-  .route('/:id')
+  .route("/:id")
   // This route is open
   .get(
     authMiddleware(

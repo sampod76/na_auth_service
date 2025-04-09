@@ -1,13 +1,13 @@
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { zodFileAfterUploadSchema } from '../../../global/schema/global.schema';
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { zodFileAfterUploadSchema } from "../../../global/schema/global.schema";
 
 import {
   AdminSettingTypeArray,
   I_AdminSettingType,
   I_PaymentTimeType,
   PaymentTimeTypeArray,
-} from './interface.adminSetting';
+} from "./interface.adminSetting";
 
 const createAdminSettingBodyData = z.object({
   title: z.string().optional(),

@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../../allUser/user/user.utils';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../../allUser/user/user.utils";
 import {
   IServiceNotification,
   sendNotificationFromDB,
-} from '../../notification/notification.utls';
-import { friendshipFilterableFields } from './friendship.constants';
-import { IFriendShip } from './friendship.interface';
-import { FriendShipService } from './friendship.service';
+} from "../../notification/notification.utls";
+import { friendshipFilterableFields } from "./friendship.constants";
+import { IFriendShip } from "./friendship.interface";
+import { FriendShipService } from "./friendship.service";
 
 const createFriendShip = catchAsync(async (req: Request, res: Response) => {
   req.body = {
@@ -27,7 +27,7 @@ const createFriendShip = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IFriendShip>(req, res, {
     statusCode: 200,
     success: true,
-    message: 'FriendShip created successfully',
+    message: "FriendShip created successfully",
     data: result,
   });
 
@@ -53,7 +53,7 @@ const checkUserIdToExistFriendShip = catchAsync(
     sendResponse<IFriendShip>(req, res, {
       statusCode: 200,
       success: true,
-      message: 'FriendShip get successfully',
+      message: "FriendShip get successfully",
       data: result,
     });
   },
@@ -73,7 +73,7 @@ const getAllFriendShips = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'FriendShips found successfully',
+    message: "FriendShips found successfully",
     data: result.data,
     meta: result.meta,
   });
@@ -89,7 +89,7 @@ const getFriendShipById = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'FriendShip found successfully',
+    message: "FriendShip found successfully",
     data: result,
   });
 });
@@ -106,7 +106,7 @@ const updateFriendShip = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'FriendShip updated successfully',
+    message: "FriendShip updated successfully",
     data: result,
   });
 });
@@ -123,7 +123,7 @@ const updateFriendShipBlock = catchAsync(
     sendResponse(req, res, {
       statusCode: 200,
       success: true,
-      message: 'FriendShip updated successfully',
+      message: "FriendShip updated successfully",
       data: result,
     });
   },
@@ -141,7 +141,7 @@ const updateFriendShipListSort = catchAsync(
     sendResponse(req, res, {
       statusCode: 200,
       success: true,
-      message: 'FriendShip updated successfully',
+      message: "FriendShip updated successfully",
       data: result,
     });
   },
@@ -159,7 +159,7 @@ const deleteFriendShip = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'review deleted successfully',
+    message: "review deleted successfully",
     data: result,
   });
 });

@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { PipelineStage, Types } from 'mongoose';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { PipelineStage, Types } from "mongoose";
 
-import { ENUM_YN, I_YN } from '../../../global/enum_constant_type';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import { paginationHelper } from '../../../helper/paginationHelper';
-import ApiError from '../../errors/ApiError';
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
-import { Notification_SearchableFields } from './notification.constant';
-import { INotification, INotificationFilters } from './notification.interface';
-import { Notification } from './notification.model';
-import { sendNotificationFromDB } from './notification.utls';
+import { ENUM_YN, I_YN } from "../../../global/enum_constant_type";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import { paginationHelper } from "../../../helper/paginationHelper";
+import ApiError from "../../errors/ApiError";
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
+import { Notification_SearchableFields } from "./notification.constant";
+import { INotification, INotificationFilters } from "./notification.interface";
+import { Notification } from "./notification.model";
+import { sendNotificationFromDB } from "./notification.utls";
 
 const createNotificationToDB = async (
   data: INotification,
@@ -30,7 +30,7 @@ const createNotificationToDB = async (
           const { userIds, ...other } = data;
           return {
             userId: userId.toString(),
-            message: 'Notification send successfully sent',
+            message: "Notification send successfully sent",
             data: other,
           };
         }),
@@ -40,7 +40,7 @@ const createNotificationToDB = async (
       sendNotificationFromDB<INotification>([
         {
           role: data.role,
-          message: 'Notification send successfully sent',
+          message: "Notification send successfully sent",
           data: data,
         },
       ]);
@@ -57,7 +57,7 @@ const getAllNotificationsFromDB = async (
   const { searchTerm, ...filtersData } = filters;
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -68,7 +68,7 @@ const getAllNotificationsFromDB = async (
       $or: Notification_SearchableFields.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -86,7 +86,7 @@ const getAllNotificationsFromDB = async (
          modifyFiled = { [field]: value };
          } 
        */
-        if (field === 'userId') {
+        if (field === "userId") {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
           };
@@ -108,7 +108,7 @@ const getAllNotificationsFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -135,7 +135,7 @@ const getAllNotificationsFromDB = async (
           {
             $match: whereConditions,
           },
-          { $count: 'totalData' },
+          { $count: "totalData" },
         ],
       },
     },
@@ -163,7 +163,7 @@ const getSingleNotificationFromDB = async (
   ];
   const result = await Notification.aggregate(pipeline);
   if (!result[0]) {
-    throw new ApiError(httpStatus.NOT_FOUND, req.t('notification not found'));
+    throw new ApiError(httpStatus.NOT_FOUND, req.t("notification not found"));
   }
   return result[0];
 };
@@ -175,14 +175,14 @@ const updateNotificationFromDB = async (
 ): Promise<INotification | null> => {
   const isExist = await Notification.findById(id);
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, req.t('notification not found'));
+    throw new ApiError(httpStatus.NOT_FOUND, req.t("notification not found"));
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.admin &&
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     !isExist?.userIds?.includes(req?.user?.userId)
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const notificationData = (await Notification.findOneAndUpdate(
@@ -196,7 +196,7 @@ const updateNotificationFromDB = async (
   if (!notificationData) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
-      req.t('Failed to update notification'),
+      req.t("Failed to update notification"),
     );
   }
   return notificationData;
@@ -208,14 +208,14 @@ const updateManyNotificationFromDB = async (
 ): Promise<INotification | null> => {
   const isExist = await Notification.findById(id);
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, req.t('notification not found'));
+    throw new ApiError(httpStatus.NOT_FOUND, req.t("notification not found"));
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.admin &&
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     !isExist?.userIds?.includes(req?.user?.userId)
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const notificationData = (await Notification.findOneAndUpdate(
@@ -229,7 +229,7 @@ const updateManyNotificationFromDB = async (
   if (!notificationData) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
-      req.t('Failed to update notification'),
+      req.t("Failed to update notification"),
     );
   }
   return notificationData;
@@ -244,14 +244,14 @@ const deleteNotificationFromDB = async (
     _id: Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, req.t('notification not found'));
+    throw new ApiError(httpStatus.NOT_FOUND, req.t("notification not found"));
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.admin &&
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     !isExist?.userIds?.includes(req?.user?.userId)
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
   const result = await Notification.findByIdAndDelete(id);
 

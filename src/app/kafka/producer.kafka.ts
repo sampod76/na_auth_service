@@ -1,7 +1,7 @@
-import { Partitioners, Producer } from 'kafkajs';
-import { v4 as uuidv4 } from 'uuid';
-import { ENUM_KAFKA_TOPIC } from './consent.kafka';
-import { kafkaClient } from './kafka';
+import { Partitioners, Producer } from "kafkajs";
+import { v4 as uuidv4 } from "uuid";
+import { ENUM_KAFKA_TOPIC } from "./consent.kafka";
+import { kafkaClient } from "./kafka";
 
 let producer: Producer | null = null;
 
@@ -26,18 +26,18 @@ export const produceMessageByKafka = async (message: string) => {
   await producer.send({
     topic: ENUM_KAFKA_TOPIC.message,
     messages: [
-      { key: 'message:' + uuidv4(), value: message, partition: 0 },
+      { key: "message:" + uuidv4(), value: message, partition: 0 },
       //   { key: 'message:' + uuidv4(), value: 'Hello, Kafka!', partition: 0 },
     ],
   });
 };
 export const produceGroupMessageByKafka = async (message: string) => {
   const producer = await createProducer();
-  console.log('🚀 ~ eachMessage: ~ data:', message);
+  console.log("🚀 ~ eachMessage: ~ data:", message);
   await producer.send({
     topic: ENUM_KAFKA_TOPIC.groupMessage,
     messages: [
-      { key: 'message:' + uuidv4(), value: message, partition: 0 },
+      { key: "message:" + uuidv4(), value: message, partition: 0 },
       //   { key: 'message:' + uuidv4(), value: 'Hello, Kafka!', partition: 0 },
     ],
   });
@@ -49,7 +49,7 @@ export const produceUpdateFriendShipListSortKafka = async (message: string) => {
     topic: ENUM_KAFKA_TOPIC.friendShipUpdateSortList,
     messages: [
       {
-        key: 'friendShipUpdateSortList:' + uuidv4(),
+        key: "friendShipUpdateSortList:" + uuidv4(),
         value: message,
         partition: 0,
       },
@@ -66,7 +66,7 @@ export const produceUpdateGroupMemberListSortKafka = async (
     topic: ENUM_KAFKA_TOPIC.friendShipUpdateSortList,
     messages: [
       {
-        key: 'friendShipUpdateSortList:' + uuidv4(),
+        key: "friendShipUpdateSortList:" + uuidv4(),
         value: message,
         partition: 0,
       },

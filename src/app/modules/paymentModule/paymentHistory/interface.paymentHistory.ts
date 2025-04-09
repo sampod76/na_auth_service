@@ -1,16 +1,16 @@
-import { Model, Types } from 'mongoose';
+import { Model, Types } from "mongoose";
 
-import { z } from 'zod';
-import { I_STATUS, I_YN } from '../../../../global/enum_constant_type';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { NonSubscriptionTransaction } from './validation.paymentHistory';
+import { z } from "zod";
+import { I_STATUS, I_YN } from "../../../../global/enum_constant_type";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { NonSubscriptionTransaction } from "./validation.paymentHistory";
 
 export type IPaymentHistoryFilters = {
   time?: any; // "daily" | "weekly" | "Monthly";
   productId?: string;
   orderId?: string;
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
   dateRangeFirst?: string;
   dateRangeSecond?: string;
   totalIncome?: I_YN;
@@ -41,9 +41,9 @@ export type IPaymentHistory = {
   payment_intent?: string;
   payment_method_types?: any;
   customer_details?: object;
-  status: 'succeeded' | string;
+  status: "succeeded" | string;
   orderId?: string | Types.ObjectId;
-  paymentBy: 'stripe' | 'paypal' | 'manual';
+  paymentBy: "stripe" | "paypal" | "manual";
   //
   revenuecatPayment?: Partial<z.infer<typeof NonSubscriptionTransaction>>;
   //

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import config from '../../config';
-import { FriendShip } from '../modules/messageingModules/friendship/friendship.models';
-import { GroupMessageService } from '../modules/messageingModules/groupMessage/service.groupMessage';
-import { ChatMessageService } from '../modules/messageingModules/message/messages.service';
-import { logger } from '../share/logger';
-import { ENUM_KAFKA_TOPIC } from './consent.kafka';
-import { kafkaClient } from './kafka';
+import config from "../../config";
+import { FriendShip } from "../modules/messageingModules/friendship/friendship.models";
+import { GroupMessageService } from "../modules/messageingModules/groupMessage/service.groupMessage";
+import { ChatMessageService } from "../modules/messageingModules/message/messages.service";
+import { logger } from "../share/logger";
+import { ENUM_KAFKA_TOPIC } from "./consent.kafka";
+import { kafkaClient } from "./kafka";
 
 export const consumerKafka = async () => {
   const topics = [
@@ -16,7 +16,7 @@ export const consumerKafka = async () => {
   ];
   const consumer = kafkaClient.consumer({
     //config.kafka.clientId=chatapplication (example)
-    groupId: config.kafka.clientId + 'message', // kafka group id is unique must --> because another project run same kafka, same group then adapt this
+    groupId: config.kafka.clientId + "message", // kafka group id is unique must --> because another project run same kafka, same group then adapt this
     retry: {
       retries: 5,
       initialRetryTime: 10000,
@@ -78,12 +78,12 @@ export const consumerKafka = async () => {
           }
         }
       } catch (error: any) {
-        console.log('🚀 ~ eachMessage: ~ error:', error);
+        console.log("🚀 ~ eachMessage: ~ error:", error);
         logger.error(error);
         if (error?.status === 503) {
           pause();
           setTimeout(() => {
-            console.log('Resuming consumer...');
+            console.log("Resuming consumer...");
             // consumer.resume([{ topic: ENUM_KAFKA_TOPIC.message }]);
             consumer.resume(
               topics.map(singleTopic => ({ topic: singleTopic })),

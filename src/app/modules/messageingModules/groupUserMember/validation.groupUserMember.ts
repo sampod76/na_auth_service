@@ -1,8 +1,8 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { Types } from 'mongoose';
-import { I_STATUS, STATUS_ARRAY } from '../../../../global/enum_constant_type';
-import { zodRefUser } from '../../allUser/typesAndConst';
+import { Types } from "mongoose";
+import { I_STATUS, STATUS_ARRAY } from "../../../../global/enum_constant_type";
+import { zodRefUser } from "../../allUser/typesAndConst";
 
 const GroupMemberBodyData = z.object({
   // sender: zodRefUser.required(), // set controller to sender

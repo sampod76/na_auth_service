@@ -1,9 +1,9 @@
-import { Job, Queue, QueueEvents, Worker } from 'bullmq';
-import { sendMailHelper } from '../../../utils/sendMail';
-import { redisConnectionString } from '../../redis/redis';
-import { logger } from '../../share/logger';
-import { ENUM_QUEUE_NAME } from '../consent.queus';
-import { defaultQueueConfig } from '../queue.config';
+import { Job, Queue, QueueEvents, Worker } from "bullmq";
+import { sendMailHelper } from "../../../utils/sendMail";
+import { redisConnectionString } from "../../redis/redis";
+import { logger } from "../../share/logger";
+import { ENUM_QUEUE_NAME } from "../consent.queus";
+import { defaultQueueConfig } from "../queue.config";
 
 export const emailQueue = new Queue(ENUM_QUEUE_NAME.email, {
   connection: redisConnectionString,
@@ -18,14 +18,14 @@ const emailQueueEvents = new QueueEvents(ENUM_QUEUE_NAME.email);
 export const checkEmailQueueResult = (jobId: string) => {
   return new Promise((resolve, reject) => {
     emailQueueEvents.on(
-      'completed',
+      "completed",
       ({ jobId: completedJobId, returnvalue }) => {
         if (jobId === completedJobId) {
           resolve(returnvalue);
         }
       },
     );
-    emailQueueEvents.on('failed', ({ jobId: failedJobId, failedReason }) => {
+    emailQueueEvents.on("failed", ({ jobId: failedJobId, failedReason }) => {
       if (jobId === failedJobId) {
         reject(new Error(failedReason));
       }

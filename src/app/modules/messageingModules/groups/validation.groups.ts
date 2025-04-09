@@ -1,13 +1,13 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { I_STATUS, STATUS_ARRAY } from '../../../../global/enum_constant_type';
-import { zodFileAfterUploadSchema } from '../../../../global/schema/global.schema';
-import { zodRefUser } from '../../allUser/typesAndConst';
+import { I_STATUS, STATUS_ARRAY } from "../../../../global/enum_constant_type";
+import { zodFileAfterUploadSchema } from "../../../../global/schema/global.schema";
+import { zodRefUser } from "../../allUser/typesAndConst";
 const projectSchema = z
   .object({
-    title: z.string().min(1, 'Title is required'),
-    description: z.string().min(1, 'Description is required'),
-    price: z.number().min(1, 'Price should be a positive number').optional(),
+    title: z.string().min(1, "Title is required"),
+    description: z.string().min(1, "Description is required"),
+    price: z.number().min(1, "Price should be a positive number").optional(),
     projectStart: z
       .string()
       .datetime({ offset: true })
@@ -15,7 +15,7 @@ const projectSchema = z
       .refine(val => {
         const date = new Date(val);
         return !isNaN(date.getTime());
-      }, 'Invalid projectStart date'),
+      }, "Invalid projectStart date"),
     projectDeadline: z
       .string()
       .datetime({ offset: true })
@@ -27,7 +27,7 @@ const projectSchema = z
           return !isNaN(date.getTime());
         }
         return true;
-      }, 'Invalid projectDeadline date'),
+      }, "Invalid projectDeadline date"),
   })
   .superRefine((project, ctx) => {
     const today = new Date(new Date().setHours(0, 0, 0, 0)).getTime(); // Start of today as timestamp
@@ -35,9 +35,9 @@ const projectSchema = z
     // Check if `projectStart` is in the future
     if (projectStart < today) {
       ctx.addIssue({
-        path: ['projectStart'],
-        message: 'projectStart date cannot be in the future',
-        code: 'custom',
+        path: ["projectStart"],
+        message: "projectStart date cannot be in the future",
+        code: "custom",
       });
     }
     // If `projectDeadline` is provided, validate it
@@ -46,24 +46,24 @@ const projectSchema = z
       // Check if `projectDeadline` is in the past
       if (projectDeadline < today) {
         ctx.addIssue({
-          path: ['projectDeadline'],
-          message: 'projectDeadline date cannot be in the past',
-          code: 'custom',
+          path: ["projectDeadline"],
+          message: "projectDeadline date cannot be in the past",
+          code: "custom",
         });
       }
       // Check if `projectDeadline` is before `projectStart`
       if (projectDeadline < projectStart) {
         ctx.addIssue({
-          path: ['projectDeadline'],
-          message: 'projectDeadline date must be after or on projectStart',
-          code: 'custom',
+          path: ["projectDeadline"],
+          message: "projectDeadline date must be after or on projectStart",
+          code: "custom",
         });
       }
     }
   });
 
 const GroupsBodyData = z.object({
-  name: z.string().min(1, 'Team name is required'),
+  name: z.string().min(1, "Team name is required"),
   // membersCount: z.number().min(1, 'Members count should be a positive number'),
   project: projectSchema,
   author: zodRefUser.optional(), //replace controller

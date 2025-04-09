@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import ApiError from '../../errors/ApiError';
-import { adminSetting_SEARCHABLE_FIELDS } from './constant.adminSetting';
-import { IAdminSetting, IAdminSettingFilters } from './interface.adminSetting';
-import { AdminSetting } from './model.adminSetting';
+import { Request } from "express";
+import httpStatus from "http-status";
+import ApiError from "../../errors/ApiError";
+import { adminSetting_SEARCHABLE_FIELDS } from "./constant.adminSetting";
+import { IAdminSetting, IAdminSettingFilters } from "./interface.adminSetting";
+import { AdminSetting } from "./model.adminSetting";
 
 const createAdminSettingByDb = async (
   payload: IAdminSetting,
@@ -47,7 +47,7 @@ const getAllAdminSettingFromDb = async (
   const { searchTerm, ...filtersData } = filters;
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -57,7 +57,7 @@ const getAllAdminSettingFromDb = async (
       $or: adminSetting_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -79,7 +79,7 @@ const getAllAdminSettingFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -111,7 +111,7 @@ const getAllAdminSettingFromDb = async (
           {
             $match: whereConditions,
           },
-          { $count: 'totalData' },
+          { $count: "totalData" },
         ],
       },
     },
@@ -140,7 +140,7 @@ const getSingleAdminSettingFromDb = async (
   ];
   const result = await AdminSetting.aggregate(pipeline);
   if (!result.length) {
-    throw new ApiError(400, req.t('Not found AdminSetting'));
+    throw new ApiError(400, req.t("Not found AdminSetting"));
   }
   return result[0];
 };
@@ -167,14 +167,14 @@ const deleteAdminSettingByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, req.t('AdminSetting not found'));
+    throw new ApiError(httpStatus.NOT_FOUND, req.t("AdminSetting not found"));
   }
 
   let result;
-  if (query.delete == 'yes') {
+  if (query.delete == "yes") {
     result = await AdminSetting.findByIdAndDelete(id);
     if (!result) {
-      throw new ApiError(httpStatus.NOT_FOUND, req.t('Failed to delete'));
+      throw new ApiError(httpStatus.NOT_FOUND, req.t("Failed to delete"));
     }
     return result;
   } else {
@@ -183,7 +183,7 @@ const deleteAdminSettingByIdFromDb = async (
       { isDelete: true },
     );
     if (!result) {
-      throw new ApiError(httpStatus.NOT_FOUND, req.t('Failed to delete'));
+      throw new ApiError(httpStatus.NOT_FOUND, req.t("Failed to delete"));
     }
     return result;
   }

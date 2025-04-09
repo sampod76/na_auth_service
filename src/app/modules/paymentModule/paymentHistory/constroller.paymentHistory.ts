@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import { PAYMENT_HISTORY_FILTERABLE_FIELDS } from './consent.paymentHistory';
-import { IPaymentHistory } from './interface.paymentHistory';
-import { PaymentHistoryService } from './service.paymentHistory';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import { PAYMENT_HISTORY_FILTERABLE_FIELDS } from "./consent.paymentHistory";
+import { IPaymentHistory } from "./interface.paymentHistory";
+import { PaymentHistoryService } from "./service.paymentHistory";
 
 // import { z } from 'zod'
 const createPaymentHistory = catchAsync(async (req: Request, res: Response) => {
@@ -19,7 +19,7 @@ const createPaymentHistory = catchAsync(async (req: Request, res: Response) => {
   sendResponse<any>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully create PaymentHistory',
+    message: "successfully create PaymentHistory",
     data: result,
   });
 });
@@ -40,7 +40,7 @@ const getAllPaymentHistory = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IPaymentHistory[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get PaymentHistory',
+    message: "successfully Get PaymentHistory",
     meta: result.meta,
     data: result.data,
   });
@@ -62,7 +62,7 @@ const getAllTransaction = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IPaymentHistory[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get PaymentHistory',
+    message: "successfully Get PaymentHistory",
     meta: result.meta,
     data: result.data,
   });
@@ -84,7 +84,7 @@ const getAllChartOfValue = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IPaymentHistory[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get PaymentHistory',
+    message: "successfully Get PaymentHistory",
     meta: result.meta,
     data: result.data,
   });
@@ -107,7 +107,7 @@ const getAllTimeToGroupPaymentHistory = catchAsync(
     sendResponse<IPaymentHistory[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully Get PaymentHistory',
+      message: "successfully Get PaymentHistory",
       meta: result.meta,
       data: result.data,
     });
@@ -130,7 +130,7 @@ const getSinglePaymentHistory = catchAsync(
     sendResponse<IPaymentHistory>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get PaymentHistory',
+      message: "successfully get PaymentHistory",
       data: result,
     });
   },

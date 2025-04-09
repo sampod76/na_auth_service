@@ -1,16 +1,16 @@
-import express from 'express';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import authMiddleware from '../../middlewares/authMiddleware';
+import express from "express";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import authMiddleware from "../../middlewares/authMiddleware";
 
-import { z } from 'zod';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { RoutingReminderController } from './controller.RoutingReminder';
-import { RoutingReminderValidation } from './validation.RoutingReminder';
+import { z } from "zod";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { RoutingReminderController } from "./controller.RoutingReminder";
+import { RoutingReminderValidation } from "./validation.RoutingReminder";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   // This route is open
   .get(
     authMiddleware(
@@ -32,7 +32,7 @@ router
     ),
     RoutingReminderController.createRoutingReminder,
   );
-router.route('/serialnumber-update').patch(
+router.route("/serialnumber-update").patch(
   authMiddleware(
     ENUM_USER_ROLE.admin,
     ENUM_USER_ROLE.superAdmin,
@@ -48,7 +48,7 @@ router.route('/serialnumber-update').patch(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   // This route is open
   .get(
     authMiddleware(

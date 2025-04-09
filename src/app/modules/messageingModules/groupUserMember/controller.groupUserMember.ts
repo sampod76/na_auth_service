@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../../allUser/user/user.utils';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../../allUser/user/user.utils";
 import {
   IServiceNotification,
   sendNotificationFromDB,
-} from '../../notification/notification.utls';
-import { GroupMemberFilterableFields } from './constants.groupUserMember';
-import { IGroupMember } from './interface.groupUserMember';
-import { GroupMemberService } from './service.groupUserMember';
+} from "../../notification/notification.utls";
+import { GroupMemberFilterableFields } from "./constants.groupUserMember";
+import { IGroupMember } from "./interface.groupUserMember";
+import { GroupMemberService } from "./service.groupUserMember";
 
 const createGroupMember = catchAsync(async (req: Request, res: Response) => {
   req.body = {
@@ -27,7 +27,7 @@ const createGroupMember = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGroupMember>(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMember created successfully',
+    message: "GroupMember created successfully",
     data: result,
   });
 
@@ -53,7 +53,7 @@ const checkUserIdToExistGroupMember = catchAsync(
     sendResponse<IGroupMember>(req, res, {
       statusCode: 200,
       success: true,
-      message: 'GroupMember get successfully',
+      message: "GroupMember get successfully",
       data: result,
     });
   },
@@ -73,7 +73,7 @@ const getAllGroupMembers = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMembers found successfully',
+    message: "GroupMembers found successfully",
     data: result.data,
     meta: result.meta,
   });
@@ -89,7 +89,7 @@ const getGroupMemberById = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMember found successfully',
+    message: "GroupMember found successfully",
     data: result,
   });
 });
@@ -106,7 +106,7 @@ const updateGroupMember = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'GroupMember updated successfully',
+    message: "GroupMember updated successfully",
     data: result,
   });
 });
@@ -123,7 +123,7 @@ const updateGroupMemberBlock = catchAsync(
     sendResponse(req, res, {
       statusCode: 200,
       success: true,
-      message: 'GroupMember updated successfully',
+      message: "GroupMember updated successfully",
       data: result,
     });
   },
@@ -141,7 +141,7 @@ const updateGroupMemberListSort = catchAsync(
     sendResponse(req, res, {
       statusCode: 200,
       success: true,
-      message: 'GroupMember updated successfully',
+      message: "GroupMember updated successfully",
       data: result,
     });
   },
@@ -159,7 +159,7 @@ const deleteGroupMember = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'review deleted successfully',
+    message: "review deleted successfully",
     data: result,
   });
 });

@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../helper/lookUpResuable';
-import ApiError from '../../errors/ApiError';
-import { IUserRef } from '../allUser/typesAndConst';
-import { Ooptestmodual_SEARCHABLE_FIELDS } from './constant.Ooptestmodual';
+} from "../../../helper/lookUpResuable";
+import ApiError from "../../errors/ApiError";
+import { IUserRef } from "../allUser/typesAndConst";
+import { Ooptestmodual_SEARCHABLE_FIELDS } from "./constant.Ooptestmodual";
 import {
   IOoptestmodual,
   IOoptestmodualFilters,
-} from './interface.Ooptestmodual';
-import { Ooptestmodual } from './model.Ooptestmodual';
+} from "./interface.Ooptestmodual";
+import { Ooptestmodual } from "./model.Ooptestmodual";
 
 // ------------------------
 
@@ -35,7 +35,7 @@ export class OoptestmodualServiceClass {
     const user = req.user as IUserRef;
     const [findAlreadyExists] = await Promise.all([
       Ooptestmodual.findOne({
-        'author.userId': new Types.ObjectId(user.userId),
+        "author.userId": new Types.ObjectId(user.userId),
         productId: new Types.ObjectId(payload.productId),
         isDelete: false,
       }).sort({ serialNumber: -1 }),
@@ -44,7 +44,7 @@ export class OoptestmodualServiceClass {
     if (findAlreadyExists) {
       throw new ApiError(
         httpStatus.NOT_ACCEPTABLE,
-        'Product is already added ',
+        "Product is already added ",
       );
     }
     const result = await Ooptestmodual.create(payload);
@@ -68,10 +68,10 @@ export class OoptestmodualServiceClass {
     } = filters;
     //***********cache start************* */
     if (user.role !== ENUM_USER_ROLE.admin) {
-      filtersData['author.userId'] = user.userId.toString();
+      filtersData["author.userId"] = user.userId.toString();
     }
     filtersData.isDelete = filtersData.isDelete
-      ? filtersData.isDelete == 'true'
+      ? filtersData.isDelete == "true"
         ? true
         : false
       : false;
@@ -81,7 +81,7 @@ export class OoptestmodualServiceClass {
         $or: Ooptestmodual_SEARCHABLE_FIELDS.map(field => ({
           [field]: {
             $regex: searchTerm,
-            $options: 'i',
+            $options: "i",
           },
         })),
       });
@@ -100,9 +100,9 @@ export class OoptestmodualServiceClass {
          } 
        */
           if (
-            field === 'author.userId' ||
-            field === 'author.roleBaseUserId' ||
-            field === 'productId'
+            field === "author.userId" ||
+            field === "author.roleBaseUserId" ||
+            field === "productId"
           ) {
             modifyFiled = {
               [field]: new Types.ObjectId(value),
@@ -151,7 +151,7 @@ export class OoptestmodualServiceClass {
 
     const sortConditions: { [key: string]: 1 | -1 } = {};
     if (sortBy && sortOrder) {
-      sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+      sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
     }
     //****************pagination end ***************/
 
@@ -170,24 +170,24 @@ export class OoptestmodualServiceClass {
       { $limit: Number(limit) || 10 },
     ];
     const collections: ILookupCollection<any>[] = []; // Use the correct type here
-    if (needProperty?.includes('productId')) {
+    if (needProperty?.includes("productId")) {
       const pipelineConnection: ILookupCollection<any> = {
-        connectionName: 'products',
-        idFiledName: 'productId',
-        pipeLineMatchField: '_id',
-        outPutFieldName: 'productDetails',
+        connectionName: "products",
+        idFiledName: "productId",
+        pipeLineMatchField: "_id",
+        outPutFieldName: "productDetails",
       };
       collections.push(pipelineConnection);
     }
-    if (needProperty && needProperty.includes('author')) {
+    if (needProperty && needProperty.includes("author")) {
       LookupAnyRoleDetailsReusable(pipeline, {
         collections: [
           {
-            roleMatchFiledName: 'author.role',
-            idFiledName: '$author.roleBaseUserId',
-            pipeLineMatchField: '$_id',
-            outPutFieldName: 'details',
-            margeInField: 'author',
+            roleMatchFiledName: "author.role",
+            idFiledName: "$author.roleBaseUserId",
+            pipeLineMatchField: "$_id",
+            outPutFieldName: "details",
+            margeInField: "author",
           },
         ],
       });
@@ -229,13 +229,13 @@ export class OoptestmodualServiceClass {
     const result = await Ooptestmodual.aggregate(pipeline);
     const dataReturn = result.length ? result[0] : null;
     if (!dataReturn) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Ooptestmodual not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "Ooptestmodual not found");
     }
     if (
       dataReturn.author.userId.toString() !== user.userId.toString() &&
       user.role !== ENUM_USER_ROLE.admin
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+      throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
     }
     return dataReturn;
   };
@@ -251,13 +251,13 @@ export class OoptestmodualServiceClass {
       _id: Schema.Types.ObjectId;
     };
     if (!isExist || isExist.isDelete) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Ooptestmodual not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "Ooptestmodual not found");
     }
     if (
       isExist.author.userId.toString() !== user.userId.toString() &&
       user.role !== ENUM_USER_ROLE.admin
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+      throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
     }
     const result = await Ooptestmodual.findOneAndUpdate({ _id: id }, payload, {
       new: true,
@@ -277,13 +277,13 @@ export class OoptestmodualServiceClass {
       _id: Schema.Types.ObjectId;
     };
     if (!isExist) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Ooptestmodual not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "Ooptestmodual not found");
     }
     if (
       isExist.author.userId.toString() !== user.userId.toString() &&
       user.role !== ENUM_USER_ROLE.admin
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+      throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
     }
 
     const result = await Ooptestmodual.findOneAndUpdate(
@@ -292,7 +292,7 @@ export class OoptestmodualServiceClass {
       { new: true, runValidators: true },
     );
     if (!result) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+      throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
     }
     return result;
   };

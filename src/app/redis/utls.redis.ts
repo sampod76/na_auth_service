@@ -1,13 +1,13 @@
-import { Request } from 'express';
+import { Request } from "express";
 
 export class CacheKeyGenerator {
   readonly baseUrl: string;
   readonly params: Record<string, any> = {};
   constructor(req: Request) {
     // any / to replace : --> /api/v1/users/123 to api:v1:users:123
-    const path = req.originalUrl.replace(/\?.*$/, '');
+    const path = req.originalUrl.replace(/\?.*$/, "");
     // this.baseUrl = req.path.replace(/^\/+|\/$/g, '').replace(/\//g, ':');
-    this.baseUrl = path.replace(/^\/+|\/$/g, '').replace(/\//g, ':');
+    this.baseUrl = path.replace(/^\/+|\/$/g, "").replace(/\//g, ":");
     Object.entries(req.query).forEach(([key, value]) => {
       if (value && Boolean(value)) {
         this.params[key] = value;
@@ -18,7 +18,7 @@ export class CacheKeyGenerator {
     return Object.keys(this.params)
       .sort()
       .map(key => `${key}=${this.params[key]}`)
-      .join('&');
+      .join("&");
   }
   public generateKey(): string {
     const sortParams = this.generateSortParams();

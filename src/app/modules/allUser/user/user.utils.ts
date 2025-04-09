@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import httpStatus from 'http-status';
-import { Types } from 'mongoose';
-import { ENUM_STATUS } from '../../../../global/enum_constant_type';
-import ApiError from '../../../errors/ApiError';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
-import { RedisAllSetterServiceOop } from '../../../redis/service.redis';
+import httpStatus from "http-status";
+import { Types } from "mongoose";
+import { ENUM_STATUS } from "../../../../global/enum_constant_type";
+import ApiError from "../../../errors/ApiError";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
+import { RedisAllSetterServiceOop } from "../../../redis/service.redis";
 
-import { ENUM_VERIFY, IUserRef } from '../typesAndConst';
-import { IUser } from './user.interface';
-import { User } from './user.model';
+import { ENUM_VERIFY, IUserRef } from "../typesAndConst";
+import { IUser } from "./user.interface";
+import { User } from "./user.model";
 
 export const findLastUserId = async () => {
   const lastUser = await User.findOne({}, { userUniqueId: 1, _id: 0 })
@@ -21,10 +21,10 @@ export const findLastUserId = async () => {
 };
 
 export const generateUserId = async () => {
-  const currentId = (await findLastUserId()) || (0).toString().padStart(8, '0');
-  const slice = currentId.includes('-') ? currentId.split('-')[1] : currentId;
+  const currentId = (await findLastUserId()) || (0).toString().padStart(8, "0");
+  const slice = currentId.includes("-") ? currentId.split("-")[1] : currentId;
   // increment by 1
-  const incrementedId = (parseInt(slice) + 1).toString().padStart(8, '0');
+  const incrementedId = (parseInt(slice) + 1).toString().padStart(8, "0");
 
   return incrementedId;
 };
@@ -43,7 +43,7 @@ export const setUserInRedisByUserId = async (id: string, data: IUser) => {
   const getUser = await redisClient.set(
     ENUM_REDIS_KEY.REDIS_IN_SAVE_ALL_USERS + id.toString(),
     JSON.stringify(data),
-    'EX',
+    "EX",
     24 * 60 * 60, // 1 day to second
   );
   return getUser;
@@ -52,7 +52,7 @@ export const setUserInRedisByUserId = async (id: string, data: IUser) => {
 
 export const validateUserInDbOrRedis = async (users: string[] | IUserRef[]) => {
   let findUserData: IUser[];
-  if (typeof users[0] === 'string' || users[0] instanceof Types.ObjectId) {
+  if (typeof users[0] === "string" || users[0] instanceof Types.ObjectId) {
     // Handle the case when `users` is an array of strings (user IDs)
     const findInRedisUsers = await redisClient.mget(
       users.map(
@@ -123,9 +123,9 @@ export const validateUserInDbOrRedis = async (users: string[] | IUserRef[]) => {
 
     validateUsers(findUserData);
   } else if (
-    typeof users[0] === 'object' &&
+    typeof users[0] === "object" &&
     users[0] !== null &&
-    'userId' in users[0]
+    "userId" in users[0]
   ) {
     const findInRedisUsers = await redisClient.mget(
       users.map(
@@ -200,7 +200,7 @@ export const validateUserInDbOrRedis = async (users: string[] | IUserRef[]) => {
     validateUsers(findUserData);
   } else {
     throw new Error(
-      'Invalid input: users array must contain either strings or IUserRef objects',
+      "Invalid input: users array must contain either strings or IUserRef objects",
     );
   }
   return findUserData;

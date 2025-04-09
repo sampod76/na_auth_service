@@ -1,41 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { PipelineStage, Schema, Types } from "mongoose";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
 
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../../helper/lookUpResuable';
+} from "../../../../helper/lookUpResuable";
 
-import { produceUpdateGroupMemberListSortKafka } from '../../../kafka/producer.kafka';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
+import { produceUpdateGroupMemberListSortKafka } from "../../../kafka/producer.kafka";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../../redis/service.redis';
+} from "../../../redis/service.redis";
 
-import { IUserRef, IUserRefAndDetails } from '../../allUser/typesAndConst';
-import { IUser } from '../../allUser/user/user.interface';
-import { User } from '../../allUser/user/user.model';
+import { IUserRef, IUserRefAndDetails } from "../../allUser/typesAndConst";
+import { IUser } from "../../allUser/user/user.interface";
+import { User } from "../../allUser/user/user.model";
 import {
   RequestToRefUserObject,
   validateUserInDbOrRedis,
-} from '../../allUser/user/user.utils';
+} from "../../allUser/user/user.utils";
 
-import { IGroups } from '../groups/interface.groups';
-import { Groups } from '../groups/models.groups';
-import { GroupMemberSearchableFields } from './constants.groupUserMember';
-import { IGroupMember, IGroupMemberFilters } from './interface.groupUserMember';
-import { GroupMember } from './models.groupUserMember';
+import { IGroups } from "../groups/interface.groups";
+import { Groups } from "../groups/models.groups";
+import { GroupMemberSearchableFields } from "./constants.groupUserMember";
+import { IGroupMember, IGroupMemberFilters } from "./interface.groupUserMember";
+import { GroupMember } from "./models.groupUserMember";
 
 const createGroupMember = async (
   data: IGroupMember,
@@ -50,16 +50,16 @@ const createGroupMember = async (
     GroupMember.findOne({
       $or: [
         {
-          'sender.userId': new Types.ObjectId(data.sender?.userId as string),
-          'receiver.userId': new Types.ObjectId(
+          "sender.userId": new Types.ObjectId(data.sender?.userId as string),
+          "receiver.userId": new Types.ObjectId(
             data.receiver?.userId as string,
           ),
           groupId: new Types.ObjectId(data.groupId as string),
           isDelete: false,
         },
         {
-          'sender.userId': new Types.ObjectId(data.receiver?.userId as string),
-          'receiver.userId': new Types.ObjectId(data.sender?.userId as string),
+          "sender.userId": new Types.ObjectId(data.receiver?.userId as string),
+          "receiver.userId": new Types.ObjectId(data.sender?.userId as string),
           groupId: new Types.ObjectId(data.groupId as string),
           isDelete: false,
         },
@@ -73,20 +73,20 @@ const createGroupMember = async (
 
   // Validate Receiver
   if (!receiver) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Receiver not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Receiver not found");
   }
 
   // Validate GroupMember
   if (groupMember) {
-    throw new ApiError(httpStatus.CONFLICT, 'GroupMember already exists');
+    throw new ApiError(httpStatus.CONFLICT, "GroupMember already exists");
   }
   // Validate Group
   if (!groupValidation) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Group not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Group not found");
   } else if (
     groupValidation.author.userId.toString() !== data.sender.userId.toString()
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access');
+    throw new ApiError(httpStatus.FORBIDDEN, "forbidden access");
   }
 
   data.receiver = {
@@ -128,7 +128,7 @@ const checkUserIdToExistGroupMemberFromDb = async (
     //[string,null]
     if (
       stringGroupMemberString &&
-      typeof stringGroupMemberString === 'string'
+      typeof stringGroupMemberString === "string"
     ) {
       const stringGroupMemberObjectDate: any = JSON.parse(
         stringGroupMemberString,
@@ -166,14 +166,14 @@ const checkUserIdToExistGroupMemberFromDb = async (
       $match: {
         $or: [
           {
-            'sender.userId': new Types.ObjectId(userId as string),
-            'receiver.userId': new Types.ObjectId(
+            "sender.userId": new Types.ObjectId(userId as string),
+            "receiver.userId": new Types.ObjectId(
               requestUser?.userId as string,
             ),
           },
           {
-            'sender.userId': new Types.ObjectId(requestUser?.userId as string),
-            'receiver.userId': new Types.ObjectId(userId as string),
+            "sender.userId": new Types.ObjectId(requestUser?.userId as string),
+            "receiver.userId": new Types.ObjectId(userId as string),
           },
         ],
       },
@@ -183,20 +183,20 @@ const checkUserIdToExistGroupMemberFromDb = async (
   LookupAnyRoleDetailsReusable(pipeline, {
     collections: [
       {
-        roleMatchFiledName: 'sender.role',
-        idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'sender',
+        roleMatchFiledName: "sender.role",
+        idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "sender",
 
         project: { name: 1, country: 1, profileImage: 1, email: 1 },
       },
       {
-        roleMatchFiledName: 'receiver.role',
-        idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'receiver',
+        roleMatchFiledName: "receiver.role",
+        idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "receiver",
 
         project: { name: 1, country: 1, profileImage: 1, email: 1 },
       },
@@ -213,7 +213,7 @@ const checkUserIdToExistGroupMemberFromDb = async (
       { key: whenMyReceiver, value: findData, ttl: 24 * 60 },
     ]);
   } else {
-    if (req.query?.createGroupMember == 'yes') {
+    if (req.query?.createGroupMember == "yes") {
       //if when checking and not found GroupMember then auto matic create user
       const receiverInfo = (await User.isUserFindMethod(
         { id: userId },
@@ -303,7 +303,7 @@ const getAllGroupMembersFromDB = async (
 ): Promise<IGenericResponse<IGroupMember[] | null>> => {
   const { searchTerm, needProperty, ...filtersData } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -314,7 +314,7 @@ const getAllGroupMembersFromDB = async (
       $or: GroupMemberSearchableFields.map((field: string) => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -327,33 +327,33 @@ const getAllGroupMembersFromDB = async (
         ([field, value]: [keyof typeof filtersData, string]) => {
           let modifyFiled;
 
-          if (field === 'groupId' || field === 'orderId') {
+          if (field === "groupId" || field === "orderId") {
             modifyFiled = { [field]: new Types.ObjectId(value) };
-          } else if (field === 'senderUserId') {
+          } else if (field === "senderUserId") {
             modifyFiled = {
-              ['sender.userId']: new Types.ObjectId(value),
+              ["sender.userId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'senderRoleBaseId') {
+          } else if (field === "senderRoleBaseId") {
             modifyFiled = {
-              ['sender.roleBaseUserId']: new Types.ObjectId(value),
+              ["sender.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'receiverUserId') {
+          } else if (field === "receiverUserId") {
             modifyFiled = {
-              ['receiver.roleBaseUserId']: new Types.ObjectId(value),
+              ["receiver.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'receiverRoleBaseId') {
+          } else if (field === "receiverRoleBaseId") {
             modifyFiled = {
-              ['receiver.roleBaseUserId']: new Types.ObjectId(value),
+              ["receiver.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'isBlock') {
+          } else if (field === "isBlock") {
             modifyFiled = {
-              ['block.isBlock']: value,
+              ["block.isBlock"]: value,
             };
-          } else if (field === 'myData' && value === 'yes') {
+          } else if (field === "myData" && value === "yes") {
             modifyFiled = {
               $or: [
                 {
-                  'receiver.userId': new Types.ObjectId(
+                  "receiver.userId": new Types.ObjectId(
                     req?.user?.userId as string,
                   ),
                 },
@@ -371,7 +371,7 @@ const getAllGroupMembersFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -401,27 +401,27 @@ const getAllGroupMembersFromDB = async (
 
   //-----------------needProperty--lookup--------------------
   if (
-    needProperty?.toLowerCase()?.includes('senderinfo') ||
-    needProperty?.toLowerCase()?.includes('receiverinfo')
+    needProperty?.toLowerCase()?.includes("senderinfo") ||
+    needProperty?.toLowerCase()?.includes("receiverinfo")
   ) {
     const collections = [];
-    if (needProperty?.toLowerCase()?.includes('senderinfo')) {
+    if (needProperty?.toLowerCase()?.includes("senderinfo")) {
       collections.push({
-        roleMatchFiledName: 'sender.role',
-        idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'sender',
+        roleMatchFiledName: "sender.role",
+        idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "sender",
         project: { name: 1, email: 1, profileImage: 1, userId: 1 },
       });
     }
-    if (needProperty?.toLowerCase()?.includes('receiverinfo')) {
+    if (needProperty?.toLowerCase()?.includes("receiverinfo")) {
       collections.push({
-        roleMatchFiledName: 'receiver.role',
-        idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'receiver',
+        roleMatchFiledName: "receiver.role",
+        idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "receiver",
         project: { name: 1, email: 1, profileImage: 1, userId: 1 },
       });
     }
@@ -434,29 +434,29 @@ const getAllGroupMembersFromDB = async (
   }
   //
   const collections: ILookupCollection<any>[] = [];
-  if (needProperty && needProperty.includes('groupId')) {
+  if (needProperty && needProperty.includes("groupId")) {
     const gigCollecting: ILookupCollection<IGroups> = {
-      connectionName: 'groups',
-      idFiledName: '$groupId',
-      pipeLineMatchField: '$_id',
-      outPutFieldName: 'groupDetails',
+      connectionName: "groups",
+      idFiledName: "$groupId",
+      pipeLineMatchField: "$_id",
+      outPutFieldName: "groupDetails",
       //project: { name: 1, country: 1, profileImage: 1, email: 1 },
     };
     // Push the object into the collections array
     collections.push(gigCollecting);
   }
-  if (needProperty && needProperty.includes('lastMessage')) {
+  if (needProperty && needProperty.includes("lastMessage")) {
     const lastMessagePipeline: PipelineStage[] = [
       {
         $lookup: {
-          from: 'groupmessages',
-          let: { groupId: '$groupId' },
+          from: "groupmessages",
+          let: { groupId: "$groupId" },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$groupId', '$$groupId'] },
+                    { $eq: ["$groupId", "$$groupId"] },
                     // {
                     //   $ne: [
                     //     '$sender.userId',
@@ -481,8 +481,8 @@ const getAllGroupMembersFromDB = async (
                 createTime: 1,
                 files: {
                   $cond: {
-                    if: { $eq: [{ $type: '$files' }, 'array'] }, // Check if `files` exists and is an array
-                    then: { $size: '$files' }, // If it exists, get the array size
+                    if: { $eq: [{ $type: "$files" }, "array"] }, // Check if `files` exists and is an array
+                    then: { $size: "$files" }, // If it exists, get the array size
                     else: 0, // If it doesn't exist, set to 0
                   },
                 },
@@ -490,16 +490,16 @@ const getAllGroupMembersFromDB = async (
               },
             },
           ],
-          as: 'lastMessageDetails',
+          as: "lastMessageDetails",
         },
       },
       {
         $addFields: {
           lastMessageDetails: {
             $cond: {
-              if: { $eq: [{ $size: '$lastMessageDetails' }, 0] },
+              if: { $eq: [{ $size: "$lastMessageDetails" }, 0] },
               then: {},
-              else: { $arrayElemAt: ['$lastMessageDetails', 0] },
+              else: { $arrayElemAt: ["$lastMessageDetails", 0] },
             },
           },
         },
@@ -571,7 +571,7 @@ const updateGroupMemberFromDB = async (
     _id: Schema.Types.ObjectId;
   } as IGroupMember;
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'GroupMember not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "GroupMember not found");
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -579,7 +579,7 @@ const updateGroupMemberFromDB = async (
     isExist?.sender?.userId?.toString() !== req?.user?.userId &&
     isExist?.receiver?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { block, ...GroupMemberData } = data;
@@ -587,10 +587,10 @@ const updateGroupMemberFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     req?.user?.role !== ENUM_USER_ROLE.admin
   ) {
-    delete (GroupMemberData as Partial<IGroupMember>)['isDelete']; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
+    delete (GroupMemberData as Partial<IGroupMember>)["isDelete"]; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
     if (isExist?.sender?.userId?.toString() !== req?.user?.userId) {
       //sender not accepted this request
-      delete (GroupMemberData as Partial<IGroupMember>)['requestAccept'];
+      delete (GroupMemberData as Partial<IGroupMember>)["requestAccept"];
     }
   }
 
@@ -605,7 +605,7 @@ const updateGroupMemberFromDB = async (
     },
   );
   if (!updatedGroupMember) {
-    throw new ApiError(400, 'Failed to update GroupMember');
+    throw new ApiError(400, "Failed to update GroupMember");
   }
   return updatedGroupMember;
 };
@@ -618,7 +618,7 @@ const updateGroupMemberBlockFromDb = async (
     _id: Schema.Types.ObjectId;
   } as IGroupMember;
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'GroupMember not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "GroupMember not found");
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -626,7 +626,7 @@ const updateGroupMemberBlockFromDb = async (
     isExist?.sender?.userId?.toString() !== req?.user?.userId &&
     isExist?.receiver?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { block, ...GroupMemberData } = data;
@@ -637,13 +637,13 @@ const updateGroupMemberBlockFromDb = async (
       req.user?.role !== ENUM_USER_ROLE.admin &&
       req.user?.role !== ENUM_USER_ROLE.superAdmin
     ) {
-      throw new ApiError(403, 'forbidden access');
+      throw new ApiError(403, "forbidden access");
     }
 
-    updatedGroupMemberData['block'] = block;
+    updatedGroupMemberData["block"] = block;
   } else if (block && Object.keys(block).length) {
     if (isExist?.block?.blocker?.userId?.toString() !== req?.user?.userId) {
-      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Already blocked you');
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, "Already blocked you");
     }
     Object.keys(block).forEach(key => {
       const nameKey = `block.${key}` as keyof Partial<IGroupMember>;
@@ -664,7 +664,7 @@ const updateGroupMemberBlockFromDb = async (
     },
   );
   if (!updatedGroupMember) {
-    throw new ApiError(400, 'Failed to update GroupMember');
+    throw new ApiError(400, "Failed to update GroupMember");
   }
   return updatedGroupMember;
 };
@@ -702,7 +702,7 @@ const deleteGroupMemberFromDB = async (
   ])) as IGroupMember[];
 
   if (!isExist.length) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'GroupMember not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "GroupMember not found");
   }
 
   if (
@@ -710,13 +710,13 @@ const deleteGroupMemberFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist[0]?.sender?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   let data;
 
   if (
-    query.delete == 'yes' && // this is permanently delete but store trash collection
+    query.delete == "yes" && // this is permanently delete but store trash collection
     (req?.user?.role == ENUM_USER_ROLE.admin ||
       req?.user?.role == ENUM_USER_ROLE.superAdmin)
   ) {

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request } from 'express';
-import ApiError from '../app/errors/ApiError';
-import { IMulterUploadFile } from '../app/interface/fileUpload';
-import { unlinkFile } from '../utils/unlinkFile';
+import { Request } from "express";
+import ApiError from "../app/errors/ApiError";
+import { IMulterUploadFile } from "../app/interface/fileUpload";
+import { unlinkFile } from "../utils/unlinkFile";
 
 export const requestToDeleteFile = (req: Request) => {
   try {
@@ -30,6 +30,6 @@ export const requestToDeleteFile = (req: Request) => {
       }
     }
   } catch (error: any) {
-    throw new ApiError(400, error?.message || 'Something went wrong');
+    throw new ApiError(400, error?.message || "Something went wrong");
   }
 };

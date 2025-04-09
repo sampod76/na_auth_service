@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { adminFilterableFields } from './admin.constant';
-import { IAdmin } from './admin.interface';
-import { AdminService } from './admin.service';
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { adminFilterableFields } from "./admin.constant";
+import { IAdmin } from "./admin.interface";
+import { AdminService } from "./admin.service";
 
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
   // await RequestToFileDecodeAddBodyHandle(req);
@@ -28,7 +28,7 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdmin>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin created successfully',
+    message: "Admin created successfully",
     data: result,
   });
 });
@@ -45,7 +45,7 @@ const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdmin[]>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Get all Admins',
+    message: "Get all Admins",
     data: result.data,
     meta: result.meta,
   });
@@ -60,7 +60,7 @@ const updateAdmin = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdmin>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin updated successfully',
+    message: "Admin updated successfully",
     data: result,
   });
 });
@@ -71,7 +71,7 @@ const getSingleAdmin = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdmin>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin find successfully',
+    message: "Admin find successfully",
     data: result,
   });
 });
@@ -82,7 +82,7 @@ const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdmin>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin deleted successfully',
+    message: "Admin deleted successfully",
     data: result,
   });
 });

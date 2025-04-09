@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { CATEGORY_FILTERABLE_FIELDS } from './constant.category';
-import { ICategory } from './interface.category';
-import { CategoryService } from './service.category';
+import { CATEGORY_FILTERABLE_FIELDS } from "./constant.category";
+import { ICategory } from "./interface.category";
+import { CategoryService } from "./service.category";
 
 // import { z } from 'zod'
 const createCategory = catchAsync(async (req: Request, res: Response) => {
@@ -29,7 +29,7 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
   sendResponse<ICategory>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successful create category',
+    message: "successful create category",
     data: result,
   });
 });
@@ -47,7 +47,7 @@ const getAllCategory = catchAsync(async (req: Request, res: Response) => {
   sendResponse<ICategory[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get all category',
+    message: "successfully Get all category",
     meta: result.meta,
     data: result.data,
   });
@@ -72,7 +72,7 @@ const getSingleCategory = catchAsync(async (req: Request, res: Response) => {
   sendResponse<ICategory>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully get category',
+    message: "successfully get category",
     data: result,
   });
 });
@@ -100,7 +100,7 @@ const updateCategory = catchAsync(async (req: Request, res: Response) => {
   sendResponse<ICategory>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully update category',
+    message: "successfully update category",
     data: result,
   });
 });
@@ -113,7 +113,7 @@ const updateCategorySerialNumber = catchAsync(
     sendResponse<ICategory[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update category',
+      message: "successfully update category",
       data: result,
     });
   },
@@ -129,7 +129,7 @@ const deleteCategory = catchAsync(async (req: Request, res: Response) => {
   sendResponse<ICategory>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully delete category',
+    message: "successfully delete category",
     data: result,
   });
 });

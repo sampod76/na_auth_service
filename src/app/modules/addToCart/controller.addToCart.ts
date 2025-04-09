@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { IUserRef } from '../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../allUser/user/user.utils';
-import { AddToCart_FILTERABLE_FIELDS } from './constant.addToCart';
-import { IAddToCart } from './interface.addToCart';
-import { AddToCartService } from './service.addToCart';
+import { IUserRef } from "../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../allUser/user/user.utils";
+import { AddToCart_FILTERABLE_FIELDS } from "./constant.addToCart";
+import { IAddToCart } from "./interface.addToCart";
+import { AddToCartService } from "./service.addToCart";
 
 // import { z } from 'zod'
 const createAddToCart = catchAsync(async (req: Request, res: Response) => {
@@ -24,7 +24,7 @@ const createAddToCart = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAddToCart>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successful create AddToCart',
+    message: "successful create AddToCart",
     data: result,
   });
 });
@@ -42,7 +42,7 @@ const getAllAddToCart = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAddToCart[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get all AddToCart',
+    message: "successfully Get all AddToCart",
     meta: result.meta,
     data: result.data,
   });
@@ -67,7 +67,7 @@ const getSingleAddToCart = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAddToCart>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully get AddToCart',
+    message: "successfully get AddToCart",
     data: result,
   });
 });
@@ -84,7 +84,7 @@ const updateAddToCart = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAddToCart>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully update AddToCart',
+    message: "successfully update AddToCart",
     data: result,
   });
 });
@@ -97,7 +97,7 @@ const updateAddToCartSerialNumber = catchAsync(
     sendResponse<IAddToCart[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update AddToCart',
+      message: "successfully update AddToCart",
       data: result,
     });
   },
@@ -113,7 +113,7 @@ const deleteAddToCart = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAddToCart>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully delete AddToCart',
+    message: "successfully delete AddToCart",
     data: result,
   });
 });

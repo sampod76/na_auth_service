@@ -1,6 +1,6 @@
-import { Model, Types } from 'mongoose';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { IUser } from '../allUser/user/user.interface';
+import { Model, Types } from "mongoose";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { IUser } from "../allUser/user/user.interface";
 
 // TypeScript type
 type OsType = {
@@ -54,6 +54,6 @@ export type UserLoginHistoryModel = Model<
 export type IUserLoginHistoryFilters = {
   searchTerm?: string;
   user?: string;
-  delete?: 'yes' | 'no';
+  delete?: "yes" | "no";
   isDelete?: string | boolean;
 };

@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../../allUser/user/user.utils';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../../allUser/user/user.utils";
 import {
   IServiceNotification,
   sendNotificationFromDB,
-} from '../../notification/notification.utls';
-import { GroupsFilterableFields } from './constants.groups';
-import { IGroups } from './interface.groups';
-import { GroupsService } from './service.groups';
+} from "../../notification/notification.utls";
+import { GroupsFilterableFields } from "./constants.groups";
+import { IGroups } from "./interface.groups";
+import { GroupsService } from "./service.groups";
 
 const createGroups = catchAsync(async (req: Request, res: Response) => {
   let bodyData = req.body;
@@ -21,10 +21,10 @@ const createGroups = catchAsync(async (req: Request, res: Response) => {
     author: RequestToRefUserObject(req.user as IUserRef),
   };
   if (Array.isArray(req.body?.profileImage) && req.body?.profileImage?.length) {
-    bodyData['profileImage'] = req.body?.profileImage[0];
+    bodyData["profileImage"] = req.body?.profileImage[0];
   }
   if (Array.isArray(req.body?.coverImage) && req.body?.coverImage?.length) {
-    bodyData['coverImage'] = req.body?.coverImage[0];
+    bodyData["coverImage"] = req.body?.coverImage[0];
   }
   const result = await GroupsService.createGroups(
     bodyData,
@@ -34,7 +34,7 @@ const createGroups = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGroups>(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Groups created successfully',
+    message: "Groups created successfully",
     data: result,
   });
 
@@ -60,7 +60,7 @@ const checkUserIdToExistGroups = catchAsync(
     sendResponse<IGroups>(req, res, {
       statusCode: 200,
       success: true,
-      message: 'Groups get successfully',
+      message: "Groups get successfully",
       data: result,
     });
   },
@@ -80,7 +80,7 @@ const getAllGroupss = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Groupss found successfully',
+    message: "Groupss found successfully",
     data: result.data,
     meta: result.meta,
   });
@@ -93,7 +93,7 @@ const getGroupsById = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Groups found successfully',
+    message: "Groups found successfully",
     data: result,
   });
 });
@@ -110,7 +110,7 @@ const updateGroups = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Groups updated successfully',
+    message: "Groups updated successfully",
     data: result,
   });
 });
@@ -127,7 +127,7 @@ const updateGroupsListSort = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Groups updated successfully',
+    message: "Groups updated successfully",
     data: result,
   });
 });
@@ -140,7 +140,7 @@ const deleteGroups = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'review deleted successfully',
+    message: "review deleted successfully",
     data: result,
   });
 });

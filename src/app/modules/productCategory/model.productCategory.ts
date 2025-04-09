@@ -1,13 +1,13 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../global/schema/global.schema';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
-import { redisClient } from '../../redis/redis';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../global/schema/global.schema";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
+import { redisClient } from "../../redis/redis";
 import {
   IProductCategory,
   ProductCategoryModel,
-} from './interface.productCategory';
+} from "./interface.productCategory";
 const ProductCategorySchema = new Schema<
   IProductCategory,
   ProductCategoryModel
@@ -49,7 +49,7 @@ const ProductCategorySchema = new Schema<
   },
 );
 
-ProductCategorySchema.post('findOneAndDelete', async function () {
+ProductCategorySchema.post("findOneAndDelete", async function () {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     // const dataId = this.getFilter();
@@ -73,7 +73,7 @@ ProductCategorySchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 ProductCategorySchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: any & { _id: string }, next: any) {
     try {
       await redisClient.del(ENUM_REDIS_KEY.RIS_All_ProductsCategories);
@@ -85,7 +85,7 @@ ProductCategorySchema.post(
   },
 );
 ProductCategorySchema.post(
-  'save',
+  "save",
   async function (data: any & { _id: string }, next: any) {
     try {
       const res = await redisClient.del(
@@ -100,10 +100,10 @@ ProductCategorySchema.post(
 );
 
 export const ProductCategory = model<IProductCategory, ProductCategoryModel>(
-  'ProductCategory',
+  "ProductCategory",
   ProductCategorySchema,
 );
 export const TrashProductCategory = model<
   IProductCategory,
   ProductCategoryModel
->('TrashProductCategory', ProductCategorySchema);
+>("TrashProductCategory", ProductCategorySchema);

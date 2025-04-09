@@ -1,17 +1,17 @@
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { PipelineStage, Schema, Types } from "mongoose";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
 
-import { IUserRef } from '../../allUser/typesAndConst';
+import { IUserRef } from "../../allUser/typesAndConst";
 
-import { messageSearchableFields } from './messages.constants';
-import { IChatMessage, IChatMessageFilters } from './messages.interface';
-import { ChatMessage } from './messages.models';
+import { messageSearchableFields } from "./messages.constants";
+import { IChatMessage, IChatMessageFilters } from "./messages.interface";
+import { ChatMessage } from "./messages.models";
 
 const createChatMessage = async (
   data: IChatMessage,
@@ -28,7 +28,7 @@ const getAllChatMessagesFromDB = async (
 ): Promise<IGenericResponse<IChatMessage[] | null>> => {
   const { searchTerm, ...filtersData } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -39,7 +39,7 @@ const getAllChatMessagesFromDB = async (
       $or: messageSearchableFields.map((field: string) => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -52,34 +52,34 @@ const getAllChatMessagesFromDB = async (
         ([field, value]: [keyof typeof filtersData, string]) => {
           let modifyFiled;
 
-          if (field === 'friendShipId') {
+          if (field === "friendShipId") {
             modifyFiled = { [field]: new Types.ObjectId(value) };
-          } else if (field === 'senderUserId') {
+          } else if (field === "senderUserId") {
             modifyFiled = {
-              ['sender.userId']: new Types.ObjectId(value),
+              ["sender.userId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'senderRoleBaseId') {
+          } else if (field === "senderRoleBaseId") {
             modifyFiled = {
-              ['sender.roleBaseUserId']: new Types.ObjectId(value),
+              ["sender.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'receiverUserId') {
+          } else if (field === "receiverUserId") {
             modifyFiled = {
-              ['receiver.roleBaseUserId']: new Types.ObjectId(value),
+              ["receiver.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'receiverRoleBaseId') {
+          } else if (field === "receiverRoleBaseId") {
             modifyFiled = {
-              ['receiver.roleBaseUserId']: new Types.ObjectId(value),
+              ["receiver.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'findMyChats' && value === 'yes') {
+          } else if (field === "findMyChats" && value === "yes") {
             modifyFiled = {
               $or: [
                 {
-                  'sender.userId': new Types.ObjectId(
+                  "sender.userId": new Types.ObjectId(
                     requestUser.userId as string,
                   ),
                 },
                 {
-                  'receiver.userId': new Types.ObjectId(
+                  "receiver.userId": new Types.ObjectId(
                     requestUser.userId as string,
                   ),
                 },
@@ -97,7 +97,7 @@ const getAllChatMessagesFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -112,7 +112,7 @@ const getAllChatMessagesFromDB = async (
       requestUser.role !== ENUM_USER_ROLE.admin &&
       requestUser.role !== ENUM_USER_ROLE.superAdmin
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'forbidden');
+      throw new ApiError(httpStatus.FORBIDDEN, "forbidden");
     }
   }
 
@@ -121,7 +121,7 @@ const getAllChatMessagesFromDB = async (
     { $sort: sortConditions },
     { $skip: Number(skip) || 0 },
     { $limit: Number(limit) || 10 },
-    { $sort: { [sortBy || 'createdAt']: 1 } }, // because first time get last 10 message , then message is readable is sort first message show top, last is last
+    { $sort: { [sortBy || "createdAt"]: 1 } }, // because first time get last 10 message , then message is readable is sort first message show top, last is last
   ];
 
   const resultArray = [
@@ -149,14 +149,14 @@ const updateChatMessageFromDB = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'ChatMessage not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "ChatMessage not found");
   }
   if (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
     user?.role !== ENUM_USER_ROLE.admin &&
     isExist?.sender?.userId?.toString() !== user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { ...ChatMessageData } = data;
@@ -164,7 +164,7 @@ const updateChatMessageFromDB = async (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
     user?.role !== ENUM_USER_ROLE.admin
   ) {
-    delete (ChatMessageData as Partial<IChatMessage>)['isDelete']; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
+    delete (ChatMessageData as Partial<IChatMessage>)["isDelete"]; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
   }
   const updatedChatMessageData: Partial<IChatMessage> = { ...ChatMessageData };
 
@@ -177,7 +177,7 @@ const updateChatMessageFromDB = async (
     },
   );
   if (!updatedChatMessage) {
-    throw new ApiError(400, 'Failed to update ChatMessage');
+    throw new ApiError(400, "Failed to update ChatMessage");
   }
   return updatedChatMessage;
 };
@@ -196,7 +196,7 @@ const getSingleChatMessageFromDB = async (
       requestUser.role !== ENUM_USER_ROLE.admin &&
       requestUser.role !== ENUM_USER_ROLE.superAdmin
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'forbidden');
+      throw new ApiError(httpStatus.FORBIDDEN, "forbidden");
     }
   }
   return user;
@@ -215,7 +215,7 @@ const deleteChatMessageFromDB = async (
   ])) as IChatMessage[];
 
   if (!isExist.length) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'ChatMessage not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "ChatMessage not found");
   }
 
   if (
@@ -223,7 +223,7 @@ const deleteChatMessageFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist[0]?.sender?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const data = await ChatMessage.findOneAndUpdate(

@@ -1,12 +1,12 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../global/schema/global.schema';
-import { mongooseIUserRef } from '../allUser/typesAndConst';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../global/schema/global.schema";
+import { mongooseIUserRef } from "../allUser/typesAndConst";
 import {
   ITipsAndGuideline,
   TipsAndGuidelineModel,
-} from './interface.TipsAndGuideline';
+} from "./interface.TipsAndGuideline";
 
 const TipsAndGuidelineSchema = new Schema<
   ITipsAndGuideline,
@@ -81,7 +81,7 @@ const TipsAndGuidelineSchema = new Schema<
   },
 );
 // after findOneAndDelete then data then call this hook
-TipsAndGuidelineSchema.post('findOneAndDelete', async function () {
+TipsAndGuidelineSchema.post("findOneAndDelete", async function () {
   try {
     // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
   } catch (error: any) {
@@ -90,7 +90,7 @@ TipsAndGuidelineSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 TipsAndGuidelineSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: any & { _id: string }, next: any) {
     try {
       // console.log('update');
@@ -102,7 +102,7 @@ TipsAndGuidelineSchema.post(
 );
 // before save/create then data then call this hook
 TipsAndGuidelineSchema.post(
-  'save',
+  "save",
   async function (data: ITipsAndGuideline, next) {
     try {
       // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
@@ -115,7 +115,7 @@ TipsAndGuidelineSchema.post(
 );
 
 export const TipsAndGuideline = model<ITipsAndGuideline, TipsAndGuidelineModel>(
-  'TipsAndGuideline',
+  "TipsAndGuideline",
   TipsAndGuidelineSchema,
 );
 // export const TrashTipsAndGuideline = model<

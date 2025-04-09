@@ -1,18 +1,18 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { RedisAllSetterServiceOop } from '../../../redis/service.redis';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
+import { RedisAllSetterServiceOop } from "../../../redis/service.redis";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../../global/schema/global.schema';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
+} from "../../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../../global/schema/global.schema";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
 import {
   IUserSaveProduct,
   UserSaveProductModel,
-} from './interface.userSaveProduct';
+} from "./interface.userSaveProduct";
 const UserSaveProductSchema = new Schema<
   IUserSaveProduct,
   UserSaveProductModel
@@ -35,7 +35,7 @@ const UserSaveProductSchema = new Schema<
     },
     productCategoryId: {
       type: Schema.Types.ObjectId,
-      ref: 'ProductCategory',
+      ref: "ProductCategory",
     },
     serialNumber: {
       type: Number,
@@ -61,7 +61,7 @@ const UserSaveProductSchema = new Schema<
   },
 );
 
-UserSaveProductSchema.post('findOneAndDelete', async function () {
+UserSaveProductSchema.post("findOneAndDelete", async function () {
   try {
     const dataId = this.getFilter();
     // console.log(dataId); // { _id: '6607a2b70d0b8a202a1b81b4' }
@@ -75,7 +75,7 @@ UserSaveProductSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 UserSaveProductSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: IUserSaveProduct & { _id: string }, next: any) {
     try {
       const redisSetterOop = new RedisAllSetterServiceOop();
@@ -90,7 +90,7 @@ UserSaveProductSchema.post(
   },
 );
 UserSaveProductSchema.post(
-  'save',
+  "save",
   async function (data: any & { _id: string }, next: any) {
     try {
       const redisSetterOop = new RedisAllSetterServiceOop();
@@ -110,10 +110,10 @@ UserSaveProductSchema.post(
 );
 
 export const UserSaveProduct = model<IUserSaveProduct, UserSaveProductModel>(
-  'UserSaveProduct',
+  "UserSaveProduct",
   UserSaveProductSchema,
 );
 export const TrashUserSaveProduct = model<
   IUserSaveProduct,
   UserSaveProductModel
->('TrashUserSaveProduct', UserSaveProductSchema);
+>("TrashUserSaveProduct", UserSaveProductSchema);

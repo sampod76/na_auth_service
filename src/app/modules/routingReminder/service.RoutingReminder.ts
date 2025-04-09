@@ -1,37 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Job, JobsOptions } from 'bullmq';
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
+import { Job, JobsOptions } from "bullmq";
+import { Request } from "express";
+import httpStatus from "http-status";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../helper/lookUpResuable';
-import { DateFormatterDayjsOop } from '../../../utils/DateAllUtlsFuntion';
-import { UuidBuilder } from '../../../utils/uuidGenerator';
-import ApiError from '../../errors/ApiError';
-import { ENUM_QUEUE_NAME } from '../../queue/consent.queus';
-import { emailQueue } from '../../queue/jobs/emailQueues';
+} from "../../../helper/lookUpResuable";
+import { DateFormatterDayjsOop } from "../../../utils/DateAllUtlsFuntion";
+import { UuidBuilder } from "../../../utils/uuidGenerator";
+import ApiError from "../../errors/ApiError";
+import { ENUM_QUEUE_NAME } from "../../queue/consent.queus";
+import { emailQueue } from "../../queue/jobs/emailQueues";
 import {
   AnyCornPatternGenerator,
   CronPatternGenerator,
-} from '../../queue/utls.queue';
-import { IUserRef, IUserRefAndDetails } from '../allUser/typesAndConst';
-import { RoutingReminder_SEARCHABLE_FIELDS } from './constant.RoutingReminder';
-import { generateReminderEmail } from './emailTempleted';
+} from "../../queue/utls.queue";
+import { IUserRef, IUserRefAndDetails } from "../allUser/typesAndConst";
+import { RoutingReminder_SEARCHABLE_FIELDS } from "./constant.RoutingReminder";
+import { generateReminderEmail } from "./emailTempleted";
 import {
   IRoutingReminder,
   IRoutingReminderFilters,
-} from './interface.RoutingReminder';
-import { RoutingReminder } from './model.RoutingReminder';
-import { RoutingReminderOop } from './utls.RoutingReminder';
+} from "./interface.RoutingReminder";
+import { RoutingReminder } from "./model.RoutingReminder";
+import { RoutingReminderOop } from "./utls.RoutingReminder";
 
 const createRoutingReminderByDb = async (
   payload: IRoutingReminder,
@@ -83,7 +83,7 @@ const createRoutingReminderByDb = async (
       attempts: 3,
       timestamp: new Date().getTime(), //as like createAt
     };
-    if (payload.scheduleType === 'weekDay' && payload.daysOfWeek) {
+    if (payload.scheduleType === "weekDay" && payload.daysOfWeek) {
       const getCornPattern = new CronPatternGenerator(
         payload.startTime, //example: 13:25:45
         payload.daysOfWeek, //monday,wednesday,friday
@@ -91,7 +91,7 @@ const createRoutingReminderByDb = async (
       jobOption.repeat = {
         pattern: getCornPattern.generate(), //45 25 13 * * 1,3,5,6
       };
-    } else if (payload.scheduleType === 'weekCycle' && payload.cycleNumber) {
+    } else if (payload.scheduleType === "weekCycle" && payload.cycleNumber) {
       jobOption.repeat = {
         every: payload.cycleNumber * 7 * 24 * 60 * 60 * 1000, // week to day convert then millisecond convert
       };
@@ -108,7 +108,7 @@ const createRoutingReminderByDb = async (
     };
     result = await RoutingReminder.create(payload);
     if (delayTime <= 0) {
-      console.log('Event has already passed, skipping reminder.');
+      console.log("Event has already passed, skipping reminder.");
       return null;
     }
     const cornJob = await emailQueue.add(
@@ -117,7 +117,7 @@ const createRoutingReminderByDb = async (
         receiver_email: user.details.email,
         htmlContent: generateReminderEmail(result),
         notification: {
-          type: 'routingReminder',
+          type: "routingReminder",
         },
       },
       jobOption,
@@ -150,10 +150,10 @@ const getAllRoutingReminderFromDb = async (
   } = filters;
   //***********cache start************* */
   if (user.role !== ENUM_USER_ROLE.admin) {
-    filtersData['author.userId'] = user.userId.toString();
+    filtersData["author.userId"] = user.userId.toString();
   }
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -163,7 +163,7 @@ const getAllRoutingReminderFromDb = async (
       $or: RoutingReminder_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -173,7 +173,7 @@ const getAllRoutingReminderFromDb = async (
     const condition = Object.entries(filtersData).map(
       //@ts-ignore
       ([field, value]: [keyof typeof filtersData, string]) => {
-        console.log('🚀 ~ field:', field, value);
+        console.log("🚀 ~ field:", field, value);
         let modifyFiled;
         /* 
         if (field === 'userRoleBaseId' || field === 'referRoleBaseId') {
@@ -183,9 +183,9 @@ const getAllRoutingReminderFromDb = async (
          } 
        */
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
@@ -258,7 +258,7 @@ const getAllRoutingReminderFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -278,15 +278,15 @@ const getAllRoutingReminderFromDb = async (
   ];
   const collections: ILookupCollection<any>[] = []; // Use the correct type here
 
-  if (needProperty && needProperty.includes('author')) {
+  if (needProperty && needProperty.includes("author")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'author.role',
-          idFiledName: '$author.roleBaseUserId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'details',
-          margeInField: 'author',
+          roleMatchFiledName: "author.role",
+          idFiledName: "$author.roleBaseUserId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "details",
+          margeInField: "author",
         },
       ],
     });
@@ -328,13 +328,13 @@ const getSingleRoutingReminderFromDb = async (
   const result = await RoutingReminder.aggregate(pipeline);
   const dataReturn = result.length ? result[0] : null;
   if (!dataReturn) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'RoutingReminder not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "RoutingReminder not found");
   }
   if (
     dataReturn.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   return dataReturn;
 };
@@ -349,25 +349,25 @@ const updateRoutingReminderFromDb = async (
   const redis = new RoutingReminderOop(id);
   const isExist = await redis.getAndSetCase();
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'RoutingReminder not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "RoutingReminder not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   const result = await RoutingReminder.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });
   if (!result) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to update');
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to update");
   }
   const jobd = await Job.fromId(emailQueue, result.cornJob.jobId);
   await jobd?.remove();
 
   const jobOption: JobsOptions = { ...jobd?.opts };
-  if (result.scheduleType === 'weekDay' && result.daysOfWeek) {
+  if (result.scheduleType === "weekDay" && result.daysOfWeek) {
     const getCornPattern = new CronPatternGenerator(
       result.startTime, //example: 13:25:45
       result.daysOfWeek, //monday,wednesday,friday
@@ -375,7 +375,7 @@ const updateRoutingReminderFromDb = async (
     jobOption.repeat = {
       pattern: getCornPattern.generate(), //45 25 13 * * 1,3,5,6
     };
-  } else if (result.scheduleType === 'weekCycle' && result.cycleNumber) {
+  } else if (result.scheduleType === "weekCycle" && result.cycleNumber) {
     jobOption.repeat = {
       every: result.cycleNumber * 7 * 24 * 60 * 60 * 1000, // week to day convert then millisecond convert
     };
@@ -428,23 +428,23 @@ const deleteRoutingReminderByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'RoutingReminder not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "RoutingReminder not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
 
   const result = await RoutingReminder.findOneAndUpdate(
     { _id: id },
-    { isDelete: true, 'cornJob.isActive': false },
+    { isDelete: true, "cornJob.isActive": false },
     { new: true, runValidators: true },
   );
 
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   const jobd = await Job.fromId(emailQueue, result.cornJob.jobId);
   await jobd?.remove();

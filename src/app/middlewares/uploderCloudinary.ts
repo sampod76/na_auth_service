@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-undef */
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary } from "cloudinary";
 
 import {
   ICloudinaryResponse,
   IFileAfterUpload,
   IMulterUploadFile,
-} from '../interface/fileUpload';
+} from "../interface/fileUpload";
 
-import config from '../../config';
-import ApiError from '../errors/ApiError';
+import config from "../../config";
+import ApiError from "../errors/ApiError";
 
-import { unlinkFile } from '../../utils/unlinkFile';
+import { unlinkFile } from "../../utils/unlinkFile";
 
 cloudinary.config({
   cloud_name: config.cloudinary.cloud_name,
@@ -40,7 +40,7 @@ const uploadToCloudinary = async (
               fieldname: file.fieldname,
               server_url: `images/${file.filename}`,
               url: result?.url,
-              platform: 'cloudinary',
+              platform: "cloudinary",
             };
             resolve(response);
           }
@@ -82,7 +82,7 @@ const uploadToCloudinaryMultiple = async (
     files.forEach(file => {
       unlinkFile(file.path);
     });
-    throw new ApiError(400, 'Error uploading to Cloudinary');
+    throw new ApiError(400, "Error uploading to Cloudinary");
   }
 };
 

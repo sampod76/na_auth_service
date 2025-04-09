@@ -1,11 +1,11 @@
-import { Types } from 'mongoose';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
+import { Types } from "mongoose";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../redis/service.redis';
-import { ITipsAndGuideline } from './interface.TipsAndGuideline';
-import { TipsAndGuideline } from './model.TipsAndGuideline';
+} from "../../redis/service.redis";
+import { ITipsAndGuideline } from "./interface.TipsAndGuideline";
+import { TipsAndGuideline } from "./model.TipsAndGuideline";
 
 export class TipsAndGuidelineOop {
   private id: string;

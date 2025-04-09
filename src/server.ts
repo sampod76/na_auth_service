@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import mongoose from 'mongoose';
-import app from './app';
+import mongoose from "mongoose";
+import app from "./app";
 
 // import { errorLogger, logger } from './app/share/logger';
-import 'colors';
-import { NextFunction } from 'express';
-import http, { Server } from 'http';
-import { Server as SocketServer } from 'socket.io';
-import { RedisConnectionServiceOop } from './app/redis/service.redis';
-import { errorLogger, logger } from './app/share/logger';
-import config from './config/index';
-import socketConnection from './sockit';
+import "colors";
+import { NextFunction } from "express";
+import http, { Server } from "http";
+import { Server as SocketServer } from "socket.io";
+import { RedisConnectionServiceOop } from "./app/redis/service.redis";
+import { errorLogger, logger } from "./app/share/logger";
+import config from "./config/index";
+import socketConnection from "./sockit";
 
-mongoose.set('strictQuery', false);
-process.on('uncaughtException', error => {
-  config.env === 'production'
+mongoose.set("strictQuery", false);
+process.on("uncaughtException", error => {
+  config.env === "production"
     ? errorLogger.error(error)
-    : console.log('uncaugthException is detected ......', error);
+    : console.log("uncaugthException is detected ......", error);
   process.exit(1);
 });
 // database connection
@@ -37,7 +37,7 @@ const io = new SocketServer(httpServer, {
     //         'http://192.168.0.101:3000',
     //       ]
     //     : ['https://iblossohimlearn.org'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   },
   // adapter: createAdapter(pubClient, subClient),
@@ -67,7 +67,7 @@ io.engine.use((req: Request, res: Response, next: NextFunction) => {
 async function connection() {
   try {
     await mongoose.connect(config.database_url as string);
-    config.env === 'production'
+    config.env === "production"
       ? logger.info(
           `Database connection successful-${config.database_url}`.green
             .underline.bold,
@@ -77,7 +77,7 @@ async function connection() {
     // ! are you use multiple connections 1. server is run 5000 port -> socket is run 5001 then use
 
     server = app.listen(config.port, (): void => {
-      config.env === 'production'
+      config.env === "production"
         ? logger.info(
             `Server is listening on port ${config.port}`.blue.underline.bold,
           )
@@ -87,7 +87,7 @@ async function connection() {
     });
 
     httpServer.listen(config.socketPort, (): void => {
-      config.env === 'production'
+      config.env === "production"
         ? logger.info(
             `socket is listening on port ${config.socketPort}`.red.underline
               .bold,
@@ -108,15 +108,15 @@ async function connection() {
     //!-------- backup-------
     // RunBackup();
   } catch (error) {
-    config.env === 'production'
+    config.env === "production"
       ? errorLogger.error(`Failed to connect database: ${error}`.red.bold)
       : console.log(`Failed to connect database: ${error}`.red.bold);
   }
 
-  process.on('unhandledRejection', error => {
+  process.on("unhandledRejection", error => {
     if (server) {
       server.close(() => {
-        config.env === 'production'
+        config.env === "production"
           ? errorLogger.error(error)
           : console.log(error);
         process.exit(1);
@@ -128,8 +128,8 @@ async function connection() {
 }
 connection();
 
-process.on('SIGTERM', () => {
-  config.env === 'production'
+process.on("SIGTERM", () => {
+  config.env === "production"
     ? errorLogger.error(`SIGTERM Error .....`.red.bold)
     : console.log(`SIGTERM Error .....`.red.bold);
   if (server) {

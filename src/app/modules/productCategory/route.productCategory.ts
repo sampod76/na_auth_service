@@ -1,31 +1,31 @@
-import express from 'express';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import authMiddleware from '../../middlewares/authMiddleware';
+import express from "express";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import authMiddleware from "../../middlewares/authMiddleware";
 
-import { z } from 'zod';
-import parseBodyData from '../../middlewares/utils/parseBodyData';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { uploadAwsS3Bucket } from '../aws/utls.aws';
-import { ProductCategoryController } from './controller.productCategory';
-import { ProductCategoryValidation } from './validation.productCategory';
+import { z } from "zod";
+import parseBodyData from "../../middlewares/utils/parseBodyData";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { uploadAwsS3Bucket } from "../aws/utls.aws";
+import { ProductCategoryController } from "./controller.productCategory";
+import { ProductCategoryValidation } from "./validation.productCategory";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   // This route is open
   .get(ProductCategoryController.getAllProductCategory)
   .post(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.superAdmin),
     // uploadImage.single('image'),
-    uploadAwsS3Bucket.single('image'),
+    uploadAwsS3Bucket.single("image"),
     parseBodyData({}),
     validateRequestZod(
       ProductCategoryValidation.createProductCategoryZodSchema,
     ),
     ProductCategoryController.createProductCategory,
   );
-router.route('/serialnumber-update').patch(
+router.route("/serialnumber-update").patch(
   authMiddleware(
     ENUM_USER_ROLE.admin,
     ENUM_USER_ROLE.superAdmin,
@@ -40,12 +40,12 @@ router.route('/serialnumber-update').patch(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   // This route is open
   .get(ProductCategoryController.getSingleProductCategory)
   .patch(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.superAdmin),
-    uploadAwsS3Bucket.single('image'),
+    uploadAwsS3Bucket.single("image"),
     parseBodyData({}),
     validateRequestZod(
       ProductCategoryValidation.updateProductCategoryZodSchema,

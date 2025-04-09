@@ -1,9 +1,9 @@
-import { z } from 'zod';
-import { IFileAfterUpload } from '../../interface/fileUpload';
+import { z } from "zod";
+import { IFileAfterUpload } from "../../interface/fileUpload";
 import {
   createAwsUploadFilesTokenBody,
   sign_url_property,
-} from './validation.AWS';
+} from "./validation.AWS";
 
 export type IAwsOutputPreUrl = IFileAfterUpload & {
   pre_url: string;

@@ -1,8 +1,8 @@
-import { Document, Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, I_YN } from '../../../../global/enum_constant_type';
+import { Document, Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, I_YN } from "../../../../global/enum_constant_type";
 
-import { messageZodData } from './messages.validation';
+import { messageZodData } from "./messages.validation";
 
 export type IChatMessageFilters = {
   senderUserId?: string;

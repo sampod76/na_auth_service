@@ -1,8 +1,8 @@
-import { Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { IUserRef } from '../allUser/typesAndConst';
-import { AddToCartValidation } from './validation.addToCart';
+import { Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { IUserRef } from "../allUser/typesAndConst";
+import { AddToCartValidation } from "./validation.addToCart";
 
 export type IAddToCartFilters = {
   searchTerm?: string;
@@ -13,8 +13,8 @@ export type IAddToCartFilters = {
   cache?: string;
   isDelete?: string | boolean;
   productId?: string;
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
   //
   createdAtFrom?: string;
   createdAtTo?: string;

@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
 import {
   ListObjectsV2Command,
   ListObjectsV2CommandInput,
-} from '@aws-sdk/client-s3';
-import config from '../../../config';
-import catchAsync from '../../share/catchAsync';
-import sendResponse from '../../share/sendResponse';
-import { IAwsBodyData } from './interface.AWS';
-import { AWSService } from './service.AWS';
-import { getAccessPrivateObjectUrl, s3Client } from './utls.aws';
+} from "@aws-sdk/client-s3";
+import config from "../../../config";
+import catchAsync from "../../share/catchAsync";
+import sendResponse from "../../share/sendResponse";
+import { IAwsBodyData } from "./interface.AWS";
+import { AWSService } from "./service.AWS";
+import { getAccessPrivateObjectUrl, s3Client } from "./utls.aws";
 
 const createAwsUploadFilesToken = catchAsync(
   async (req: Request, res: Response) => {
@@ -26,7 +26,7 @@ const createAwsUploadFilesToken = catchAsync(
     sendResponse<any>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful create AWS',
+      message: "successful create AWS",
       data: asyncResponse,
     });
   },
@@ -35,13 +35,13 @@ const createAwsUploadFilesToken = catchAsync(
 const getPrivetAwsFileToken = catchAsync(
   async (req: Request, res: Response) => {
     const response = await getAccessPrivateObjectUrl(
-      req.params.filename || 'upload/images/file_example_JPG_100kB.jpg',
+      req.params.filename || "upload/images/file_example_JPG_100kB.jpg",
     );
 
     sendResponse<any>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful get AWS',
+      message: "successful get AWS",
       data: response,
     });
   },
@@ -49,14 +49,14 @@ const getPrivetAwsFileToken = catchAsync(
 const getFiles = catchAsync(async (req: Request, res: Response) => {
   //  console.log(req.query.continuationToken); //1 DMBufoyTXlHp0UTXdkLyFsP722G3 t2GPB1AnySKVdqRDG0UzMihyk8RoCWzd8gvYUrq/Ea6UsNQXXfe4kpsTo9wJBUqZmE -->//!- this is many white spaces
   const continuationToken =
-    typeof req.query.continuationToken === 'string'
-      ? req.query.continuationToken.split(' ').join('+') //!- this is many white spaces remove and add (+)
+    typeof req.query.continuationToken === "string"
+      ? req.query.continuationToken.split(" ").join("+") //!- this is many white spaces remove and add (+)
       : undefined;
 
   // Define the parameters for S3 listObjectsV2
   const params: ListObjectsV2CommandInput = {
     Bucket: config.aws.s3.bucket as string, // Ensure this is correctly defined
-    Prefix: 'upload/images/', // Ensure this is correct
+    Prefix: "upload/images/", // Ensure this is correct
     MaxKeys: 10,
     ...(continuationToken ? { ContinuationToken: continuationToken } : {}),
   };
@@ -65,7 +65,7 @@ const getFiles = catchAsync(async (req: Request, res: Response) => {
   sendResponse<any>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successful get AWS',
+    message: "successful get AWS",
     data: data,
   });
 

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from "moment";
 
 export default function ReservationEmail({
   rent,
@@ -80,8 +80,8 @@ export default function ReservationEmail({
                 <p><strong>Car Model:</strong> ${carModel}</p>
                 <p><strong>Price:</strong> ${offerRent} (Original Price: ${rent})</p>
             
-                <p><strong>From:</strong> ${moment(from).format('YYYY MMM DD h:mm')}</p>
-                <p><strong>To:</strong> ${moment(to).format('YYYY MMM DD h:mm')}</p>
+                <p><strong>From:</strong> ${moment(from).format("YYYY MMM DD h:mm")}</p>
+                <p><strong>To:</strong> ${moment(to).format("YYYY MMM DD h:mm")}</p>
             </div>
             <h2>Car Image</h2>
            

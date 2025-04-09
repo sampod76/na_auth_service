@@ -1,34 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import bcrypt from 'bcrypt';
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import mongoose, { PipelineStage, Schema, Types } from 'mongoose';
-import { z } from 'zod';
-import { ENUM_STATUS } from '../../../../global/enum_constant_type';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
-import { Admin } from '../admin/admin.model';
+import bcrypt from "bcrypt";
+import { Request } from "express";
+import httpStatus from "http-status";
+import mongoose, { PipelineStage, Schema, Types } from "mongoose";
+import { z } from "zod";
+import { ENUM_STATUS } from "../../../../global/enum_constant_type";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
+import { Admin } from "../admin/admin.model";
 
-import { LookupAnyRoleDetailsReusable } from '../../../../helper/lookUpResuable';
+import { LookupAnyRoleDetailsReusable } from "../../../../helper/lookUpResuable";
 
-import { ENUM_QUEUE_NAME } from '../../../queue/consent.queus';
-import { emailQueue } from '../../../queue/jobs/emailQueues';
+import { ENUM_QUEUE_NAME } from "../../../queue/consent.queus";
+import { emailQueue } from "../../../queue/jobs/emailQueues";
 
-import { AuthService } from '../../auth/auth.service';
-import { GeneralUser } from '../generalUser/model.generalUser';
-import { userSearchableFields } from './user.constant';
+import { AuthService } from "../../auth/auth.service";
+import { GeneralUser } from "../generalUser/model.generalUser";
+import { userSearchableFields } from "./user.constant";
 import {
   ENUM_ACCOUNT_TYPE,
   ITempUser,
   IUser,
   IUserFilters,
-} from './user.interface';
-import { TempUser, User } from './user.model';
-import { generateUserId } from './user.utils';
-import { UserValidation } from './user.validation';
+} from "./user.interface";
+import { TempUser, User } from "./user.model";
+import { generateUserId } from "./user.utils";
+import { UserValidation } from "./user.validation";
 const createUser = async (
   data: any,
   req: Request,
@@ -40,26 +40,26 @@ const createUser = async (
   const roleData = data[authData?.role];
   // default password
   if (!authData?.password) {
-    throw new ApiError(500, 'Please enter a password');
+    throw new ApiError(500, "Please enter a password");
   }
   //---- verify user ---------------------------------------------
   const verifyTempUser = await TempUser.findById(
     authData?.tempUser?.tempUserId,
   );
   if (authData.role !== verifyTempUser?.role) {
-    throw new ApiError(400, 'You are modifying data or not found temp user');
+    throw new ApiError(400, "You are modifying data or not found temp user");
   }
   if (!verifyTempUser) {
-    throw new ApiError(400, 'Failed to get request user');
+    throw new ApiError(400, "Failed to get request user");
   }
   if (verifyTempUser?.authentication?.otp !== Number(authData?.tempUser?.otp)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Otp not matching');
+    throw new ApiError(httpStatus.BAD_REQUEST, "Otp not matching");
   }
   if (
     verifyTempUser?.authentication?.timeOut &&
     new Date(verifyTempUser?.authentication?.timeOut).getTime() < Date.now()
   ) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'OTP has expired');
+    throw new ApiError(httpStatus.BAD_REQUEST, "OTP has expired");
   }
   //--add company in verifyTempUser
 
@@ -71,11 +71,11 @@ const createUser = async (
     const id = await generateUserId();
 
     authData.userUniqueId =
-      authData?.role?.toUpperCase()?.slice(0, 2) + '-' + id;
+      authData?.role?.toUpperCase()?.slice(0, 2) + "-" + id;
 
     createdUser = await User.create([{ ...authData }], { session });
     if (Array.isArray(createdUser) && !createdUser?.length) {
-      throw new ApiError(400, 'Failed to create user');
+      throw new ApiError(400, "Failed to create user");
     }
     roleData.userId = createdUser[0]._id;
     if (authData?.role === ENUM_USER_ROLE.admin) {
@@ -89,7 +89,7 @@ const createUser = async (
     }
 
     if (Array.isArray(roleCreate) && !roleCreate.length) {
-      throw new ApiError(400, 'Failed to create role user');
+      throw new ApiError(400, "Failed to create role user");
     }
 
     const deleteTemp = await TempUser.findByIdAndDelete(
@@ -97,7 +97,7 @@ const createUser = async (
       { session: session },
     );
     if (!deleteTemp) {
-      throw new ApiError(400, 'Failed to delete temp user');
+      throw new ApiError(400, "Failed to delete temp user");
     }
 
     await session.commitTransaction();
@@ -119,10 +119,10 @@ const createTempUserFromDb = async (
   if (previousUser?.isDelete === true) {
     throw new ApiError(
       400,
-      'The account associated with this email is deleted. Please choose another email.',
+      "The account associated with this email is deleted. Please choose another email.",
     );
   } else if (previousUser?.email) {
-    throw new ApiError(400, 'Email is already available');
+    throw new ApiError(400, "Email is already available");
   }
 
   // Calculate expiry time by adding 5 minutes to the current time
@@ -133,8 +133,8 @@ const createTempUserFromDb = async (
   };
   const emailDate = {
     receiver_email: user.email,
-    title: req.t('New account created'),
-    subject: req.t('New account created'),
+    title: req.t("New account created"),
+    subject: req.t("New account created"),
     body_text: ` <div style="text-align: center;">
     <h1 style=" padding: 10px 15px; background-color: #2ecc71; color: #fff; text-decoration: none; border-radius: 5px;">${authData.otp}</h1>
   </div>`,
@@ -172,13 +172,13 @@ const createUserByGooglefromDb = async (
   if (authData?.role !== ENUM_USER_ROLE.generalUser) {
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      'Only vendor allowed google login',
+      "Only vendor allowed google login",
     );
   }
   const findUser = await User.findOne({ email: authData?.email });
   if (findUser) {
     if (findUser?.isDelete === true) {
-      throw new ApiError(409, 'User already delete');
+      throw new ApiError(409, "User already delete");
     }
     if (findUser.accountType === ENUM_ACCOUNT_TYPE.google) {
       const loginDetails = await AuthService.loginUserBySocialMedia({
@@ -187,7 +187,7 @@ const createUserByGooglefromDb = async (
 
       return loginDetails;
     }
-    throw new ApiError(409, 'User already registered with google');
+    throw new ApiError(409, "User already registered with google");
   }
   //--add roleType in verifyTempUser
   authData.accountType = ENUM_ACCOUNT_TYPE.google;
@@ -201,16 +201,16 @@ const createUserByGooglefromDb = async (
     session.startTransaction();
     const id = await generateUserId();
     authData.userUniqueId =
-      authData?.role?.toUpperCase()?.slice(0, 2) + '-' + id;
+      authData?.role?.toUpperCase()?.slice(0, 2) + "-" + id;
     createdUser = await User.create([{ ...authData }], { session });
     if (Array.isArray(createdUser) && !createdUser?.length) {
-      throw new ApiError(400, 'Failed to create user');
+      throw new ApiError(400, "Failed to create user");
     }
     roleCreate = await GeneralUser.create([{ ...roleData, ...authData }], {
       session,
     });
     if (Array.isArray(roleCreate) && !roleCreate.length) {
-      throw new ApiError(400, 'Failed to create role user');
+      throw new ApiError(400, "Failed to create role user");
     }
     await session.commitTransaction();
     await session.endSession();
@@ -241,7 +241,7 @@ const getAllUsersFromDB = async (
   } = filters;
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -253,7 +253,7 @@ const getAllUsersFromDB = async (
       $or: userSearchableFields.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -271,9 +271,9 @@ const getAllUsersFromDB = async (
          modifyFiled = { [field]: value };
          } 
        */
-        if (field === 'authUserId') {
+        if (field === "authUserId") {
           modifyFiled = {
-            ['authUserId']: new Types.ObjectId(value),
+            ["authUserId"]: new Types.ObjectId(value),
           };
         } else {
           modifyFiled = { [field]: value };
@@ -313,7 +313,7 @@ const getAllUsersFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -329,14 +329,14 @@ const getAllUsersFromDB = async (
     { $limit: Number(limit) || 10 },
     //line 5 in put lookup,
   ];
-  if (needProperty?.toLowerCase()?.includes('roleinfo')) {
+  if (needProperty?.toLowerCase()?.includes("roleinfo")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'role',
-          idFiledName: '$userId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'roleInfo',
+          roleMatchFiledName: "role",
+          idFiledName: "$userId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "roleInfo",
         },
       ],
       spliceStart: 5,
@@ -377,7 +377,7 @@ const dashboardUsersFromDB = async (
     ...filtersData
   } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -389,7 +389,7 @@ const dashboardUsersFromDB = async (
       $or: userSearchableFields.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -406,7 +406,7 @@ const dashboardUsersFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -418,7 +418,7 @@ const dashboardUsersFromDB = async (
     { $match: whereConditions },
     {
       $group: {
-        _id: '$role',
+        _id: "$role",
         totalUsers: { $sum: 1 },
       },
     },
@@ -427,8 +427,8 @@ const dashboardUsersFromDB = async (
     { $match: whereConditions },
     {
       $addFields: {
-        year: { $year: '$createdAt' },
-        monthNumber: { $month: '$createdAt' }, // Directly extract month number
+        year: { $year: "$createdAt" },
+        monthNumber: { $month: "$createdAt" }, // Directly extract month number
         amount: 1, // every user is one
       },
     },
@@ -441,8 +441,8 @@ const dashboardUsersFromDB = async (
       $project: {
         yearMonth: {
           $dateToString: {
-            format: '%Y-%m',
-            date: '$createdAt',
+            format: "%Y-%m",
+            date: "$createdAt",
           },
         },
         amount: 1,
@@ -451,9 +451,9 @@ const dashboardUsersFromDB = async (
     },
     {
       $group: {
-        _id: '$yearMonth',
-        totalAmount: { $sum: '$amount' },
-        monthNumber: { $first: '$monthNumber' }, // Retain monthNumber
+        _id: "$yearMonth",
+        totalAmount: { $sum: "$amount" },
+        monthNumber: { $first: "$monthNumber" }, // Retain monthNumber
       },
     },
     {
@@ -463,30 +463,30 @@ const dashboardUsersFromDB = async (
           $let: {
             vars: {
               monthsInString: [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December',
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
               ],
             },
             in: {
               $arrayElemAt: [
-                '$$monthsInString',
-                { $subtract: ['$monthNumber', 1] },
+                "$$monthsInString",
+                { $subtract: ["$monthNumber", 1] },
               ],
             },
           },
         },
-        value: '$totalAmount',
-        serialNumber: '$monthNumber',
+        value: "$totalAmount",
+        serialNumber: "$monthNumber",
       },
     },
     {
@@ -528,21 +528,21 @@ const updateUserFromDB = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.admin &&
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist?._id?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'Unauthorize user');
+    throw new ApiError(403, "Unauthorize user");
   }
   if (
     data.verify &&
     req?.user?.role !== ENUM_USER_ROLE.admin &&
     req?.user?.role !== ENUM_USER_ROLE.superAdmin
   ) {
-    throw new ApiError(403, 'Unauthorize Your are not update verify status');
+    throw new ApiError(403, "Unauthorize Your are not update verify status");
   }
 
   if (
@@ -552,7 +552,7 @@ const updateUserFromDB = async (
   ) {
     throw new ApiError(
       403,
-      'Unauthorize user super admin data not update another user',
+      "Unauthorize user super admin data not update another user",
     );
   }
   let updatedUser;
@@ -584,7 +584,7 @@ const updateUserFromDB = async (
     }
 
     if (!updatedUser) {
-      throw new ApiError(400, 'Failed to update user');
+      throw new ApiError(400, "Failed to update user");
     }
     await session.commitTransaction();
     await session.endSession();
@@ -605,12 +605,12 @@ const getSingleUserFromDB = async (
     { id },
     {
       populate: true,
-      needProperty: query?.split(',')?.map(property => property.trim()),
+      needProperty: query?.split(",")?.map(property => property.trim()),
     },
   );
 
   if (!user) {
-    throw new ApiError(400, 'Failed to get user');
+    throw new ApiError(400, "Failed to get user");
   }
   return user;
 };
@@ -620,12 +620,12 @@ const deleteUserFromDB = async (
   query: IUserFilters,
   req: Request,
 ): Promise<IUser | null> => {
-  const isExist = (await User.findById(id).select('+password')) as IUser & {
+  const isExist = (await User.findById(id).select("+password")) as IUser & {
     _id: Schema.Types.ObjectId;
   };
 
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
   if (
@@ -633,7 +633,7 @@ const deleteUserFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist?._id?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   //---- if user when delete you account then give his password
@@ -645,7 +645,7 @@ const deleteUserFromDB = async (
       isExist.password &&
       !(await bcrypt.compare(req.body?.password, isExist.password))
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'Password is incorrect');
+      throw new ApiError(httpStatus.FORBIDDEN, "Password is incorrect");
     }
   }
 
@@ -660,7 +660,7 @@ const deleteUserFromDB = async (
       { new: true, runValidators: true, session },
     );
     if (!data?._id) {
-      throw new ApiError(400, 'Felid to delete user');
+      throw new ApiError(400, "Felid to delete user");
     }
     let roleUser;
     if (data?.role === ENUM_USER_ROLE.generalUser) {
@@ -681,7 +681,7 @@ const deleteUserFromDB = async (
     }
 
     if (!roleUser) {
-      throw new ApiError(400, 'Felid to delete user');
+      throw new ApiError(400, "Felid to delete user");
     }
 
     await session.commitTransaction();

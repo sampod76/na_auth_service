@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { IUserRef } from '../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../allUser/user/user.utils';
-import { Ooptestmodual_FILTERABLE_FIELDS } from './constant.Ooptestmodual';
-import { IOoptestmodual } from './interface.Ooptestmodual';
-import { OoptestmodualServiceClass } from './service.Ooptestmodual';
+import { IUserRef } from "../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../allUser/user/user.utils";
+import { Ooptestmodual_FILTERABLE_FIELDS } from "./constant.Ooptestmodual";
+import { IOoptestmodual } from "./interface.Ooptestmodual";
+import { OoptestmodualServiceClass } from "./service.Ooptestmodual";
 
 export class OoptestmodualControllerClass {
   public service: OoptestmodualServiceClass;
@@ -29,7 +29,7 @@ export class OoptestmodualControllerClass {
     sendResponse<IOoptestmodual>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful create Ooptestmodual',
+      message: "successful create Ooptestmodual",
       data: result,
     });
   });
@@ -47,7 +47,7 @@ export class OoptestmodualControllerClass {
     sendResponse<IOoptestmodual[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully Get all Ooptestmodual',
+      message: "successfully Get all Ooptestmodual",
       meta: result.meta,
       data: result.data,
     });
@@ -72,7 +72,7 @@ export class OoptestmodualControllerClass {
     sendResponse<IOoptestmodual>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get Ooptestmodual',
+      message: "successfully get Ooptestmodual",
       data: result,
     });
   });
@@ -89,7 +89,7 @@ export class OoptestmodualControllerClass {
     sendResponse<IOoptestmodual>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update Ooptestmodual',
+      message: "successfully update Ooptestmodual",
       data: result,
     });
   });
@@ -102,7 +102,7 @@ export class OoptestmodualControllerClass {
       sendResponse<IOoptestmodual[]>(req, res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: 'successfully update Ooptestmodual',
+        message: "successfully update Ooptestmodual",
         data: result,
       });
     },
@@ -118,7 +118,7 @@ export class OoptestmodualControllerClass {
     sendResponse<IOoptestmodual>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully delete Ooptestmodual',
+      message: "successfully delete Ooptestmodual",
       data: result,
     });
   });

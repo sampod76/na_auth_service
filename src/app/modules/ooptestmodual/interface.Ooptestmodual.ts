@@ -1,9 +1,8 @@
-
-      import { Model } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, I_YN } from '../../../global/enum_constant_type';
-import { IUserRef } from '../allUser/typesAndConst';
-import { OoptestmodualValidation } from './validation.Ooptestmodual';
+import { Model } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, I_YN } from "../../../global/enum_constant_type";
+import { IUserRef } from "../allUser/typesAndConst";
+import { OoptestmodualValidation } from "./validation.Ooptestmodual";
 
 export type IOoptestmodualFilters = {
   searchTerm?: string;
@@ -14,8 +13,8 @@ export type IOoptestmodualFilters = {
   cache?: string;
   isDelete?: string | boolean;
   productId?: string;
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
   //
   createdAtFrom?: string;
   createdAtTo?: string;
@@ -31,9 +30,4 @@ export type IOoptestmodual = z.infer<
     author: IUserRef;
   };
 
-export type OoptestmodualModel = Model<
-  IOoptestmodual,
-  Record<string, unknown>
->;
-
-      
+export type OoptestmodualModel = Model<IOoptestmodual, Record<string, unknown>>;

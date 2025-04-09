@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
-import { RateLimiterMongo } from 'rate-limiter-flexible';
-import { errorLogger, logger } from '../../app/share/logger';
-import config from '../../config';
+import { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
+import { RateLimiterMongo } from "rate-limiter-flexible";
+import { errorLogger, logger } from "../../app/share/logger";
+import config from "../../config";
 export const rateLimiterMiddlewareMongodb = (
   req: Request,
   res: Response,
@@ -28,15 +28,15 @@ export const rateLimiterMiddlewareMongodb = (
         next();
       })
       .catch(rateLimiterRes => {
-        if (config.env === 'production') {
-          errorLogger.error('rateLimiterRes', rateLimiterRes);
+        if (config.env === "production") {
+          errorLogger.error("rateLimiterRes", rateLimiterRes);
         } else {
           console.log(rateLimiterRes);
         }
         // Not enough points to consume
         return res
           .status(429)
-          .send({ success: false, message: 'Too Many Requests' });
+          .send({ success: false, message: "Too Many Requests" });
       });
   } else {
     next();

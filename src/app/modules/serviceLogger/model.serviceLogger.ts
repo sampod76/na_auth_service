@@ -1,10 +1,10 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../global/schema/global.schema';
-import { mongooseIUserRef } from '../allUser/typesAndConst';
-import { LOG_TYPE_ARRAY, ENUM_LOG_TYPE } from './constant.serviceLogger';
-import { IServiceLogger, ServiceLoggerModel } from './interface.serviceLogger';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../global/schema/global.schema";
+import { mongooseIUserRef } from "../allUser/typesAndConst";
+import { LOG_TYPE_ARRAY, ENUM_LOG_TYPE } from "./constant.serviceLogger";
+import { IServiceLogger, ServiceLoggerModel } from "./interface.serviceLogger";
 const categoryValue = new Schema({
   value: {
     type: String,
@@ -105,7 +105,7 @@ const ServiceLoggerSchema = new Schema<IServiceLogger, ServiceLoggerModel>(
   },
 );
 // after findOneAndDelete then data then call this hook
-ServiceLoggerSchema.post('findOneAndDelete', async function () {
+ServiceLoggerSchema.post("findOneAndDelete", async function () {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     // const dataId = this.getFilter();
@@ -129,7 +129,7 @@ ServiceLoggerSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 ServiceLoggerSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: any & { _id: string }, next: any) {
     try {
       // console.log('update');
@@ -140,7 +140,7 @@ ServiceLoggerSchema.post(
   },
 );
 // before save/create then data then call this hook
-ServiceLoggerSchema.post('save', async function (data: IServiceLogger, next) {
+ServiceLoggerSchema.post("save", async function (data: IServiceLogger, next) {
   try {
     // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
 
@@ -151,7 +151,7 @@ ServiceLoggerSchema.post('save', async function (data: IServiceLogger, next) {
 });
 
 export const ServiceLogger = model<IServiceLogger, ServiceLoggerModel>(
-  'ServiceLogger',
+  "ServiceLogger",
   ServiceLoggerSchema,
 );
 // export const TrashServiceLogger = model<

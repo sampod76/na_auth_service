@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import config from '../../../../config';
-import { ENUM_YN } from '../../../../global/enum_constant_type';
-import { decryptCryptoData } from '../../../../utils/cryptoEncryptDecrypt';
-import ApiError from '../../../errors/ApiError';
-import catchAsync from '../../../share/catchAsync';
-import sendResponse from '../../../share/sendResponse';
-import { PaymentHistoryService } from '../paymentHistory/service.paymentHistory';
-import { StripeService } from './payment.service';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import config from "../../../../config";
+import { ENUM_YN } from "../../../../global/enum_constant_type";
+import { decryptCryptoData } from "../../../../utils/cryptoEncryptDecrypt";
+import ApiError from "../../../errors/ApiError";
+import catchAsync from "../../../share/catchAsync";
+import sendResponse from "../../../share/sendResponse";
+import { PaymentHistoryService } from "../paymentHistory/service.paymentHistory";
+import { StripeService } from "./payment.service";
 import {
   stripe,
   stripeSessionIdCsId_To_PaymentIntent,
   stripeUpdatePaymentIntent,
-} from './payment.utls';
+} from "./payment.utls";
 
 const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
   const session = await StripeService.createPaymentStripeService(req.body, req);
   if (session?.id) {
-    if (req.query?.requestDevice === 'web') {
+    if (req.query?.requestDevice === "web") {
       //! when user in web site then can user this and automatically redirect
       return res.redirect(301, session?.url as string);
     }
@@ -27,12 +27,12 @@ const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
       sendResponse<any>(req, res, {
         success: true,
         statusCode: 200,
-        message: 'successfully get secret',
+        message: "successfully get secret",
         data: { id: session?.id, url: session.url },
       });
     }
   } else {
-    throw new ApiError(404, 'Payment failed');
+    throw new ApiError(404, "Payment failed");
   }
 });
 
@@ -46,11 +46,11 @@ const createPaymentStripeAdvanceForNative = catchAsync(
     const ephemeralKey = await stripe.ephemeralKeys.create(
       { customer: customer.id },
       // { apiVersion: '2022-11-15' },
-      { apiVersion: '2023-10-16' },
+      { apiVersion: "2023-10-16" },
     );
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
-      currency: 'USD',
+      currency: "USD",
       customer: customer.id,
       automatic_payment_methods: {
         enabled: true,
@@ -61,7 +61,7 @@ const createPaymentStripeAdvanceForNative = catchAsync(
       return res.status(200).send({
         success: true,
         statusCode: 200,
-        message: 'successful get secret',
+        message: "successful get secret",
         data: {
           // paymentIntent: paymentIntent.client_secret,
           clientSecret: paymentIntent.client_secret,
@@ -71,7 +71,7 @@ const createPaymentStripeAdvanceForNative = catchAsync(
         },
       });
     } else {
-      throw new ApiError(404, 'Payment failed');
+      throw new ApiError(404, "Payment failed");
     }
   },
 );
@@ -83,7 +83,7 @@ const test = catchAsync(async (req: Request, res: Response) => {
   sendResponse<any>(req, res, {
     success: true,
     statusCode: 200,
-    message: 'successfully get secret',
+    message: "successfully get secret",
     data: response,
   });
 });
@@ -91,7 +91,7 @@ const test = catchAsync(async (req: Request, res: Response) => {
 const successStripePayment = catchAsync(async (req: Request, res: Response) => {
   const { sessionId, metadata, metadataV2 } = req.query;
   if (!sessionId || !metadataV2) {
-    throw new ApiError(404, 'Session not found');
+    throw new ApiError(404, "Session not found");
   }
   const { result, sessionDetails } =
     await PaymentHistoryService.createPaymentHistoryByDb({
@@ -104,7 +104,7 @@ const successStripePayment = catchAsync(async (req: Request, res: Response) => {
     });
 
   if (!result) {
-    throw new ApiError(404, 'Payment failed');
+    throw new ApiError(404, "Payment failed");
   }
   // Redirect to Google or send a response
   // res.writeHead(302, {
@@ -114,7 +114,7 @@ const successStripePayment = catchAsync(async (req: Request, res: Response) => {
   sendResponse<any>(req, res, {
     success: true,
     statusCode: 200,
-    message: 'successfully get secret',
+    message: "successfully get secret",
     data: { result },
   });
   // res.render('stripeSuccessPayment.ejs', { data: { sessionId } });
@@ -128,7 +128,7 @@ const successStripePayment = catchAsync(async (req: Request, res: Response) => {
 });
 const cancelStripePayment = catchAsync(async (req: Request, res: Response) => {
   const { sessionId, metadata, metadataV2 } = req.query;
-  res.render('somethingWrong.ejs');
+  res.render("somethingWrong.ejs");
 });
 
 const createStripeConnectAccount = catchAsync(
@@ -138,7 +138,7 @@ const createStripeConnectAccount = catchAsync(
     sendResponse<any>(req, res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Account create successful',
+      message: "Account create successful",
       data: account,
     });
   },

@@ -1,14 +1,14 @@
-import express from 'express';
+import express from "express";
 
-import { UserLoginHistoryController } from './loginHistory.controller';
+import { UserLoginHistoryController } from "./loginHistory.controller";
 
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import authMiddleware from '../../middlewares/authMiddleware';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { UserLoginHistoryValidation } from './loginHistory.validation';
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import authMiddleware from "../../middlewares/authMiddleware";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { UserLoginHistoryValidation } from "./loginHistory.validation";
 const router = express.Router();
 
-router.route('/').get(
+router.route("/").get(
   authMiddleware(
     ENUM_USER_ROLE.generalUser,
 
@@ -19,7 +19,7 @@ router.route('/').get(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(
     authMiddleware(
       ENUM_USER_ROLE.generalUser,

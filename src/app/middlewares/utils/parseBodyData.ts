@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
-import { RequestTo_Aws_Multer_FileDecodeAddBodyHandle } from '../../../helper/requestToFilesHandle';
-import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
+import { NextFunction, Request, Response } from "express";
+import { RequestTo_Aws_Multer_FileDecodeAddBodyHandle } from "../../../helper/requestToFilesHandle";
+import ApiError from "../../errors/ApiError";
+import catchAsync from "../../share/catchAsync";
 type IParseBodyDate = {
   isFile?: boolean;
   required_file_fields?: string[];
@@ -30,7 +30,7 @@ const parseBodyData = ({
     if (messingRequiredField.length) {
       throw new ApiError(
         404,
-        `${messingRequiredField.join(', ')} this field is required`,
+        `${messingRequiredField.join(", ")} this field is required`,
       );
     }
     // console.log(req.files);

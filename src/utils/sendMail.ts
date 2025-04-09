@@ -1,6 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
-import nodemailer from 'nodemailer';
-import config from '../config';
+import nodemailer from "nodemailer";
+import config from "../config";
 
 export type IMailData = {
   company_name?: string;
@@ -51,7 +51,7 @@ export const sendMailHelper = async (bodyData: IMailData) => {
   } = bodyData;
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: "smtp.gmail.com",
     secure: true,
     port: 465,
     auth: {
@@ -128,7 +128,7 @@ export const sendMailHelper = async (bodyData: IMailData) => {
           padding: 10px 20px;
           font-size: 16px;
           color: #ffffff;
-          background-color: ${button?.button_color_code || '#22BC66'};
+          background-color: ${button?.button_color_code || "#22BC66"};
           text-decoration: none;
           border-radius: 5px;
         }
@@ -149,7 +149,7 @@ export const sendMailHelper = async (bodyData: IMailData) => {
        
         <div class="email-header">
           <h1 class="email-title">${process.env.PROJECT_NAME}</h1>
-          <h1 class="email-title">${title || ''}</h1>
+          <h1 class="email-title">${title || ""}</h1>
         </div>
   
      
@@ -159,7 +159,7 @@ export const sendMailHelper = async (bodyData: IMailData) => {
             dictionary
               ? `<p><strong>Date:</strong> ${dictionary.date}</p>
                  <p><strong>Address:</strong> ${dictionary.address}</p>`
-              : ''
+              : ""
           }
         </div>
   
@@ -167,15 +167,15 @@ export const sendMailHelper = async (bodyData: IMailData) => {
         ${
           button?.button_text
             ? `<div class="email-action">
-              <p>${button.button_action_details || 'Please click the button below:'}</p>
+              <p>${button.button_action_details || "Please click the button below:"}</p>
               <a href="${button.button_link}" class="email-button">${button.button_text}</a>
             </div>`
-            : ''
+            : ""
         }
   
       
         <div class="email-footer">
-          <p>${footer_text || 'Need help or have questions? Just reply to this email.'}</p>
+          <p>${footer_text || "Need help or have questions? Just reply to this email."}</p>
         </div>
       </div>
     </body>

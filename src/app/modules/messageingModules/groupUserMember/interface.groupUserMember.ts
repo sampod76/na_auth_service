@@ -1,9 +1,9 @@
-import { Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, I_YN } from '../../../../global/enum_constant_type';
+import { Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, I_YN } from "../../../../global/enum_constant_type";
 
-import { IUserRef } from '../../allUser/typesAndConst';
-import { GroupMemberValidation } from './validation.groupUserMember';
+import { IUserRef } from "../../allUser/typesAndConst";
+import { GroupMemberValidation } from "./validation.groupUserMember";
 
 export type IGroupMemberFilters = {
   senderUserId?: string;
@@ -23,9 +23,9 @@ export type IGroupMemberFilters = {
   isDelete?: boolean | string;
 };
 export enum ENUM_GROUP_MEMBER_ROLE_TYPE {
-  admin = 'admin',
-  member = 'member',
-  viewer = 'viewer',
+  admin = "admin",
+  member = "member",
+  viewer = "viewer",
   //
 }
 type I_GROUP_MEMBER_ROLE_TYPES = keyof typeof ENUM_GROUP_MEMBER_ROLE_TYPE;

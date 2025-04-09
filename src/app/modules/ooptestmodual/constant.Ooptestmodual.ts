@@ -1,21 +1,18 @@
-
-export const Ooptestmodual_SEARCHABLE_FIELDS = ['productTitle'];
+export const Ooptestmodual_SEARCHABLE_FIELDS = ["productTitle"];
 export const Ooptestmodual_FILTERABLE_FIELDS = [
-  'searchTerm',
-  'productId',
+  "searchTerm",
+  "productId",
 
-  'status',
-  'delete',
-  'serialNumber',
-  'isDelete',
-  'cache',
+  "status",
+  "delete",
+  "serialNumber",
+  "isDelete",
+  "cache",
   //
-  'needProperty',
-  'createdAtFrom',
-  'createdAtTo',
+  "needProperty",
+  "createdAtFrom",
+  "createdAtTo",
   //
-  'author.userId',
-  'author.roleBaseUserId',
+  "author.userId",
+  "author.roleBaseUserId",
 ];
-
-      

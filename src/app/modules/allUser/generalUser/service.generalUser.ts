@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import bcrypt from 'bcrypt';
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import mongoose, { PipelineStage, Schema, Types } from 'mongoose';
+import bcrypt from "bcrypt";
+import { Request } from "express";
+import httpStatus from "http-status";
+import mongoose, { PipelineStage, Schema, Types } from "mongoose";
 
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
 
-import { LookupReusable } from '../../../../helper/lookUpResuable';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
+import { LookupReusable } from "../../../../helper/lookUpResuable";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../../redis/service.redis';
-import { ENUM_VERIFY, IUserRef, IUserRefAndDetails } from '../typesAndConst';
-import { User } from '../user/user.model';
-import { GeneralUserSearchableFields } from './constant.generalUser';
-import { IGeneralUser, IGeneralUserFilters } from './interface.generalUser';
-import { GeneralUser } from './model.generalUser';
+} from "../../../redis/service.redis";
+import { ENUM_VERIFY, IUserRef, IUserRefAndDetails } from "../typesAndConst";
+import { User } from "../user/user.model";
+import { GeneralUserSearchableFields } from "./constant.generalUser";
+import { IGeneralUser, IGeneralUserFilters } from "./interface.generalUser";
+import { GeneralUser } from "./model.generalUser";
 
 const createGeneralUser = async (
   data: IGeneralUser,
@@ -55,7 +55,7 @@ const getAllGeneralUsersFromDB = async (
       $or: GeneralUserSearchableFields.map((field: string) => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -73,15 +73,15 @@ const getAllGeneralUsersFromDB = async (
          modifyFiled = { [field]: value };
          } 
        */
-        if (field === 'countryName') {
+        if (field === "countryName") {
           modifyFiled = {
-            ['country.name']: new Types.ObjectId(value),
+            ["country.name"]: new Types.ObjectId(value),
           };
-        } else if (field === 'authUserId') {
+        } else if (field === "authUserId") {
           modifyFiled = {
-            ['authUserId']: new Types.ObjectId(value),
+            ["authUserId"]: new Types.ObjectId(value),
           };
-        } else if (field === 'dateOfBirth') {
+        } else if (field === "dateOfBirth") {
           const timeTo = new Date(value);
           const createdAtToModify = new Date(timeTo.setHours(23, 59, 59, 999));
           modifyFiled = {
@@ -129,7 +129,7 @@ const getAllGeneralUsersFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -148,10 +148,10 @@ const getAllGeneralUsersFromDB = async (
   LookupReusable(pipeline, {
     collections: [
       {
-        connectionName: 'users',
-        idFiledName: 'userId',
-        pipeLineMatchField: '_id',
-        outPutFieldName: 'userDetails',
+        connectionName: "users",
+        idFiledName: "userId",
+        pipeLineMatchField: "_id",
+        outPutFieldName: "userDetails",
       },
     ],
   });
@@ -169,7 +169,7 @@ const getAllGeneralUsersFromDB = async (
           {
             $match: whereConditions,
           },
-          { $count: 'totalData' },
+          { $count: "totalData" },
         ],
       },
     },
@@ -197,14 +197,14 @@ const updateGeneralUserFromDB = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'GeneralUser not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "GeneralUser not found");
   }
   if (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
     user?.role !== ENUM_USER_ROLE.admin &&
     isExist?._id?.toString() !== user?.roleBaseUserId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { name, address, ...GeneralUserData } = data;
@@ -212,10 +212,10 @@ const updateGeneralUserFromDB = async (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
     user?.role !== ENUM_USER_ROLE.admin
   ) {
-    delete (GeneralUserData as Partial<IGeneralUser>)['isDelete']; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
-    delete (GeneralUserData as Partial<IGeneralUser>)['email'];
-    delete (GeneralUserData as Partial<IGeneralUser>)['userUniqueId'];
-    delete (GeneralUserData as Partial<IGeneralUser>)['verify'];
+    delete (GeneralUserData as Partial<IGeneralUser>)["isDelete"]; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
+    delete (GeneralUserData as Partial<IGeneralUser>)["email"];
+    delete (GeneralUserData as Partial<IGeneralUser>)["userUniqueId"];
+    delete (GeneralUserData as Partial<IGeneralUser>)["verify"];
   }
   const updatedGeneralUserData: Partial<IGeneralUser> = { ...GeneralUserData };
 
@@ -241,7 +241,7 @@ const updateGeneralUserFromDB = async (
     },
   );
   if (!updatedGeneralUser) {
-    throw new ApiError(400, 'Failed to update GeneralUser');
+    throw new ApiError(400, "Failed to update GeneralUser");
   }
   return updatedGeneralUser;
 };
@@ -279,7 +279,7 @@ const getSingleGeneralUserFromDB = async (
     userData._id.toString() !== user.roleBaseUserId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
   return userData;
 };
@@ -297,7 +297,7 @@ const deleteGeneralUserFromDB = async (
   ]);
 
   if (!isExist.length) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'GeneralUser not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "GeneralUser not found");
   }
 
   if (
@@ -305,7 +305,7 @@ const deleteGeneralUserFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist[0]?._id?.toString() !== req?.user?.roleBaseUserId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   //---- if user when delete you account then give his password
@@ -317,7 +317,7 @@ const deleteGeneralUserFromDB = async (
       isExist[0].password &&
       !(await bcrypt.compare(req.body?.password, isExist[0].password))
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'Password is incorrect');
+      throw new ApiError(httpStatus.FORBIDDEN, "Password is incorrect");
     }
   }
 
@@ -332,7 +332,7 @@ const deleteGeneralUserFromDB = async (
       { new: true, runValidators: true, session },
     );
     if (!data?.email) {
-      throw new ApiError(400, 'Felid to delete GeneralUser');
+      throw new ApiError(400, "Felid to delete GeneralUser");
     }
     const deleteUser = await User.findOneAndUpdate(
       { email: isExist[0].email },
@@ -340,7 +340,7 @@ const deleteGeneralUserFromDB = async (
       { new: true, runValidators: true, session },
     );
     if (!deleteUser?.email) {
-      throw new ApiError(400, 'Felid to delete GeneralUser');
+      throw new ApiError(400, "Felid to delete GeneralUser");
     }
     await session.commitTransaction();
     await session.endSession();

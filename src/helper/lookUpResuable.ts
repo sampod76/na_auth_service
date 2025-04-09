@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage } from 'mongoose';
-import { ENUM_USER_ROLE } from '../global/enums/users';
+import { PipelineStage } from "mongoose";
+import { ENUM_USER_ROLE } from "../global/enums/users";
 
 export type ILookupCollection<P> = {
   connectionName: string;
@@ -42,7 +42,7 @@ export const LookupReusable = <P, T>(
         $lookup: {
           from: connectionName,
           let: {
-            id: idFiledName.includes('$') ? idFiledName : `$${idFiledName}`,
+            id: idFiledName.includes("$") ? idFiledName : `$${idFiledName}`,
           },
           pipeline: [
             {
@@ -50,11 +50,11 @@ export const LookupReusable = <P, T>(
                 $expr: {
                   $eq: [
                     pipeLineMatchField
-                      ? pipeLineMatchField.includes('$')
+                      ? pipeLineMatchField.includes("$")
                         ? pipeLineMatchField
                         : `$${pipeLineMatchField}`
-                      : '_id',
-                    '$$id',
+                      : "_id",
+                    "$$id",
                   ],
                 },
                 // Additional filter conditions for collection2
@@ -222,9 +222,9 @@ export const LookupAnyRoleDetailsReusable = <T>(
             //admin
             {
               $lookup: {
-                from: 'admins',
+                from: "admins",
                 let: {
-                  id: idFiledName.includes('$')
+                  id: idFiledName.includes("$")
                     ? idFiledName
                     : `$${idFiledName}`,
                 },
@@ -234,11 +234,11 @@ export const LookupAnyRoleDetailsReusable = <T>(
                       $expr: {
                         $eq: [
                           pipeLineMatchField
-                            ? pipeLineMatchField.includes('$')
+                            ? pipeLineMatchField.includes("$")
                               ? pipeLineMatchField
                               : `$${pipeLineMatchField}`
-                            : '_id',
-                          '$$id',
+                            : "_id",
+                          "$$id",
                         ],
                       },
                       // Additional filter conditions for collection2
@@ -248,7 +248,7 @@ export const LookupAnyRoleDetailsReusable = <T>(
                   // Additional stages for collection2
                   { $project: modifyProject },
                 ],
-                as: 'superAdminDetails',
+                as: "superAdminDetails",
               },
             },
 
@@ -257,9 +257,9 @@ export const LookupAnyRoleDetailsReusable = <T>(
               $addFields: {
                 [outPutFieldName]: {
                   $cond: {
-                    if: { $eq: [{ $size: '$superAdminDetails' }, 0] },
+                    if: { $eq: [{ $size: "$superAdminDetails" }, 0] },
                     then: [{}],
-                    else: '$superAdminDetails',
+                    else: "$superAdminDetails",
                   },
                 },
               },
@@ -280,9 +280,9 @@ export const LookupAnyRoleDetailsReusable = <T>(
             //admin
             {
               $lookup: {
-                from: 'admins',
+                from: "admins",
                 let: {
-                  id: idFiledName.includes('$')
+                  id: idFiledName.includes("$")
                     ? idFiledName
                     : `$${idFiledName}`,
                 },
@@ -292,11 +292,11 @@ export const LookupAnyRoleDetailsReusable = <T>(
                       $expr: {
                         $eq: [
                           pipeLineMatchField
-                            ? pipeLineMatchField.includes('$')
+                            ? pipeLineMatchField.includes("$")
                               ? pipeLineMatchField
                               : `$${pipeLineMatchField}`
-                            : '_id',
-                          '$$id',
+                            : "_id",
+                          "$$id",
                         ],
                       },
                       // Additional filter conditions for collection2
@@ -305,7 +305,7 @@ export const LookupAnyRoleDetailsReusable = <T>(
                   // Additional stages for collection2
                   { $project: modifyProject },
                 ],
-                as: 'adminDetails',
+                as: "adminDetails",
               },
             },
 
@@ -314,9 +314,9 @@ export const LookupAnyRoleDetailsReusable = <T>(
               $addFields: {
                 [outPutFieldName]: {
                   $cond: {
-                    if: { $eq: [{ $size: '$adminDetails' }, 0] },
+                    if: { $eq: [{ $size: "$adminDetails" }, 0] },
                     then: [{}],
-                    else: '$adminDetails',
+                    else: "$adminDetails",
                   },
                 },
               },
@@ -338,9 +338,9 @@ export const LookupAnyRoleDetailsReusable = <T>(
             //!--------------generalUser-------start----------
             {
               $lookup: {
-                from: 'generalusers',
+                from: "generalusers",
                 let: {
-                  id: idFiledName.includes('$')
+                  id: idFiledName.includes("$")
                     ? idFiledName
                     : `$${idFiledName}`,
                 },
@@ -350,11 +350,11 @@ export const LookupAnyRoleDetailsReusable = <T>(
                       $expr: {
                         $eq: [
                           pipeLineMatchField
-                            ? pipeLineMatchField.includes('$')
+                            ? pipeLineMatchField.includes("$")
                               ? pipeLineMatchField
                               : `$${pipeLineMatchField}`
-                            : '_id',
-                          '$$id',
+                            : "_id",
+                          "$$id",
                         ],
                       },
                       // Additional filter conditions for collection2
@@ -363,7 +363,7 @@ export const LookupAnyRoleDetailsReusable = <T>(
                   // Additional stages for collection2
                   { $project: modifyProject },
                 ],
-                as: 'employeeDetails',
+                as: "employeeDetails",
               },
             },
 
@@ -372,9 +372,9 @@ export const LookupAnyRoleDetailsReusable = <T>(
               $addFields: {
                 [outPutFieldName]: {
                   $cond: {
-                    if: { $eq: [{ $size: '$employeeDetails' }, 0] },
+                    if: { $eq: [{ $size: "$employeeDetails" }, 0] },
                     then: [{}],
-                    else: '$employeeDetails',
+                    else: "$employeeDetails",
                   },
                 },
               },
@@ -392,18 +392,18 @@ export const LookupAnyRoleDetailsReusable = <T>(
         $project: {
           userData: {
             $concatArrays: [
-              '$superAdminInfo',
-              '$adminInfo',
-              '$generalUserInfo',
+              "$superAdminInfo",
+              "$adminInfo",
+              "$generalUserInfo",
             ], // Concatenate arrays into a single array
           },
         },
       },
       {
-        $unwind: '$userData', // Unwind the array to separate documents
+        $unwind: "$userData", // Unwind the array to separate documents
       },
       {
-        $replaceRoot: { newRoot: '$userData' }, // Replace the root with the documents from the array
+        $replaceRoot: { newRoot: "$userData" }, // Replace the root with the documents from the array
       },
     ];
     if (margeInField) {

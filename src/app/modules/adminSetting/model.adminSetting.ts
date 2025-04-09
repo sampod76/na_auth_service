@@ -1,14 +1,14 @@
-import mongoose, { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../global/schema/global.schema';
-import ApiError from '../../errors/ApiError';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../global/schema/global.schema";
+import ApiError from "../../errors/ApiError";
 import {
   AdminSettingModel,
   AdminSettingTypeArray,
   IAdminSetting,
   PaymentTimeTypeArray,
-} from './interface.adminSetting';
+} from "./interface.adminSetting";
 const AdminSettingSchema = new Schema<IAdminSetting, AdminSettingModel>(
   {
     settingType: {
@@ -58,7 +58,7 @@ const AdminSettingSchema = new Schema<IAdminSetting, AdminSettingModel>(
   },
 );
 
-AdminSettingSchema.pre('findOneAndDelete', async function (next) {
+AdminSettingSchema.pre("findOneAndDelete", async function (next) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const dataId = this.getFilter();
@@ -77,12 +77,12 @@ AdminSettingSchema.pre('findOneAndDelete', async function (next) {
         const { status, isDelete, createdAt, updatedAt, ...otherData } = data;
         await TrashAdminSetting.create({
           ...otherData,
-          oldRecord: { refId: _id, collection: 'categories' },
+          oldRecord: { refId: _id, collection: "categories" },
         });
         // or
         // const result = await DeleteAdminSetting.create(data);
       } else {
-        throw new ApiError(400, 'Not found this item');
+        throw new ApiError(400, "Not found this item");
       }
     }
     next();
@@ -92,10 +92,10 @@ AdminSettingSchema.pre('findOneAndDelete', async function (next) {
 });
 
 export const AdminSetting = model<IAdminSetting, AdminSettingModel>(
-  'AdminSetting',
+  "AdminSetting",
   AdminSettingSchema,
 );
 export const TrashAdminSetting = model<IAdminSetting, AdminSettingModel>(
-  'TrashAdminSetting',
+  "TrashAdminSetting",
   AdminSettingSchema,
 );

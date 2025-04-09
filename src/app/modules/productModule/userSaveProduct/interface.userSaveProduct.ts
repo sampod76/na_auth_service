@@ -1,10 +1,10 @@
-import { Model } from 'mongoose';
-import { z } from 'zod';
+import { Model } from "mongoose";
+import { z } from "zod";
 
-import { IUserRef } from '../../allUser/typesAndConst';
+import { IUserRef } from "../../allUser/typesAndConst";
 
-import { I_STATUS } from '../../../../global/enum_constant_type';
-import { UserSaveProductValidation } from './validation.userSaveProduct';
+import { I_STATUS } from "../../../../global/enum_constant_type";
+import { UserSaveProductValidation } from "./validation.userSaveProduct";
 
 export type IUserSaveProductFilters = {
   searchTerm?: string;
@@ -21,8 +21,8 @@ export type IUserSaveProductFilters = {
   createdAtTo?: string;
   needProperty?: string;
   //
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
 };
 
 export type IUserSaveProduct = z.infer<

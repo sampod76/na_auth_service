@@ -1,6 +1,6 @@
-import { ZodError, ZodIssue } from 'zod';
-import { IGenericErrorResponse } from '../interface/common';
-import { IGenericErrorMessage } from '../interface/error';
+import { ZodError, ZodIssue } from "zod";
+import { IGenericErrorResponse } from "../interface/common";
+import { IGenericErrorMessage } from "../interface/error";
 const handleZodError = (error: ZodError): IGenericErrorResponse => {
   const statusCode = 400;
   const errors: IGenericErrorMessage[] = error.issues.map((issue: ZodIssue) => {
@@ -11,7 +11,7 @@ const handleZodError = (error: ZodError): IGenericErrorResponse => {
   });
   return {
     statusCode,
-    message: `Validation Error:-> ${errors.map(error => `${error.path} : ${error.message}`).join(',')}`,
+    message: `Validation Error:-> ${errors.map(error => `${error.path} : ${error.message}`).join(",")}`,
     // message: `Validation Error`,
     errorMessages: errors,
   };

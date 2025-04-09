@@ -1,37 +1,37 @@
 export const RoutingReminder_SEARCHABLE_FIELDS = [
-  'productUseDetails',
-  'applicationStepsDetails',
+  "productUseDetails",
+  "applicationStepsDetails",
 ];
 export const RoutingReminder_FILTERABLE_FIELDS = [
-  'searchTerm',
-  'reminderType',
+  "searchTerm",
+  "reminderType",
 
-  'status',
-  'delete',
-  'serialNumber',
-  'isDelete',
-  'month',
-  'scheduleType',
+  "status",
+  "delete",
+  "serialNumber",
+  "isDelete",
+  "month",
+  "scheduleType",
   //
-  'pickDateFrom',
-  'pickDateTo',
+  "pickDateFrom",
+  "pickDateTo",
   //
   //
-  'startTime',
-  'endTime',
+  "startTime",
+  "endTime",
   //
-  'needProperty',
-  'createdAtFrom',
-  'createdAtTo',
+  "needProperty",
+  "createdAtFrom",
+  "createdAtTo",
   //
-  'author.userId',
-  'author.roleBaseUserId',
+  "author.userId",
+  "author.roleBaseUserId",
 ];
 
 export enum ENUM_SCHEDULE_TYPE_ROUTING {
-  date = 'date',
-  weekCycle = 'weekCycle',
-  weekDay = 'weekDay',
+  date = "date",
+  weekCycle = "weekCycle",
+  weekDay = "weekDay",
 }
 
 export type I_ScheduleType = keyof typeof ENUM_SCHEDULE_TYPE_ROUTING;

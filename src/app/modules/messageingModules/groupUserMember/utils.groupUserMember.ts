@@ -1,9 +1,9 @@
-import { PipelineStage, Types } from 'mongoose';
-import { LookupAnyRoleDetailsReusable } from '../../../../helper/lookUpResuable';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
-import { IGroupMember } from './interface.groupUserMember';
-import { GroupMember } from './models.groupUserMember';
+import { PipelineStage, Types } from "mongoose";
+import { LookupAnyRoleDetailsReusable } from "../../../../helper/lookUpResuable";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
+import { IGroupMember } from "./interface.groupUserMember";
+import { GroupMember } from "./models.groupUserMember";
 type GroupMemberOptions = {
   needGroup?: boolean;
   validateUserId?: string;
@@ -17,7 +17,7 @@ export const findGroupMemberInRedisOrDb = async (
     const redisData = await redisClient.get(
       ENUM_REDIS_KEY.REDIS_IN_SAVE_GroupMemberAndUserId +
         option.validateUserId +
-        ':' +
+        ":" +
         groupMemberId,
     );
     if (redisData) {
@@ -35,11 +35,11 @@ export const findGroupMemberInRedisOrDb = async (
       LookupAnyRoleDetailsReusable(pipeline, {
         collections: [
           {
-            roleMatchFiledName: 'receiver.role',
-            idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-            pipeLineMatchField: '_id', //$_id
-            outPutFieldName: 'details',
-            margeInField: 'receiver',
+            roleMatchFiledName: "receiver.role",
+            idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+            pipeLineMatchField: "_id", //$_id
+            outPutFieldName: "details",
+            margeInField: "receiver",
             project: { name: 1, country: 1, profileImage: 1, email: 1 },
           },
         ],
@@ -50,10 +50,10 @@ export const findGroupMemberInRedisOrDb = async (
         await redisClient.set(
           ENUM_REDIS_KEY.REDIS_IN_SAVE_GroupMemberAndUserId +
             option.validateUserId +
-            ':' +
+            ":" +
             groupMemberId,
           JSON.stringify(result),
-          'EX',
+          "EX",
           24 * 60 * 60, // 1 day to second
         );
       }
@@ -64,7 +64,7 @@ export const findGroupMemberInRedisOrDb = async (
         result?.receiver?.userId?.toString() !==
         option?.validateUserId?.toString()
       ) {
-        throw new Error('forbidden access');
+        throw new Error("forbidden access");
       }
     }
     return result;

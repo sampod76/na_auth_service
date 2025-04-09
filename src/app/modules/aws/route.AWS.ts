@@ -1,12 +1,12 @@
-import express from 'express';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import { apiLimiter } from '../../middlewares/api-limited-hite';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { AWSController } from './controller.AWS';
-import { AWSValidation } from './validation.AWS';
+import express from "express";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import { apiLimiter } from "../../middlewares/api-limited-hite";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { AWSController } from "./controller.AWS";
+import { AWSValidation } from "./validation.AWS";
 const router = express.Router();
 
-router.route('/create-aws-upload-files-token').post(
+router.route("/create-aws-upload-files-token").post(
   (req, res, next) => {
     const role = req?.user?.role;
     if (role !== ENUM_USER_ROLE.admin) {
@@ -21,9 +21,9 @@ router.route('/create-aws-upload-files-token').post(
   AWSController.createAwsUploadFilesToken,
 );
 router
-  .route('/getPrivetAwsFile/:filename')
+  .route("/getPrivetAwsFile/:filename")
   .post(AWSController.getPrivetAwsFileToken);
 //
-router.route('/get-all-files').get(AWSController.getFiles);
+router.route("/get-all-files").get(AWSController.getFiles);
 
 export const AWSRoute = router;

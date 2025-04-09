@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from "crypto";
 
 export class CryptoHashOop<T> {
   public data: T;
@@ -7,13 +7,13 @@ export class CryptoHashOop<T> {
   }
 
   getHash(algorithm?: string): string {
-    const hash = crypto.createHash(algorithm || 'shake256'); // sha1
+    const hash = crypto.createHash(algorithm || "shake256"); // sha1
     hash.update(JSON.stringify(this.data));
-    return hash.digest('hex');
+    return hash.digest("hex");
   }
   getHashWithSalt(salt: string, algorithm?: string): string {
-    const hash = crypto.createHash(algorithm || 'shake256'); // sha1
+    const hash = crypto.createHash(algorithm || "shake256"); // sha1
     hash.update(JSON.stringify(this.data) + salt);
-    return hash.digest('hex');
+    return hash.digest("hex");
   }
 }

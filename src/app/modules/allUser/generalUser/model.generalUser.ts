@@ -4,17 +4,17 @@ import {
   PipelineStage,
   Schema,
   Types,
-} from 'mongoose';
+} from "mongoose";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../../global/schema/global.schema';
-import { LookupReusable } from '../../../../helper/lookUpResuable';
-import { ENUM_VERIFY, mongooseIUserRef, VERIFY_ARRAY } from '../typesAndConst';
-import { ENUM_ACCOUNT_TYPE, I_AccountTypeArray } from '../user/user.interface';
-import { GeneralUserModel, IGeneralUser } from './interface.generalUser';
+} from "../../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../../global/schema/global.schema";
+import { LookupReusable } from "../../../../helper/lookUpResuable";
+import { ENUM_VERIFY, mongooseIUserRef, VERIFY_ARRAY } from "../typesAndConst";
+import { ENUM_ACCOUNT_TYPE, I_AccountTypeArray } from "../user/user.interface";
+import { GeneralUserModel, IGeneralUser } from "./interface.generalUser";
 
 const GeneralSchema = new Schema<IGeneralUser, GeneralUserModel>(
   {
@@ -25,7 +25,7 @@ const GeneralSchema = new Schema<IGeneralUser, GeneralUserModel>(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     email: {
       type: String,
@@ -41,7 +41,7 @@ const GeneralSchema = new Schema<IGeneralUser, GeneralUserModel>(
     },
     authUserId: {
       type: Schema.Types.ObjectId,
-      ref: 'Vendor', // when general user create vendor
+      ref: "Vendor", // when general user create vendor
     },
     name: {
       firstName: { type: String, trim: true },
@@ -160,10 +160,10 @@ GeneralSchema.statics.isGeneralUserExistMethod = async function (
     LookupReusable(pipeline, {
       collections: [
         {
-          connectionName: 'users',
-          idFiledName: 'userId',
-          pipeLineMatchField: '_id',
-          outPutFieldName: 'userDetails',
+          connectionName: "users",
+          idFiledName: "userId",
+          pipeLineMatchField: "_id",
+          outPutFieldName: "userDetails",
         },
       ],
     });
@@ -174,7 +174,7 @@ GeneralSchema.statics.isGeneralUserExistMethod = async function (
 };
 
 GeneralSchema.pre(
-  'save',
+  "save",
   async function (next: CallbackWithoutResultAndOptionalError) {
     try {
       // const General = this;
@@ -191,6 +191,6 @@ GeneralSchema.pre(
 );
 
 export const GeneralUser = model<IGeneralUser, GeneralUserModel>(
-  'GeneralUser',
+  "GeneralUser",
   GeneralSchema,
 );

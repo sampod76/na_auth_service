@@ -1,16 +1,16 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 // Function to check and create directories
 export function createDirectories(baseDir?: string, folders?: string[]): void {
-  const defaultBaseDir: string = path.join(__dirname, '../../../uploadFile');
+  const defaultBaseDir: string = path.join(__dirname, "../../../uploadFile");
   const defaultFolders: string[] = [
-    'images',
-    'audios',
-    'pdfs',
-    'videos',
-    'docs',
-    'others',
+    "images",
+    "audios",
+    "pdfs",
+    "videos",
+    "docs",
+    "others",
   ];
   const finalBaseDir = baseDir
     ? path.join(__dirname, baseDir as string)
@@ -22,7 +22,7 @@ export function createDirectories(baseDir?: string, folders?: string[]): void {
     fs.mkdirSync(finalBaseDir);
     console.log(`Created base directory: ${finalBaseDir}`);
   }
-  const backupDir = path.join(__dirname, '../../../backupdb');
+  const backupDir = path.join(__dirname, "../../../backupdb");
   if (!fs.existsSync(backupDir)) {
     fs.mkdirSync(backupDir);
     console.log(`Created base directory: ${backupDir}`);

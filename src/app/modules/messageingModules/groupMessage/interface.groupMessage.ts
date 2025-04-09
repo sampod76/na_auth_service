@@ -1,8 +1,8 @@
-import { Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, I_YN } from '../../../../global/enum_constant_type';
+import { Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, I_YN } from "../../../../global/enum_constant_type";
 
-import { groupMessageZodData } from './validation.groupMessage';
+import { groupMessageZodData } from "./validation.groupMessage";
 
 export type IGroupMessageFilters = {
   senderUserId?: string;

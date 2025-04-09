@@ -1,14 +1,14 @@
-import { Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { I_ROLE_TYPE } from '../allUser/user/user.interface';
-import { CategoryValidation } from './validation.category';
+import { Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { I_ROLE_TYPE } from "../allUser/user/user.interface";
+import { CategoryValidation } from "./validation.category";
 //
 export enum ENUM_CATEGORY_TYPE {
-  profile = 'profile',
-  logWashDay = 'logWashDay',
-  logStyleArchive = 'logStyleArchive',
-  logTrimTracker = 'logTrimTracker',
+  profile = "profile",
+  logWashDay = "logWashDay",
+  logStyleArchive = "logStyleArchive",
+  logTrimTracker = "logTrimTracker",
 }
 export type I_CategoryType = keyof typeof ENUM_CATEGORY_TYPE;
 export const CATEGORY_TYPE_ARRAY = Object.values(ENUM_CATEGORY_TYPE);

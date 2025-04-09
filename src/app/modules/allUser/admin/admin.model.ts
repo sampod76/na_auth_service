@@ -1,12 +1,12 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../../global/schema/global.schema';
-import { mongooseIUserRef } from '../typesAndConst';
-import { AdminModel, IAdmin } from './admin.interface';
+} from "../../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../../global/schema/global.schema";
+import { mongooseIUserRef } from "../typesAndConst";
+import { AdminModel, IAdmin } from "./admin.interface";
 
 const adminSchema = new Schema<IAdmin, AdminModel>(
   {
@@ -17,7 +17,7 @@ const adminSchema = new Schema<IAdmin, AdminModel>(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     name: {
       firstName: { type: String },
@@ -68,4 +68,4 @@ const adminSchema = new Schema<IAdmin, AdminModel>(
   },
 );
 
-export const Admin = model<IAdmin, AdminModel>('Admin', adminSchema);
+export const Admin = model<IAdmin, AdminModel>("Admin", adminSchema);

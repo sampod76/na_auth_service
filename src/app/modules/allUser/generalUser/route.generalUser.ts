@@ -1,20 +1,20 @@
-import express from 'express';
-import { z } from 'zod';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import authMiddleware from '../../../middlewares/authMiddleware';
+import express from "express";
+import { z } from "zod";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import authMiddleware from "../../../middlewares/authMiddleware";
 
-import parseBodyData from '../../../middlewares/utils/parseBodyData';
-import validateRequestZod from '../../../middlewares/validateRequestZod';
-import { uploadAwsS3Bucket } from '../../aws/utls.aws';
-import { GeneralUserController } from './controller.generalUser';
-import { GeneralUserValidation } from './validation.generalUser';
+import parseBodyData from "../../../middlewares/utils/parseBodyData";
+import validateRequestZod from "../../../middlewares/validateRequestZod";
+import { uploadAwsS3Bucket } from "../../aws/utls.aws";
+import { GeneralUserController } from "./controller.generalUser";
+import { GeneralUserValidation } from "./validation.generalUser";
 
 const router = express.Router();
 
-router.route('/').get(GeneralUserController.getAllGeneralUsers);
+router.route("/").get(GeneralUserController.getAllGeneralUsers);
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(GeneralUserController.getSingleGeneralUser)
   .patch(
     authMiddleware(
@@ -24,7 +24,7 @@ router
     ),
     // uploadAwsS3Bucket.fields([{ name: 'profileImage', maxCount: 1 }]),
     // uploadImage.single('profileImage'),
-    uploadAwsS3Bucket.single('profileImage'),
+    uploadAwsS3Bucket.single("profileImage"),
     parseBodyData({}),
     validateRequestZod(GeneralUserValidation.updateGeneralUserSchema),
     GeneralUserController.updateGeneralUser,

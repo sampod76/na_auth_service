@@ -1,13 +1,13 @@
-import mongoose, { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../global/schema/global.schema';
-import ApiError from '../../errors/ApiError';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../global/schema/global.schema";
+import ApiError from "../../errors/ApiError";
 import {
   AllTextFieldModel,
   DATA_TYPE_ARRAY,
   IAllTextField,
-} from './interface.AllTextField';
+} from "./interface.AllTextField";
 const AllTextFieldSchema = new Schema<IAllTextField, AllTextFieldModel>(
   {
     heading: {
@@ -40,7 +40,7 @@ const AllTextFieldSchema = new Schema<IAllTextField, AllTextFieldModel>(
     },
     //--- for --TrashAllTextField---
     oldRecord: {
-      refId: { type: Schema.Types.ObjectId, ref: 'AllTextField' },
+      refId: { type: Schema.Types.ObjectId, ref: "AllTextField" },
       collection: String,
     },
   },
@@ -53,7 +53,7 @@ const AllTextFieldSchema = new Schema<IAllTextField, AllTextFieldModel>(
   },
 );
 
-AllTextFieldSchema.pre('findOneAndDelete', async function (next) {
+AllTextFieldSchema.pre("findOneAndDelete", async function (next) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const dataId = this.getFilter();
@@ -72,12 +72,12 @@ AllTextFieldSchema.pre('findOneAndDelete', async function (next) {
         const { status, isDelete, createdAt, updatedAt, ...otherData } = data;
         await TrashAllTextField.create({
           ...otherData,
-          oldRecord: { refId: _id, collection: 'categories' },
+          oldRecord: { refId: _id, collection: "categories" },
         });
         // or
         // const result = await DeleteAllTextField.create(data);
       } else {
-        throw new ApiError(400, 'Not found this item');
+        throw new ApiError(400, "Not found this item");
       }
     }
     next();
@@ -87,10 +87,10 @@ AllTextFieldSchema.pre('findOneAndDelete', async function (next) {
 });
 
 export const AllTextField = model<IAllTextField, AllTextFieldModel>(
-  'AllTextField',
+  "AllTextField",
   AllTextFieldSchema,
 );
 export const TrashAllTextField = model<IAllTextField, AllTextFieldModel>(
-  'TrashAllTextField',
+  "TrashAllTextField",
   AllTextFieldSchema,
 );

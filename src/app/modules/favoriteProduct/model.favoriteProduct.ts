@@ -1,11 +1,11 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseIUserRef } from '../allUser/typesAndConst';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseIUserRef } from "../allUser/typesAndConst";
 import {
   FavoriteProductModel,
   IFavoriteProduct,
-} from './interface.favoriteProduct';
+} from "./interface.favoriteProduct";
 
 const FavoriteProductSchema = new Schema<
   IFavoriteProduct,
@@ -14,7 +14,7 @@ const FavoriteProductSchema = new Schema<
   {
     productId: {
       type: Schema.Types.ObjectId,
-      ref: 'Product',
+      ref: "Product",
     },
     productTitle: String,
     author: mongooseIUserRef,
@@ -41,7 +41,7 @@ const FavoriteProductSchema = new Schema<
   },
 );
 // after findOneAndDelete then data then call this hook
-FavoriteProductSchema.post('findOneAndDelete', async function () {
+FavoriteProductSchema.post("findOneAndDelete", async function () {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     // const dataId = this.getFilter();
@@ -65,7 +65,7 @@ FavoriteProductSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 FavoriteProductSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: any & { _id: string }, next: any) {
     try {
       // if (data?.FavoriteProductType) {
@@ -82,7 +82,7 @@ FavoriteProductSchema.post(
 );
 // before save/create then data then call this hook
 FavoriteProductSchema.post(
-  'save',
+  "save",
   async function (data: IFavoriteProduct, next) {
     try {
       // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
@@ -95,7 +95,7 @@ FavoriteProductSchema.post(
 );
 
 export const FavoriteProduct = model<IFavoriteProduct, FavoriteProductModel>(
-  'FavoriteProduct',
+  "FavoriteProduct",
   FavoriteProductSchema,
 );
 // export const TrashFavoriteProduct = model<

@@ -1,6 +1,6 @@
-import { Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
+import { Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
 
 export class OoptestmodualValidationClass {
   public readonly createOoptestmodual_BodyData = z

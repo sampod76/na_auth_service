@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { Product_FILTERABLE_FIELDS } from './constant.products';
-import { IProduct } from './interface.products';
-import { ProductService } from './service.products';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { Product_FILTERABLE_FIELDS } from "./constant.products";
+import { IProduct } from "./interface.products";
+import { ProductService } from "./service.products";
 
 // import { z } from 'zod'
 const createProduct = catchAsync(async (req: Request, res: Response) => {
@@ -28,7 +28,7 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IProduct>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successful create Product',
+    message: "successful create Product",
     data: result,
   });
 });
@@ -46,7 +46,7 @@ const getAllProduct = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IProduct[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get all Product',
+    message: "successfully Get all Product",
     meta: result.meta,
     data: result.data,
   });
@@ -67,7 +67,7 @@ const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IProduct>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully get Product',
+    message: "successfully get Product",
     data: result,
   });
 });
@@ -96,7 +96,7 @@ const updateProduct = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IProduct>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully update Product',
+    message: "successfully update Product",
     data: result,
   });
 });
@@ -109,7 +109,7 @@ const updateProductSerialNumber = catchAsync(
     sendResponse<IProduct[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update Product',
+      message: "successfully update Product",
       data: result,
     });
   },
@@ -126,7 +126,7 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IProduct>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully delete Product',
+    message: "successfully delete Product",
     data: result,
   });
 });

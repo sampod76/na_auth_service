@@ -1,6 +1,6 @@
 // import mongoose from 'mongoose';
-import { MongoServerError } from 'mongodb';
-import { IGenericErrorMessage } from '../interface/error';
+import { MongoServerError } from "mongodb";
+import { IGenericErrorMessage } from "../interface/error";
 
 const handleMongoUniqueError = (error: MongoServerError) => {
   // const errors: IGenericErrorMessage[] = [
@@ -11,15 +11,15 @@ const handleMongoUniqueError = (error: MongoServerError) => {
   // ];
   const errors: IGenericErrorMessage[] = Object.keys(error.keyValue).map(
     key => ({
-      path: error?.path || '',
-      message: key + ': ' + error?.keyValue[key] + ' already exists.',
+      path: error?.path || "",
+      message: key + ": " + error?.keyValue[key] + " already exists.",
     }),
   );
 
   const statusCode = 400;
   return {
     statusCode,
-    message: 'Unique error',
+    message: "Unique error",
     errorMessages: errors,
   };
 };

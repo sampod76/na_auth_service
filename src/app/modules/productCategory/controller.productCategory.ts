@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { productCategory_FILTERABLE_FIELDS } from './constant.productCategory';
-import { IProductCategory } from './interface.productCategory';
-import { ProductCategoryService } from './service.productCategory';
+import { productCategory_FILTERABLE_FIELDS } from "./constant.productCategory";
+import { IProductCategory } from "./interface.productCategory";
+import { ProductCategoryService } from "./service.productCategory";
 
 // import { z } from 'zod'
 const createProductCategory = catchAsync(
@@ -33,7 +33,7 @@ const createProductCategory = catchAsync(
     sendResponse<IProductCategory>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful create ProductCategory',
+      message: "successful create ProductCategory",
       data: result,
     });
   },
@@ -53,7 +53,7 @@ const getAllProductCategory = catchAsync(
     sendResponse<IProductCategory[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully Get all ProductCategory',
+      message: "successfully Get all ProductCategory",
       meta: result.meta,
       data: result.data,
     });
@@ -80,7 +80,7 @@ const getSingleProductCategory = catchAsync(
     sendResponse<IProductCategory>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get ProductCategory',
+      message: "successfully get ProductCategory",
       data: result,
     });
   },
@@ -110,7 +110,7 @@ const updateProductCategory = catchAsync(
     sendResponse<IProductCategory>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update ProductCategory',
+      message: "successfully update ProductCategory",
       data: result,
     });
   },
@@ -125,7 +125,7 @@ const updateProductCategorySerialNumber = catchAsync(
     sendResponse<IProductCategory[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update ProductCategory',
+      message: "successfully update ProductCategory",
       data: result,
     });
   },
@@ -142,7 +142,7 @@ const deleteProductCategory = catchAsync(
     sendResponse<IProductCategory>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully delete ProductCategory',
+      message: "successfully delete ProductCategory",
       data: result,
     });
   },

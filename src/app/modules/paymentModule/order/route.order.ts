@@ -1,14 +1,14 @@
-import express from 'express';
+import express from "express";
 
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import authMiddleware from '../../../middlewares/authMiddleware';
-import validateRequestZod from '../../../middlewares/validateRequestZod';
-import { OrdersController } from './controller.order';
-import { OrderValidation } from './validation.order';
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import authMiddleware from "../../../middlewares/authMiddleware";
+import validateRequestZod from "../../../middlewares/validateRequestZod";
+import { OrdersController } from "./controller.order";
+import { OrderValidation } from "./validation.order";
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   .get(
     authMiddleware(
       ENUM_USER_ROLE.admin,
@@ -31,7 +31,7 @@ router
     OrdersController.createOrder,
   );
 
-router.route('/dashboard/status').get(
+router.route("/dashboard/status").get(
   authMiddleware(
     ENUM_USER_ROLE.admin,
     ENUM_USER_ROLE.superAdmin,
@@ -42,7 +42,7 @@ router.route('/dashboard/status').get(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(OrdersController.getOrderById)
   .patch(
     authMiddleware(

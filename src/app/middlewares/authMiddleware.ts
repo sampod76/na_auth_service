@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from "express";
 
-import httpStatus from 'http-status';
-import { Secret } from 'jsonwebtoken';
-import config from '../../config';
-import { ENUM_STATUS } from '../../global/enum_constant_type';
-import { jwtHelpers } from '../../helper/jwtHelpers';
-import ApiError from '../errors/ApiError';
-import { validateUserInDbOrRedis } from '../modules/allUser/user/user.utils';
-import { redisClient } from '../redis/redis';
+import httpStatus from "http-status";
+import { Secret } from "jsonwebtoken";
+import config from "../../config";
+import { ENUM_STATUS } from "../../global/enum_constant_type";
+import { jwtHelpers } from "../../helper/jwtHelpers";
+import ApiError from "../errors/ApiError";
+import { validateUserInDbOrRedis } from "../modules/allUser/user/user.utils";
+import { redisClient } from "../redis/redis";
 // Dedicated Redis service
 const getUserFromCache = async (token: string) => {
   const cachedUser = await redisClient.get(token);
@@ -16,7 +16,7 @@ const getUserFromCache = async (token: string) => {
 //
 const cacheUser = async (token: string, data: any, ttl: number) => {
   if (ttl > 0) {
-    await redisClient.set(token, JSON.stringify(data), 'EX', ttl);
+    await redisClient.set(token, JSON.stringify(data), "EX", ttl);
   }
 };
 // Token verification with TTL calculation
@@ -42,7 +42,7 @@ const authMiddleware =
       const token = req.headers.authorization;
 
       if (!token) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+        throw new ApiError(httpStatus.UNAUTHORIZED, "Unauthorized access");
       }
 
       let verifiedUser = await getUserFromCache(token);
@@ -60,7 +60,7 @@ const authMiddleware =
 
       // role diye guard korar jnno
       if (requiredRoles.length && !requiredRoles.includes(verifiedUser?.role)) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access');
+        throw new ApiError(httpStatus.FORBIDDEN, "forbidden access");
       }
 
       //--validation in database or raids--

@@ -1,11 +1,11 @@
-import { Types } from 'mongoose';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
+import { Types } from "mongoose";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../redis/service.redis';
-import { IRoutingReminder } from './interface.RoutingReminder';
-import { RoutingReminder } from './model.RoutingReminder';
+} from "../../redis/service.redis";
+import { IRoutingReminder } from "./interface.RoutingReminder";
+import { RoutingReminder } from "./model.RoutingReminder";
 
 export class RoutingReminderOop {
   private id: string;
@@ -18,7 +18,7 @@ export class RoutingReminderOop {
     const key = patten || `${ENUM_REDIS_KEY.RIS_RoutingReminder}${this.id}`;
     const getRoutingReminder = await getCase.getAnyDataByKey(key);
     console.log(
-      '🚀 ~ RoutingReminderOop ~ getAndSetCase ~ getRoutingReminder:',
+      "🚀 ~ RoutingReminderOop ~ getAndSetCase ~ getRoutingReminder:",
       getRoutingReminder,
     );
     if (getRoutingReminder) {
@@ -29,7 +29,7 @@ export class RoutingReminderOop {
       isDelete: false,
     });
     console.log(
-      '🚀 ~ RoutingReminderOop ~ getAndSetCase ~ cacheData:',
+      "🚀 ~ RoutingReminderOop ~ getAndSetCase ~ cacheData:",
       cacheData,
     );
     if (!cacheData) {

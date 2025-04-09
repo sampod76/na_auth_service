@@ -1,39 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { PipelineStage, Schema, Types } from "mongoose";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
 
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../../helper/lookUpResuable';
+} from "../../../../helper/lookUpResuable";
 
-import { produceUpdateFriendShipListSortKafka } from '../../../kafka/producer.kafka';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
+import { produceUpdateFriendShipListSortKafka } from "../../../kafka/producer.kafka";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../../redis/service.redis';
+} from "../../../redis/service.redis";
 
-import { IUserRef, IUserRefAndDetails } from '../../allUser/typesAndConst';
-import { IUser } from '../../allUser/user/user.interface';
-import { User } from '../../allUser/user/user.model';
+import { IUserRef, IUserRefAndDetails } from "../../allUser/typesAndConst";
+import { IUser } from "../../allUser/user/user.interface";
+import { User } from "../../allUser/user/user.model";
 import {
   RequestToRefUserObject,
   validateUserInDbOrRedis,
-} from '../../allUser/user/user.utils';
+} from "../../allUser/user/user.utils";
 
-import { friendshipSearchableFields } from './friendship.constants';
-import { IFriendShip, IFriendShipFilters } from './friendship.interface';
-import { FriendShip } from './friendship.models';
+import { friendshipSearchableFields } from "./friendship.constants";
+import { IFriendShip, IFriendShipFilters } from "./friendship.interface";
+import { FriendShip } from "./friendship.models";
 
 const createFriendShip = async (
   data: IFriendShip,
@@ -49,12 +49,12 @@ const createFriendShip = async (
   const findData: any = FriendShip.findOne({
     $or: [
       {
-        'sender.userId': new Types.ObjectId(data.sender?.userId as string),
-        'receiver.userId': new Types.ObjectId(data.receiver?.userId as string),
+        "sender.userId": new Types.ObjectId(data.sender?.userId as string),
+        "receiver.userId": new Types.ObjectId(data.receiver?.userId as string),
       },
       {
-        'sender.userId': new Types.ObjectId(data.receiver?.userId as string),
-        'receiver.userId': new Types.ObjectId(data.sender?.userId as string),
+        "sender.userId": new Types.ObjectId(data.receiver?.userId as string),
+        "receiver.userId": new Types.ObjectId(data.sender?.userId as string),
       },
     ],
   });
@@ -66,10 +66,10 @@ const createFriendShip = async (
   ];
 
   if (!resolved[0] || resolved[0]?.isDelete === true) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Receiver not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Receiver not found");
   }
   if (resolved[1]) {
-    throw new ApiError(httpStatus.CONFLICT, 'Friendship already exists');
+    throw new ApiError(httpStatus.CONFLICT, "Friendship already exists");
   }
 
   data.receiver = {
@@ -109,7 +109,7 @@ const checkUserIdToExistFriendShipFromDb = async (
   for (const stringFriendShipString of findRedisStringData) {
     //loop
     //[string,null]
-    if (stringFriendShipString && typeof stringFriendShipString === 'string') {
+    if (stringFriendShipString && typeof stringFriendShipString === "string") {
       const stringFriendShipObjectDate: any = JSON.parse(
         stringFriendShipString,
       );
@@ -146,14 +146,14 @@ const checkUserIdToExistFriendShipFromDb = async (
       $match: {
         $or: [
           {
-            'sender.userId': new Types.ObjectId(userId as string),
-            'receiver.userId': new Types.ObjectId(
+            "sender.userId": new Types.ObjectId(userId as string),
+            "receiver.userId": new Types.ObjectId(
               requestUser?.userId as string,
             ),
           },
           {
-            'sender.userId': new Types.ObjectId(requestUser?.userId as string),
-            'receiver.userId': new Types.ObjectId(userId as string),
+            "sender.userId": new Types.ObjectId(requestUser?.userId as string),
+            "receiver.userId": new Types.ObjectId(userId as string),
           },
         ],
       },
@@ -163,20 +163,20 @@ const checkUserIdToExistFriendShipFromDb = async (
   LookupAnyRoleDetailsReusable(pipeline, {
     collections: [
       {
-        roleMatchFiledName: 'sender.role',
-        idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'sender',
+        roleMatchFiledName: "sender.role",
+        idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "sender",
 
         project: { name: 1, country: 1, profileImage: 1, email: 1 },
       },
       {
-        roleMatchFiledName: 'receiver.role',
-        idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'receiver',
+        roleMatchFiledName: "receiver.role",
+        idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "receiver",
 
         project: { name: 1, country: 1, profileImage: 1, email: 1 },
       },
@@ -193,7 +193,7 @@ const checkUserIdToExistFriendShipFromDb = async (
       { key: whenMyReceiver, value: findData, ttl: 24 * 60 },
     ]);
   } else {
-    if (req.query?.createFriendShip == 'yes') {
+    if (req.query?.createFriendShip == "yes") {
       //if when checking and not found friendship then auto matic create user
       const receiverInfo = (await User.isUserFindMethod(
         { id: userId },
@@ -286,7 +286,7 @@ const getAllFriendShipsFromDB = async (
 ): Promise<IGenericResponse<IFriendShip[] | null>> => {
   const { searchTerm, needProperty, ...filtersData } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -296,7 +296,7 @@ const getAllFriendShipsFromDB = async (
       $or: friendshipSearchableFields.map((field: string) => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -309,38 +309,38 @@ const getAllFriendShipsFromDB = async (
         ([field, value]: [keyof typeof filtersData, string]) => {
           let modifyFiled;
 
-          if (field === 'gigId' || field === 'orderId') {
+          if (field === "gigId" || field === "orderId") {
             modifyFiled = { [field]: new Types.ObjectId(value) };
-          } else if (field === 'senderUserId') {
+          } else if (field === "senderUserId") {
             modifyFiled = {
-              ['sender.userId']: new Types.ObjectId(value),
+              ["sender.userId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'senderRoleBaseId') {
+          } else if (field === "senderRoleBaseId") {
             modifyFiled = {
-              ['sender.roleBaseUserId']: new Types.ObjectId(value),
+              ["sender.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'receiverUserId') {
+          } else if (field === "receiverUserId") {
             modifyFiled = {
-              ['receiver.roleBaseUserId']: new Types.ObjectId(value),
+              ["receiver.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'receiverRoleBaseId') {
+          } else if (field === "receiverRoleBaseId") {
             modifyFiled = {
-              ['receiver.roleBaseUserId']: new Types.ObjectId(value),
+              ["receiver.roleBaseUserId"]: new Types.ObjectId(value),
             };
-          } else if (field === 'isBlock') {
+          } else if (field === "isBlock") {
             modifyFiled = {
-              ['block.isBlock']: value,
+              ["block.isBlock"]: value,
             };
-          } else if (field === 'myData' && value === 'yes') {
+          } else if (field === "myData" && value === "yes") {
             modifyFiled = {
               $or: [
                 {
-                  'sender.userId': new Types.ObjectId(
+                  "sender.userId": new Types.ObjectId(
                     req?.user?.userId as string,
                   ),
                 },
                 {
-                  'receiver.userId': new Types.ObjectId(
+                  "receiver.userId": new Types.ObjectId(
                     req?.user?.userId as string,
                   ),
                 },
@@ -358,7 +358,7 @@ const getAllFriendShipsFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -374,7 +374,7 @@ const getAllFriendShipsFromDB = async (
       req?.user?.role !== ENUM_USER_ROLE.admin &&
       req?.user?.role !== ENUM_USER_ROLE.superAdmin
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access data');
+      throw new ApiError(httpStatus.FORBIDDEN, "forbidden access data");
     }
   }
   //!------------check -access validation ------------------
@@ -387,27 +387,27 @@ const getAllFriendShipsFromDB = async (
 
   //-----------------needProperty--lookup--------------------
   if (
-    needProperty?.toLowerCase()?.includes('senderinfo') ||
-    needProperty?.toLowerCase()?.includes('receiverinfo')
+    needProperty?.toLowerCase()?.includes("senderinfo") ||
+    needProperty?.toLowerCase()?.includes("receiverinfo")
   ) {
     const collections = [];
-    if (needProperty?.toLowerCase()?.includes('senderinfo')) {
+    if (needProperty?.toLowerCase()?.includes("senderinfo")) {
       collections.push({
-        roleMatchFiledName: 'sender.role',
-        idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'sender',
+        roleMatchFiledName: "sender.role",
+        idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "sender",
         project: { name: 1, profileImage: 1, email: 1 },
       });
     }
-    if (needProperty?.toLowerCase()?.includes('receiverinfo')) {
+    if (needProperty?.toLowerCase()?.includes("receiverinfo")) {
       collections.push({
-        roleMatchFiledName: 'receiver.role',
-        idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'receiver',
+        roleMatchFiledName: "receiver.role",
+        idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "receiver",
         project: { name: 1, email: 1, profileImage: 1, userId: 1 },
       });
     }
@@ -421,21 +421,21 @@ const getAllFriendShipsFromDB = async (
   //
   const collections: ILookupCollection<any>[] = [];
 
-  if (needProperty && needProperty.includes('lastMessage')) {
+  if (needProperty && needProperty.includes("lastMessage")) {
     const lastMessagePipeline: PipelineStage[] = [
       {
         $lookup: {
-          from: 'chatmessages',
-          let: { id: '$_id' },
+          from: "chatmessages",
+          let: { id: "$_id" },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$friendShipId', '$$id'] },
+                    { $eq: ["$friendShipId", "$$id"] },
                     {
                       $eq: [
-                        '$sender.userId',
+                        "$sender.userId",
                         new Types.ObjectId(req?.user?.userId),
                       ],
                     },
@@ -457,24 +457,24 @@ const getAllFriendShipsFromDB = async (
                 createTime: 1,
                 files: {
                   $cond: {
-                    if: { $eq: [{ $type: '$files' }, 'array'] }, // Check if `files` exists and is an array
-                    then: { $size: '$files' }, // If it exists, get the array size
+                    if: { $eq: [{ $type: "$files" }, "array"] }, // Check if `files` exists and is an array
+                    then: { $size: "$files" }, // If it exists, get the array size
                     else: 0, // If it doesn't exist, set to 0
                   },
                 },
               },
             },
           ],
-          as: 'lastMessageDetails',
+          as: "lastMessageDetails",
         },
       },
       {
         $addFields: {
           lastMessageDetails: {
             $cond: {
-              if: { $eq: [{ $size: '$lastMessageDetails' }, 0] },
+              if: { $eq: [{ $size: "$lastMessageDetails" }, 0] },
               then: {},
-              else: { $arrayElemAt: ['$lastMessageDetails', 0] },
+              else: { $arrayElemAt: ["$lastMessageDetails", 0] },
             },
           },
         },
@@ -523,7 +523,7 @@ const getAllFriendShipsFromDB = async (
         group.receiver.userId.toString() !== req?.user?.userId &&
         group.sender.userId.toString() !== req?.user?.userId
       ) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access data');
+        throw new ApiError(httpStatus.FORBIDDEN, "forbidden access data");
       }
     });
   }
@@ -546,7 +546,7 @@ const updateFriendShipFromDB = async (
     _id: Schema.Types.ObjectId;
   } as IFriendShip;
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'FriendShip not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "FriendShip not found");
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -554,7 +554,7 @@ const updateFriendShipFromDB = async (
     isExist?.sender?.userId?.toString() !== req?.user?.userId &&
     isExist?.receiver?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { block, ...FriendShipData } = data;
@@ -562,10 +562,10 @@ const updateFriendShipFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     req?.user?.role !== ENUM_USER_ROLE.admin
   ) {
-    delete (FriendShipData as Partial<IFriendShip>)['isDelete']; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
+    delete (FriendShipData as Partial<IFriendShip>)["isDelete"]; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
     if (isExist?.sender?.userId?.toString() !== req?.user?.userId) {
       //sender not accepted this request
-      delete (FriendShipData as Partial<IFriendShip>)['requestAccept'];
+      delete (FriendShipData as Partial<IFriendShip>)["requestAccept"];
     }
   }
 
@@ -580,7 +580,7 @@ const updateFriendShipFromDB = async (
     },
   );
   if (!updatedFriendShip) {
-    throw new ApiError(400, 'Failed to update FriendShip');
+    throw new ApiError(400, "Failed to update FriendShip");
   }
   return updatedFriendShip;
 };
@@ -593,7 +593,7 @@ const updateFriendShipBlockFromDb = async (
     _id: Schema.Types.ObjectId;
   } as IFriendShip;
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'FriendShip not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "FriendShip not found");
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -601,7 +601,7 @@ const updateFriendShipBlockFromDb = async (
     isExist?.sender?.userId?.toString() !== req?.user?.userId &&
     isExist?.receiver?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { block, ...FriendShipData } = data;
@@ -612,13 +612,13 @@ const updateFriendShipBlockFromDb = async (
       req.user?.role !== ENUM_USER_ROLE.admin &&
       req.user?.role !== ENUM_USER_ROLE.superAdmin
     ) {
-      throw new ApiError(403, 'forbidden access');
+      throw new ApiError(403, "forbidden access");
     }
 
-    updatedFriendShipData['block'] = block;
+    updatedFriendShipData["block"] = block;
   } else if (block && Object.keys(block).length) {
     if (isExist?.block?.blocker?.userId?.toString() !== req?.user?.userId) {
-      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Already blocked you');
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, "Already blocked you");
     }
     Object.keys(block).forEach(key => {
       const nameKey = `block.${key}` as keyof Partial<IFriendShip>;
@@ -639,7 +639,7 @@ const updateFriendShipBlockFromDb = async (
     },
   );
   if (!updatedFriendShip) {
-    throw new ApiError(400, 'Failed to update FriendShip');
+    throw new ApiError(400, "Failed to update FriendShip");
   }
   return updatedFriendShip;
 };
@@ -677,7 +677,7 @@ const deleteFriendShipFromDB = async (
   ])) as IFriendShip[];
 
   if (!isExist.length) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'FriendShip not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "FriendShip not found");
   }
 
   if (
@@ -685,13 +685,13 @@ const deleteFriendShipFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist[0]?.sender?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   let data;
 
   if (
-    query.delete == 'yes' && // this is permanently delete but store trash collection
+    query.delete == "yes" && // this is permanently delete but store trash collection
     (req?.user?.role == ENUM_USER_ROLE.admin ||
       req?.user?.role == ENUM_USER_ROLE.superAdmin)
   ) {

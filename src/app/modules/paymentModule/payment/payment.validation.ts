@@ -1,14 +1,14 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const createStripePaymentBodyData = z.object({
   products: z.array(
     z.object({
-      name: z.string({ required_error: 'Product name is required' }).optional(),
+      name: z.string({ required_error: "Product name is required" }).optional(),
       img: z.string().url().optional(),
       price: z.number().optional(),
       quantity: z.number().optional().default(1),
-      productId: z.string({ required_error: 'productId is required' }),
-      currency: z.string().default('usd'),
+      productId: z.string({ required_error: "productId is required" }),
+      currency: z.string().default("usd"),
       isTrial: z.boolean().optional(),
     }),
   ),
@@ -22,9 +22,9 @@ export type IStripePaymentData = z.infer<typeof createStripePaymentBodyData>;
 //--------------------------
 const BusinessProfileSchema = z.object({
   mcc: z.string().optional(),
-  name: z.string({ required_error: 'Business profile name is required' }),
+  name: z.string({ required_error: "Business profile name is required" }),
   product_description: z.string({
-    required_error: 'product_description is required',
+    required_error: "product_description is required",
   }),
   // support_address: z
   //   .object({
@@ -40,14 +40,14 @@ const BusinessProfileSchema = z.object({
 
 const AddressSchema = z
   .object({
-    city: z.string({ required_error: 'city is required' }),
+    city: z.string({ required_error: "city is required" }),
     countryShortForm: z.string({
-      required_error: 'countryShortForm is required',
+      required_error: "countryShortForm is required",
     }),
     line1: z.string().optional(),
     line2: z.string().optional(),
-    postal_code: z.string({ required_error: 'postalCode is required' }),
-    state: z.string({ required_error: 'state is required' }),
+    postal_code: z.string({ required_error: "postalCode is required" }),
+    state: z.string({ required_error: "state is required" }),
   })
   .optional();
 
@@ -64,20 +64,20 @@ const createStripeConnectAccount = z.object({
     address: AddressSchema,
     bankInfo: z.object({
       account_holder_name: z.string({
-        required_error: 'account_holder_name is required',
+        required_error: "account_holder_name is required",
       }),
       account_holder_type: z.string({
-        required_error: 'account holder is required',
+        required_error: "account holder is required",
       }),
       account_number: z.string({
-        required_error: 'account number is required',
+        required_error: "account number is required",
       }),
       countryShortForm: z
         .string({
-          required_error: 'countryShortForm is required',
+          required_error: "countryShortForm is required",
         })
         .optional(),
-      currency: z.string({ required_error: 'currency is required' }),
+      currency: z.string({ required_error: "currency is required" }),
       // routing_number: z.string({ required_error: 'routing_number is required' }),
       routing_number: z.string().optional(),
     }),

@@ -1,9 +1,9 @@
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { zodFileAfterUploadSchema } from '../../../global/schema/global.schema';
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { zodFileAfterUploadSchema } from "../../../global/schema/global.schema";
 const createProductCategoryBodyData = z.object({
   title: z.string({
-    required_error: 'Title is required',
+    required_error: "Title is required",
   }),
   subTitle: z.string().optional(),
   image: zodFileAfterUploadSchema

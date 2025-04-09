@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { adminSetting_FILTERABLE_FIELDS } from './constant.adminSetting';
-import { IAdminSetting } from './interface.adminSetting';
-import { AdminSettingService } from './service.adminSetting';
+import { adminSetting_FILTERABLE_FIELDS } from "./constant.adminSetting";
+import { IAdminSetting } from "./interface.adminSetting";
+import { AdminSettingService } from "./service.adminSetting";
 
 // import { z } from 'zod'
 const createAdminSetting = catchAsync(async (req: Request, res: Response) => {
@@ -25,7 +25,7 @@ const createAdminSetting = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdminSetting>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successful create AdminSetting',
+    message: "successful create AdminSetting",
     data: result,
   });
   // next();
@@ -51,7 +51,7 @@ const getAllAdminSetting = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdminSetting[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get all AdminSetting',
+    message: "successfully Get all AdminSetting",
     meta: result.meta,
     data: result.data,
   });
@@ -77,7 +77,7 @@ const getSingleAdminSetting = catchAsync(
     sendResponse<IAdminSetting>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get AdminSetting',
+      message: "successfully get AdminSetting",
       data: result,
     });
   },
@@ -96,7 +96,7 @@ const updateAdminSetting = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdminSetting>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully update AdminSetting',
+    message: "successfully update AdminSetting",
     data: result,
   });
 });
@@ -111,7 +111,7 @@ const deleteAdminSetting = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAdminSetting>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully delete AdminSetting',
+    message: "successfully delete AdminSetting",
     data: result,
   });
 });

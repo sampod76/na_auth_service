@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request } from 'express';
-import { IAwsBodyData, IAwsOutputPreUrl } from './interface.AWS';
+import { Request } from "express";
+import { IAwsBodyData, IAwsOutputPreUrl } from "./interface.AWS";
 import {
   multipleImageObjectCommandToUrl,
   putSingleImageObjectCommandToUrl,
-} from './utls.aws';
+} from "./utls.aws";
 
 const createAwsUploadFilesTokenFromDb = async (
   body: IAwsBodyData,
@@ -23,7 +23,7 @@ const createAwsUploadFilesTokenFromDb = async (
             return reject(err);
           });
       });
-    } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+    } else if (value && typeof value === "object" && !Array.isArray(value)) {
       return new Promise((resolve, reject) => {
         putSingleImageObjectCommandToUrl(value)
           .then(res => {

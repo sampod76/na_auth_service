@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { I_STATUS, STATUS_ARRAY } from '../../../../global/enum_constant_type';
-import { UserValidation } from '../user/user.validation';
+import { I_STATUS, STATUS_ARRAY } from "../../../../global/enum_constant_type";
+import { UserValidation } from "../user/user.validation";
 // const combinedBuyerZodData = UserValidation.BuyerZodData.merge(
 //   UserValidation.authData
 // );
@@ -12,7 +12,7 @@ const combinedGeneralUserZodData = UserValidation.generalUserZod_BodyData.merge(
 export const zodCategoryChildrenObject = z.object({
   label: z.string().optional(),
   value: z.string({
-    required_error: 'Value is required',
+    required_error: "Value is required",
   }),
   subTitle: z.string().optional(),
   uid: z.string().or(z.string().uuid()),

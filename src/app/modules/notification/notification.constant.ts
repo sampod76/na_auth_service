@@ -1,13 +1,13 @@
-export const Notification_SearchableFields = ['subject', 'bodyText'];
+export const Notification_SearchableFields = ["subject", "bodyText"];
 
 export const Notification_FilterableFields = [
-  'userId',
-  'role',
+  "userId",
+  "role",
   // always required filter
-  'searchTerm',
-  'isSendNotification',
+  "searchTerm",
+  "isSendNotification",
   //
-  'delete', // for permanent delete
-  'status',
-  'isDelete',
+  "delete", // for permanent delete
+  "status",
+  "isDelete",
 ];

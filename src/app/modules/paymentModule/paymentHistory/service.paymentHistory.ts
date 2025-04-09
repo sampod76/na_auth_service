@@ -1,31 +1,31 @@
-import { Types } from 'mongoose';
+import { Types } from "mongoose";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request } from 'express';
-import mongoose, { PipelineStage } from 'mongoose';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
+import { Request } from "express";
+import mongoose, { PipelineStage } from "mongoose";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
 // import { paymentQueue } from '../../../queue/jobs/paymentQueues';
-import httpStatus from 'http-status';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { LookupAnyRoleDetailsReusable } from '../../../../helper/lookUpResuable';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { ENUM_ORDER_STATUS } from '../order/constants.order';
-import { Order } from '../order/models.order';
-import { IStripeProductMetaData } from '../payment/payment.service';
+import httpStatus from "http-status";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { LookupAnyRoleDetailsReusable } from "../../../../helper/lookUpResuable";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { ENUM_ORDER_STATUS } from "../order/constants.order";
+import { Order } from "../order/models.order";
+import { IStripeProductMetaData } from "../payment/payment.service";
 import {
   IPaymentIntentAndSessionResponse,
   refundFunc,
   stripeSessionIdCsId_To_PaymentIntent,
-} from '../payment/payment.utls';
-import { PAYMENT_HISTORY_SEARCHABLE_FIELDS } from './consent.paymentHistory';
+} from "../payment/payment.utls";
+import { PAYMENT_HISTORY_SEARCHABLE_FIELDS } from "./consent.paymentHistory";
 import {
   IPaymentHistory,
   IPaymentHistoryFilters,
-} from './interface.paymentHistory';
-import { PaymentHistory } from './model.paymentHistory';
+} from "./interface.paymentHistory";
+import { PaymentHistory } from "./model.paymentHistory";
 
 const createPaymentHistoryByDb = async (
   payload: { cs_id: string; metadata?: string },
@@ -49,24 +49,24 @@ const createPaymentHistoryByDb = async (
   const findTransaction = resolvePromises[1];
   if (findTransaction) {
     // my database
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Transaction already used');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, "Transaction already used");
   }
   // logger.info(balanceTransaction);
   if (!balanceTransaction?.paymentIntentResponse) {
-    throw new ApiError(400, 'Transaction not available');
+    throw new ApiError(400, "Transaction not available");
   } else if (
     balanceTransaction?.sessionsResponse &&
-    balanceTransaction?.paymentIntentResponse?.status !== 'succeeded'
+    balanceTransaction?.paymentIntentResponse?.status !== "succeeded"
   ) {
     throw new ApiError(400, `Transaction not succeeded `);
   } else if (!balanceTransaction?.paymentIntentResponse?.latest_charge) {
-    throw new ApiError(400, 'Transaction not succeeded');
+    throw new ApiError(400, "Transaction not succeeded");
   }
   const { paymentIntentResponse, sessionsResponse } = balanceTransaction;
   // hard security by stripe, when successful use stripe then set stripe metadata alreadyUsed
-  if (paymentIntentResponse?.metadata?.alreadyUsed === 'yes') {
+  if (paymentIntentResponse?.metadata?.alreadyUsed === "yes") {
     //stripe data
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Transaction already used');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, "Transaction already used");
   }
 
   const author = {
@@ -83,13 +83,13 @@ const createPaymentHistoryByDb = async (
     author: author,
     amount: paymentIntentResponse.amount / 100,
     amount_received: paymentIntentResponse.amount_received / 100,
-    paymentBy: 'stripe',
+    paymentBy: "stripe",
     ...paymentIntentResponse.metadata, // automatically set all metadata in values
   };
   const products = JSON.parse(
     paymentIntentResponse.metadata.products,
   ) as IStripeProductMetaData[];
-  data['productIds'] = products.map(p => p.productId);
+  data["productIds"] = products.map(p => p.productId);
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -107,14 +107,14 @@ const createPaymentHistoryByDb = async (
         paymentId: result[0]._id,
         quantity: product.quantity,
         orderStatus: ENUM_ORDER_STATUS.completed,
-        paymentBy: 'stripe',
+        paymentBy: "stripe",
         totalPrice: product.quantity * product.price,
       };
     });
 
     const cre = await Order.create(orderData, { session });
 
-    console.log('🚀 ~ cre:', cre);
+    console.log("🚀 ~ cre:", cre);
     // Commit the transaction if all operations are successful
     await session.commitTransaction();
     session.endSession();
@@ -128,8 +128,8 @@ const createPaymentHistoryByDb = async (
       usersAndMessage: [
         {
           user: paymentIntentResponse?.metadata?.userId as string,
-          subject: '',
-          message: '',
+          subject: "",
+          message: "",
         },
       ],
     });
@@ -159,13 +159,13 @@ const getAllPaymentHistoryFromDb = async (
     ...filtersData
   } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
   filtersData.isRefund = filtersData.isRefund ? filtersData.isRefund : false;
   if (user?.role !== ENUM_USER_ROLE.admin) {
-    filtersData['author.userId'] = user?.userId.toString();
+    filtersData["author.userId"] = user?.userId.toString();
   }
   const andConditions = [];
 
@@ -174,7 +174,7 @@ const getAllPaymentHistoryFromDb = async (
       $or: PAYMENT_HISTORY_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -186,15 +186,15 @@ const getAllPaymentHistoryFromDb = async (
       ([field, value]: [keyof typeof filtersData, string]) => {
         let modifyFiled;
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
           };
-        } else if (field === 'isRefund') {
-          modifyFiled = { ['refund.isRefund']: value };
+        } else if (field === "isRefund") {
+          modifyFiled = { ["refund.isRefund"]: value };
         } else {
           modifyFiled = { [field]: value };
         }
@@ -226,7 +226,7 @@ const getAllPaymentHistoryFromDb = async (
     }
 
     if (time) {
-      if (time === 'monthly') {
+      if (time === "monthly") {
         const today = new Date();
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
         const endOfMonth = new Date(
@@ -238,7 +238,7 @@ const getAllPaymentHistoryFromDb = async (
           //@ts-ignore
           createdAt: { $gte: startOfMonth, $lte: endOfMonth },
         });
-      } else if (time === 'weekly') {
+      } else if (time === "weekly") {
         const today = new Date();
         const startOfWeek = new Date(
           today.setDate(today.getDate() - today.getDay()),
@@ -248,7 +248,7 @@ const getAllPaymentHistoryFromDb = async (
           //@ts-ignore
           createdAt: { $gte: startOfWeek, $lte: endOfWeek },
         });
-      } else if (time === 'daily') {
+      } else if (time === "daily") {
         const today = new Date();
         const startOfToday = new Date(today.setHours(0, 0, 0, 0));
         const endOfToday = new Date(today.setHours(23, 59, 59, 999));
@@ -272,7 +272,7 @@ const getAllPaymentHistoryFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -306,11 +306,11 @@ const getAllPaymentHistoryFromDb = async (
   LookupAnyRoleDetailsReusable(pipeline, {
     collections: [
       {
-        roleMatchFiledName: 'author.role',
-        idFiledName: 'author.roleBaseUserId',
-        pipeLineMatchField: '_id',
-        outPutFieldName: 'details',
-        margeInField: 'author',
+        roleMatchFiledName: "author.role",
+        idFiledName: "author.roleBaseUserId",
+        pipeLineMatchField: "_id",
+        outPutFieldName: "details",
+        margeInField: "author",
         project: { name: 1, email: 1, profileImage: 1, userId: 1 },
       },
     ],
@@ -366,7 +366,7 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
   } = filters;
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -378,7 +378,7 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
       $or: PAYMENT_HISTORY_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -390,15 +390,15 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
       ([field, value]: [keyof typeof filtersData, string]) => {
         let modifyFiled;
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
           };
-        } else if (field === 'isRefund') {
-          modifyFiled = { ['refund.isRefund']: value };
+        } else if (field === "isRefund") {
+          modifyFiled = { ["refund.isRefund"]: value };
         } else {
           modifyFiled = { [field]: value };
         }
@@ -432,7 +432,7 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
       });
     }
     if (time) {
-      if (time === 'monthly') {
+      if (time === "monthly") {
         const today = new Date();
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
         const endOfMonth = new Date(
@@ -444,7 +444,7 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
           //@ts-ignore
           createdAt: { $gte: startOfMonth, $lte: endOfMonth },
         });
-      } else if (time === 'weekly') {
+      } else if (time === "weekly") {
         const today = new Date();
         const startOfWeek = new Date(
           today.setDate(today.getDate() - today.getDay()),
@@ -454,7 +454,7 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
           //@ts-ignore
           createdAt: { $gte: startOfWeek, $lte: endOfWeek },
         });
-      } else if (time === 'daily') {
+      } else if (time === "daily") {
         const today = new Date();
         const startOfToday = new Date(today.setHours(0, 0, 0, 0));
         const endOfToday = new Date(today.setHours(23, 59, 59, 999));
@@ -479,7 +479,7 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -497,14 +497,14 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
           {
             $group: {
               _id: null,
-              income: { $sum: '$amount' },
+              income: { $sum: "$amount" },
               // allData: { $push: '$$ROOT' },
             },
           },
           {
             $project: {
               _id: 0, // Optional: Exclude the _id field from the result
-              income: { $round: ['$income', 2] }, // Round to 2 decimal places
+              income: { $round: ["$income", 2] }, // Round to 2 decimal places
             },
           },
         ],
@@ -515,14 +515,14 @@ const getAllTimeToGroupPaymentHistoryFromDb = async (
           {
             $group: {
               _id: null,
-              income: { $sum: '$amount' },
+              income: { $sum: "$amount" },
               // allData: { $push: '$$ROOT' },
             },
           },
           {
             $project: {
               _id: 0, // Optional: Exclude the _id field from the result
-              income: { $round: ['$income', 2] }, // Round to 2 decimal places
+              income: { $round: ["$income", 2] }, // Round to 2 decimal places
             },
           },
         ],
@@ -558,7 +558,7 @@ const getAllTransactionFromDb = async (
     ...filtersData
   } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -568,7 +568,7 @@ const getAllTransactionFromDb = async (
       $or: PAYMENT_HISTORY_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -579,9 +579,9 @@ const getAllTransactionFromDb = async (
       ([field, value]: [keyof typeof filtersData, string]) => {
         let modifyFiled;
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
@@ -643,7 +643,7 @@ const getAllTransactionFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -659,11 +659,11 @@ const getAllTransactionFromDb = async (
   LookupAnyRoleDetailsReusable(pipeline, {
     collections: [
       {
-        roleMatchFiledName: 'author.role',
-        idFiledName: 'author.roleBaseUserId', //$sender.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'author',
+        roleMatchFiledName: "author.role",
+        idFiledName: "author.roleBaseUserId", //$sender.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "author",
         project: { name: 1, country: 1, profileImage: 1, email: 1 },
       },
     ],
@@ -701,12 +701,12 @@ const getAllChartOfValueFromDb = async (
     ...filtersData
   } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
   filtersData.isRefund = filtersData.isRefund
-    ? filtersData.isRefund == 'true'
+    ? filtersData.isRefund == "true"
       ? true
       : false
     : false;
@@ -716,7 +716,7 @@ const getAllChartOfValueFromDb = async (
       $or: PAYMENT_HISTORY_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -728,16 +728,16 @@ const getAllChartOfValueFromDb = async (
       ([field, value]: [keyof typeof filtersData, string]) => {
         let modifyFiled;
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
           };
-        } else if (field === 'isRefund') {
+        } else if (field === "isRefund") {
           modifyFiled = {
-            ['refund.isRefund']: value,
+            ["refund.isRefund"]: value,
           };
         } else {
           modifyFiled = { [field]: value };
@@ -760,7 +760,7 @@ const getAllChartOfValueFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -771,8 +771,8 @@ const getAllChartOfValueFromDb = async (
     { $match: whereConditions },
     {
       $addFields: {
-        year: { $year: '$createdAt' },
-        monthNumber: { $month: '$createdAt' }, // Directly extract month number
+        year: { $year: "$createdAt" },
+        monthNumber: { $month: "$createdAt" }, // Directly extract month number
       },
     },
     {
@@ -784,8 +784,8 @@ const getAllChartOfValueFromDb = async (
       $project: {
         yearMonth: {
           $dateToString: {
-            format: '%Y-%m',
-            date: '$createdAt',
+            format: "%Y-%m",
+            date: "$createdAt",
           },
         },
         amount: 1,
@@ -794,9 +794,9 @@ const getAllChartOfValueFromDb = async (
     },
     {
       $group: {
-        _id: '$yearMonth',
-        totalAmount: { $sum: '$amount' },
-        monthNumber: { $first: '$monthNumber' }, // Retain monthNumber
+        _id: "$yearMonth",
+        totalAmount: { $sum: "$amount" },
+        monthNumber: { $first: "$monthNumber" }, // Retain monthNumber
       },
     },
     {
@@ -806,30 +806,30 @@ const getAllChartOfValueFromDb = async (
           $let: {
             vars: {
               monthsInString: [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December',
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
               ],
             },
             in: {
               $arrayElemAt: [
-                '$$monthsInString',
-                { $subtract: ['$monthNumber', 1] },
+                "$$monthsInString",
+                { $subtract: ["$monthNumber", 1] },
               ],
             },
           },
         },
-        value: '$totalAmount',
-        serialNumber: '$monthNumber',
+        value: "$totalAmount",
+        serialNumber: "$monthNumber",
       },
     },
     {

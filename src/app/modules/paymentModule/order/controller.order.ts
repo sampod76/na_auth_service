@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRefAndDetails } from '../../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../../allUser/user/user.utils';
-import { OrderFilterableFields } from './constants.order';
-import { IOrder, IOrderFilters } from './interface.order';
-import { OrderService } from './service.order';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRefAndDetails } from "../../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../../allUser/user/user.utils";
+import { OrderFilterableFields } from "./constants.order";
+import { IOrder, IOrderFilters } from "./interface.order";
+import { OrderService } from "./service.order";
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
   const bodyDate = req.body as IOrder;
@@ -25,7 +25,7 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IOrder>(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Order created successfully',
+    message: "Order created successfully",
     data: result,
   });
 });
@@ -47,7 +47,7 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Orders found successfully',
+    message: "Orders found successfully",
     data: result.data,
     meta: result.meta,
   });
@@ -64,7 +64,7 @@ const getOrderById = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Order found successfully',
+    message: "Order found successfully",
     data: result,
   });
 });
@@ -78,7 +78,7 @@ const getDashboardStatus = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Order found successfully',
+    message: "Order found successfully",
     data: result,
   });
 });
@@ -96,7 +96,7 @@ const updateOrder = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Order updated successfully',
+    message: "Order updated successfully",
     data: result,
   });
 });
@@ -113,7 +113,7 @@ const orderComplete = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Order Complete successfully',
+    message: "Order Complete successfully",
     data: result,
   });
 });
@@ -131,7 +131,7 @@ const deleteOrder = catchAsync(async (req: Request, res: Response) => {
   sendResponse(req, res, {
     statusCode: 200,
     success: true,
-    message: 'Order deleted successfully',
+    message: "Order deleted successfully",
     data: result,
   });
 });

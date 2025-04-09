@@ -1,15 +1,15 @@
-import httpStatus from 'http-status';
-import { Server, Socket } from 'socket.io';
-import { produceMessageByKafka } from '../../kafka/producer.kafka';
-import { IUserRef } from '../../modules/allUser/typesAndConst';
-import { IFriendShip } from '../../modules/messageingModules/friendship/friendship.interface';
-import { FriendShip } from '../../modules/messageingModules/friendship/friendship.models';
-import { IChatMessage } from '../../modules/messageingModules/message/messages.interface';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
-import { redisClient } from '../../redis/redis';
-import { RedisAllQueryServiceOop } from '../../redis/service.redis';
-import { socketErrorHandler } from '../socket.service';
-import { ENUM_SOCKET_EMIT_ON_TYPE } from '../socketTypes';
+import httpStatus from "http-status";
+import { Server, Socket } from "socket.io";
+import { produceMessageByKafka } from "../../kafka/producer.kafka";
+import { IUserRef } from "../../modules/allUser/typesAndConst";
+import { IFriendShip } from "../../modules/messageingModules/friendship/friendship.interface";
+import { FriendShip } from "../../modules/messageingModules/friendship/friendship.models";
+import { IChatMessage } from "../../modules/messageingModules/message/messages.interface";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
+import { redisClient } from "../../redis/redis";
+import { RedisAllQueryServiceOop } from "../../redis/service.redis";
+import { socketErrorHandler } from "../socket.service";
+import { ENUM_SOCKET_EMIT_ON_TYPE } from "../socketTypes";
 export const personalMessageSocket = (
   io: Server,
   socket: Socket,
@@ -51,21 +51,21 @@ export const personalMessageSocket = (
                 ENUM_REDIS_KEY.REDIS_IN_SAVE_FRIENDSHIP +
                   messageData?.friendShipId,
                 JSON.stringify(getFriendShip),
-                'EX',
+                "EX",
                 24 * 60, // 1 day to second
               );
             } else {
               const errorMessage = {
                 success: false,
                 statusCode: 404,
-                message: 'Friendship not found',
+                message: "Friendship not found",
               };
               return socketErrorHandler({ socket, callback, errorMessage });
             }
           }
 
           //
-          if (typeof getFriendShip === 'string') {
+          if (typeof getFriendShip === "string") {
             getFriendShip = JSON.parse(getFriendShip);
           }
           //!-------------auth--message-----------
@@ -77,21 +77,21 @@ export const personalMessageSocket = (
             const errorMessage = {
               success: false,
               statusCode: httpStatus.FORBIDDEN,
-              message: 'Forbidden',
+              message: "Forbidden",
             };
             return socketErrorHandler({ socket, callback, errorMessage });
           } else if (getFriendShip?.requestAccept == false) {
             const errorMessage = {
               success: false,
               statusCode: httpStatus.FORBIDDEN,
-              message: 'You are not allowed to send message',
+              message: "You are not allowed to send message",
             };
             return socketErrorHandler({ socket, callback, errorMessage });
           } else if (getFriendShip?.block?.isBlock == true) {
             const errorMessage = {
               success: false,
               statusCode: httpStatus.FORBIDDEN,
-              message: 'Block. you are not allowed to send message',
+              message: "Block. you are not allowed to send message",
             };
             return socketErrorHandler({ socket, callback, errorMessage });
           } else if (getFriendShip) {
@@ -105,10 +105,10 @@ export const personalMessageSocket = (
                 : getFriendShip?.receiver;
           }
           //---------web or nodejs is support callback but flutter not support callback--then when request flutter then not have any callback function but same project request web --solution is check callback is function--------
-          if (callback && typeof callback === 'function') {
+          if (callback && typeof callback === "function") {
             callback({
               success: true,
-              message: 'Message delivered successfully',
+              message: "Message delivered successfully",
               data: {
                 ...messageData,
                 createdAt: new Date(),
@@ -167,7 +167,7 @@ export const personalMessageSocket = (
           const errorMessage = {
             success: false,
             statusCode: 404,
-            message: 'friendShipId id not found',
+            message: "friendShipId id not found",
           };
           return socketErrorHandler({ socket, callback, errorMessage });
         }
@@ -175,7 +175,7 @@ export const personalMessageSocket = (
         const errorMessage = {
           success: false,
           statusCode: error?.statusCode || 400,
-          message: error?.message || 'Server error',
+          message: error?.message || "Server error",
           error,
         };
         return socketErrorHandler({ socket, callback, errorMessage });

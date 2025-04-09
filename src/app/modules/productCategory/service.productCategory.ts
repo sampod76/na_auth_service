@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import ApiError from '../../errors/ApiError';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
+import { Request } from "express";
+import httpStatus from "http-status";
+import ApiError from "../../errors/ApiError";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../redis/service.redis';
-import { productCategory_SEARCHABLE_FIELDS } from './constant.productCategory';
+} from "../../redis/service.redis";
+import { productCategory_SEARCHABLE_FIELDS } from "./constant.productCategory";
 import {
   IProductCategory,
   IProductCategoryFilters,
-} from './interface.productCategory';
-import { ProductCategory } from './model.productCategory';
+} from "./interface.productCategory";
+import { ProductCategory } from "./model.productCategory";
 
 const createProductCategoryByDb = async (
   payload: IProductCategory,
@@ -26,7 +26,7 @@ const createProductCategoryByDb = async (
 ): Promise<IProductCategory> => {
   const [findAlreadyExists, findIndex] = await Promise.all([
     ProductCategory.findOne({
-      title: { $regex: new RegExp(`^${payload.title}$`, 'i') },
+      title: { $regex: new RegExp(`^${payload.title}$`, "i") },
 
       isDelete: false,
     }),
@@ -36,7 +36,7 @@ const createProductCategoryByDb = async (
   ]);
 
   if (findAlreadyExists) {
-    throw new ApiError(400, 'This ProductCategory already Exist');
+    throw new ApiError(400, "This ProductCategory already Exist");
   }
   payload.serialNumber = findIndex?.serialNumber
     ? findIndex?.serialNumber + 1
@@ -56,7 +56,7 @@ const getAllProductCategoryFromDb = async (
   const { searchTerm, createdAtFrom, createdAtTo, ...filtersData } = filters;
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -66,7 +66,7 @@ const getAllProductCategoryFromDb = async (
       $or: productCategory_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -78,7 +78,7 @@ const getAllProductCategoryFromDb = async (
       ([field, value]: [keyof typeof filtersData, string]) => {
         let modifyFiled;
 
-        if (field === 'author.userId') {
+        if (field === "author.userId") {
           modifyFiled = { [field]: new Types.ObjectId(value) };
         } else {
           modifyFiled = { [field]: value };
@@ -122,7 +122,7 @@ const getAllProductCategoryFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -171,7 +171,7 @@ const getAllProductCategoryFromDb = async (
           {
             $match: whereConditions,
           },
-          { $count: 'totalData' },
+          { $count: "totalData" },
         ],
       },
     },
@@ -251,7 +251,7 @@ const deleteProductCategoryByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'ProductCategory not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "ProductCategory not found");
   }
 
   const result = await ProductCategory.findOneAndUpdate(
@@ -260,7 +260,7 @@ const deleteProductCategoryByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   return result;
 };

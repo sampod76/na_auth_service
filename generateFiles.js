@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-console */
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require("fs").promises;
+const path = require("path");
 
 const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
 const files = [
   {
-    name: 'constant.ts',
+    name: "constant.ts",
     getCode: folderName =>
       `
 export const ${capitalize(folderName)}_SEARCHABLE_FIELDS = ['productTitle'];
@@ -33,7 +33,7 @@ export const ${capitalize(folderName)}_FILTERABLE_FIELDS = [
 `,
   },
   {
-    name: 'controller.ts',
+    name: "controller.ts",
     getCode: folderName =>
       `
       /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -182,7 +182,7 @@ export const ${capitalize(folderName)}Controller = {
 `,
   },
   {
-    name: 'interface.ts',
+    name: "interface.ts",
     getCode: folderName =>
       `
       import { Model } from 'mongoose';
@@ -226,7 +226,7 @@ export type ${capitalize(folderName)}Model = Model<
 `,
   },
   {
-    name: 'model.ts',
+    name: "model.ts",
     getCode: folderName =>
       `
       import { Schema, model } from 'mongoose';
@@ -334,7 +334,7 @@ export const ${capitalize(folderName)} = model<I${capitalize(folderName)}, ${cap
 `,
   },
   {
-    name: 'route.ts',
+    name: "route.ts",
     getCode: folderName =>
       `
 import express from 'express';
@@ -427,7 +427,7 @@ export const ${capitalize(folderName)}Route = router;
 `,
   },
   {
-    name: 'service.ts',
+    name: "service.ts",
     getCode: folderName =>
       `
       /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -751,7 +751,7 @@ export const ${capitalize(folderName)}Service = {
 `,
   },
   {
-    name: 'validation.ts',
+    name: "validation.ts",
     getCode: folderName =>
       `
  import { Types } from 'mongoose';
@@ -789,7 +789,7 @@ export const ${capitalize(folderName)}Validation = {
 `,
   },
   {
-    name: 'utls.ts',
+    name: "utls.ts",
     getCode: folderName =>
       `
  import { Types } from 'mongoose';
@@ -842,10 +842,10 @@ async function createFolderAndFiles(parentDirectory, folderName) {
 
     // Create the files using for...of loop and async/await
     for (const file of files) {
-      const parts = file.name.split('.');
+      const parts = file.name.split(".");
       //after pop() then return pop file
       const fileExtinctionsName = `${parts.pop()}`; //ts
-      const fileName = parts.join('.'); //interface.favoriteProduct
+      const fileName = parts.join("."); //interface.favoriteProduct
       const filePath = path.join(
         moduleDirectory,
         `${fileName}.${capitalize(folderName)}.${fileExtinctionsName}`,
@@ -854,15 +854,15 @@ async function createFolderAndFiles(parentDirectory, folderName) {
       console.log(`Created ${filePath}`);
     }
 
-    console.log('Module and files created successfully.');
+    console.log("Module and files created successfully.");
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
 }
 
 async function getUserInput() {
   return new Promise(resolve => {
-    const readline = require('readline').createInterface({
+    const readline = require("readline").createInterface({
       input: process.stdin,
       output: process.stdout,
     });
@@ -878,13 +878,13 @@ async function getUserInput() {
 }
 
 async function start() {
-  const parentDirectory = 'src/app/modules';
+  const parentDirectory = "src/app/modules";
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
     const folderName = await getUserInput();
 
-    if (folderName.toLowerCase() === 'exit') {
+    if (folderName.toLowerCase() === "exit") {
       process.exit(0);
     }
 

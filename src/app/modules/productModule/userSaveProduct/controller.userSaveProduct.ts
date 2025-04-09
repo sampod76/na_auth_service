@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
 
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRef } from '../../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../../allUser/user/user.utils';
-import { userSaveProduct_FILTERABLE_FIELDS } from './constant.userSaveProduct';
-import { IUserSaveProduct } from './interface.userSaveProduct';
-import { UserSaveProductService } from './service.userSaveProduct';
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRef } from "../../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../../allUser/user/user.utils";
+import { userSaveProduct_FILTERABLE_FIELDS } from "./constant.userSaveProduct";
+import { IUserSaveProduct } from "./interface.userSaveProduct";
+import { UserSaveProductService } from "./service.userSaveProduct";
 
 // import { z } from 'zod'
 const createUserSaveProduct = catchAsync(
@@ -29,7 +29,7 @@ const createUserSaveProduct = catchAsync(
     sendResponse<IUserSaveProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful create UserSaveProduct',
+      message: "successful create UserSaveProduct",
       data: result,
     });
   },
@@ -49,7 +49,7 @@ const getAllUserSaveProduct = catchAsync(
     sendResponse<IUserSaveProduct[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully Get all UserSaveProduct',
+      message: "successfully Get all UserSaveProduct",
       meta: result.meta,
       data: result.data,
     });
@@ -76,7 +76,7 @@ const getSingleUserSaveProduct = catchAsync(
     sendResponse<IUserSaveProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get UserSaveProduct',
+      message: "successfully get UserSaveProduct",
       data: result,
     });
   },
@@ -107,7 +107,7 @@ const updateUserSaveProduct = catchAsync(
     sendResponse<IUserSaveProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update UserSaveProduct',
+      message: "successfully update UserSaveProduct",
       data: result,
     });
   },
@@ -122,7 +122,7 @@ const updateUserSaveProductSerialNumber = catchAsync(
     sendResponse<IUserSaveProduct[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update UserSaveProduct',
+      message: "successfully update UserSaveProduct",
       data: result,
     });
   },
@@ -140,7 +140,7 @@ const deleteUserSaveProduct = catchAsync(
     sendResponse<IUserSaveProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully delete UserSaveProduct',
+      message: "successfully delete UserSaveProduct",
       data: result,
     });
   },

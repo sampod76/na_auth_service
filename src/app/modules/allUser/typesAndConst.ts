@@ -1,18 +1,18 @@
-import { Schema, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { IFileAfterUpload } from '../../interface/fileUpload';
-import { I_USER_ROLE, IUser, USER_ROLE_ARRAY } from './user/user.interface';
+import { Schema, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { IFileAfterUpload } from "../../interface/fileUpload";
+import { I_USER_ROLE, IUser, USER_ROLE_ARRAY } from "./user/user.interface";
 //
-export type IGender = 'male' | 'female' | 'other';
-export const GENDER_ARRAY = ['male', 'female', 'other'];
+export type IGender = "male" | "female" | "other";
+export const GENDER_ARRAY = ["male", "female", "other"];
 
 export type ILocation = {
   link?: string;
   latitude?: number;
   longitude?: number;
   coordinates: number[]; // first -> longitude,latitude
-  type: string | 'Point';
+  type: string | "Point";
 };
 //-------------------IUserRef-----------------
 /* 
@@ -26,7 +26,7 @@ export type IUserRef = {
 export const mongooseIUserRef = new Schema<IUserRef>(
   {
     role: { type: String, enum: USER_ROLE_ARRAY },
-    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     roleBaseUserId: { type: Schema.Types.ObjectId },
   },
   {
@@ -43,12 +43,12 @@ export type IUserRef = z.infer<typeof zodRefUser>;
 export type IUserRefAndDetails = IUserRef & { details: IUser };
 //--------------------------------------------
 //
-export const VERIFY_ARRAY = ['pending', 'accept', 'reject'];
-export type I_VERIFY = 'pending' | 'accept' | 'reject';
+export const VERIFY_ARRAY = ["pending", "accept", "reject"];
+export type I_VERIFY = "pending" | "accept" | "reject";
 export enum ENUM_VERIFY {
-  PENDING = 'pending',
-  ACCEPT = 'accept',
-  CANCEL = 'reject',
+  PENDING = "pending",
+  ACCEPT = "accept",
+  CANCEL = "reject",
 }
 //
 export type ICommonUser = {

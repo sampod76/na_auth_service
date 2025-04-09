@@ -1,11 +1,11 @@
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { zodFileAfterUploadSchema } from '../../../global/schema/global.schema';
-import { zodCategoryChildrenObject } from '../allUser/generalUser/validation.generalUser';
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { zodFileAfterUploadSchema } from "../../../global/schema/global.schema";
+import { zodCategoryChildrenObject } from "../allUser/generalUser/validation.generalUser";
 
 const createTipsAndGuideline_BodyData = z.object({
-  title: z.string({ required_error: 'Title is required' }).max(500),
-  details: z.string({ required_error: 'Details is required' }),
+  title: z.string({ required_error: "Title is required" }).max(500),
+  details: z.string({ required_error: "Details is required" }),
   tips: z
     .object({
       do: z.array(z.object({ title: z.string() })),

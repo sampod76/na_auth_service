@@ -1,9 +1,9 @@
-import { Server, Socket } from 'socket.io';
-import { ENUM_SOCKET_STATUS } from '../../global/enum_constant_type';
-import { IUserRef } from '../modules/allUser/typesAndConst';
-import { User } from '../modules/allUser/user/user.model';
-import { errorLogger } from '../share/logger';
-import { ENUM_SOCKET_EMIT_ON_TYPE } from './socketTypes';
+import { Server, Socket } from "socket.io";
+import { ENUM_SOCKET_STATUS } from "../../global/enum_constant_type";
+import { IUserRef } from "../modules/allUser/typesAndConst";
+import { User } from "../modules/allUser/user/user.model";
+import { errorLogger } from "../share/logger";
+import { ENUM_SOCKET_EMIT_ON_TYPE } from "./socketTypes";
 
 let socketServer: Server | null = null;
 
@@ -43,7 +43,7 @@ export const yourAreOnlineOffline = async (
       };
     } else {
       setData = {
-        'lastActive.createdAt': new Date(),
+        "lastActive.createdAt": new Date(),
         socketStatus: ENUM_SOCKET_STATUS.OFFLINE,
       };
       // when user offline then update status
@@ -66,9 +66,9 @@ export const socketErrorHandler = ({
   callback?: any;
   errorMessage: any;
 }) => {
-  if (callback && typeof callback === 'function') {
+  if (callback && typeof callback === "function") {
     return callback(errorMessage);
   } else {
-    return socket.emit('error', errorMessage);
+    return socket.emit("error", errorMessage);
   }
 };

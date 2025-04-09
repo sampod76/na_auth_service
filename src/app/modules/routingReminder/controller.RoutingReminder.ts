@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { IUserRef } from '../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../allUser/user/user.utils';
-import { RoutingReminder_FILTERABLE_FIELDS } from './constant.RoutingReminder';
-import { IRoutingReminder } from './interface.RoutingReminder';
-import { RoutingReminderService } from './service.RoutingReminder';
+import { IUserRef } from "../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../allUser/user/user.utils";
+import { RoutingReminder_FILTERABLE_FIELDS } from "./constant.RoutingReminder";
+import { IRoutingReminder } from "./interface.RoutingReminder";
+import { RoutingReminderService } from "./service.RoutingReminder";
 
 // import { z } from 'zod'
 const createRoutingReminder = catchAsync(
@@ -28,7 +28,7 @@ const createRoutingReminder = catchAsync(
     sendResponse<IRoutingReminder>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful create RoutingReminder',
+      message: "successful create RoutingReminder",
       data: result,
     });
   },
@@ -48,7 +48,7 @@ const getAllRoutingReminder = catchAsync(
     sendResponse<IRoutingReminder[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully Get all RoutingReminder',
+      message: "successfully Get all RoutingReminder",
       meta: result.meta,
       data: result.data,
     });
@@ -75,7 +75,7 @@ const getSingleRoutingReminder = catchAsync(
     sendResponse<IRoutingReminder>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get RoutingReminder',
+      message: "successfully get RoutingReminder",
       data: result,
     });
   },
@@ -94,7 +94,7 @@ const updateRoutingReminder = catchAsync(
     sendResponse<IRoutingReminder>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update RoutingReminder',
+      message: "successfully update RoutingReminder",
       data: result,
     });
   },
@@ -109,7 +109,7 @@ const updateRoutingReminderSerialNumber = catchAsync(
     sendResponse<IRoutingReminder[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update RoutingReminder',
+      message: "successfully update RoutingReminder",
       data: result,
     });
   },
@@ -126,7 +126,7 @@ const deleteRoutingReminder = catchAsync(
     sendResponse<IRoutingReminder>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully delete RoutingReminder',
+      message: "successfully delete RoutingReminder",
       data: result,
     });
   },

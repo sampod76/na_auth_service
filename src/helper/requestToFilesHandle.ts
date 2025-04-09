@@ -1,14 +1,14 @@
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import ApiError from '../app/errors/ApiError';
+import { Request } from "express";
+import httpStatus from "http-status";
+import ApiError from "../app/errors/ApiError";
 import {
   IAws_MulterUploadFile,
   IFileAfterUpload,
   IMulterUploadFile,
-} from '../app/interface/fileUpload';
-import { FileUploadHelper } from '../app/middlewares/uploderCloudinary';
-import config from '../config';
-import { bytesToKbAndMb } from '../utils/bytesTokbAndMb';
+} from "../app/interface/fileUpload";
+import { FileUploadHelper } from "../app/middlewares/uploderCloudinary";
+import config from "../config";
+import { bytesToKbAndMb } from "../utils/bytesTokbAndMb";
 
 /*
  class makeImage {
@@ -44,14 +44,14 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
     if (file?.filename) {
       const bodyData = { ...req.body };
 
-      if (file.mimetype.includes('pdf')) {
+      if (file.mimetype.includes("pdf")) {
         bodyData[file.fieldname] = {
           mimetype: file.mimetype,
           filename: file.filename,
           server_url: `pdfs/${file.filename}`,
-          platform: 'server',
+          platform: "server",
         };
-      } else if (file.mimetype.includes('image')) {
+      } else if (file.mimetype.includes("image")) {
         if (bytesToKbAndMb(file.size).KB > config.fileSize.image) {
           throw new ApiError(
             httpStatus.NOT_ACCEPTABLE,
@@ -72,14 +72,14 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
           durl: imgbb?.delete_url,
         };
          */
-      } else if (file.mimetype.includes('audio')) {
+      } else if (file.mimetype.includes("audio")) {
         bodyData[file.fieldname] = {
           mimetype: file.mimetype,
           filename: file.filename,
           server_url: `audios/${file.filename}`,
-          platform: 'server',
+          platform: "server",
         };
-      } else if (file.mimetype.includes('video')) {
+      } else if (file.mimetype.includes("video")) {
         //-------video--uploader--------
         // const video = await videoUploder.uploadSingleFilevideo(file);
         // bodyData[file.fieldname] = video;
@@ -88,21 +88,21 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
           mimetype: file.mimetype,
           filename: file.filename,
           server_url: `videos/${file.filename}`,
-          platform: 'server',
+          platform: "server",
         };
-      } else if (file.mimetype.includes('application')) {
+      } else if (file.mimetype.includes("application")) {
         bodyData[file.fieldname] = {
           mimetype: file.mimetype,
           filename: file.filename,
           server_url: `docs/${file.filename}`,
-          platform: 'server',
+          platform: "server",
         };
       } else {
         bodyData[file.fieldname] = {
           mimetype: file.mimetype,
           filename: file.filename,
           server_url: `others/${file.filename}`,
-          platform: 'server',
+          platform: "server",
         };
       }
       req.body = bodyData;
@@ -113,7 +113,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
         // let videos: IMulterUploadFile[] = [];
         const other: IMulterUploadFile[] = [];
         req.files.forEach((file: IMulterUploadFile) => {
-          if (file.mimetype.includes('image')) {
+          if (file.mimetype.includes("image")) {
             if (bytesToKbAndMb(file.size).KB > config.fileSize.image) {
               throw new ApiError(
                 httpStatus.NOT_ACCEPTABLE,
@@ -146,12 +146,12 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
             !obj[file.fieldname]
           ) {
             // for update--> when first time has some image then set default value
-            obj[file.fieldname] = req['body'][file.fieldname];
+            obj[file.fieldname] = req["body"][file.fieldname];
           } else if (!obj[file.fieldname]?.length) {
             obj[file.fieldname] = [];
           }
 
-          if (file?.mimetype?.includes('image')) {
+          if (file?.mimetype?.includes("image")) {
             // console.log(file, 'file dd');
             //@ts-ignore
             if (file?.url) {
@@ -162,10 +162,10 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                 mimetype: file.mimetype,
                 filename: file.filename,
                 server_url: `images/${file.filename}`,
-                platform: 'server',
+                platform: "server",
               });
             }
-          } else if (file.mimetype.includes('pdf')) {
+          } else if (file.mimetype.includes("pdf")) {
             //@ts-ignore
             if (file?.url) {
               obj[file.fieldname].push(file); // when image not upload imgbb then comment it
@@ -175,10 +175,10 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                 mimetype: file.mimetype,
                 filename: file.filename,
                 server_url: `pdfs/${file.filename}`,
-                platform: 'server',
+                platform: "server",
               });
             }
-          } else if (file.mimetype.includes('audio')) {
+          } else if (file.mimetype.includes("audio")) {
             //@ts-ignore
             if (file?.url) {
               obj[file.fieldname].push(file); // when image not upload imgbb then comment it
@@ -188,10 +188,10 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                 mimetype: file.mimetype,
                 filename: file.filename,
                 server_url: `audios/${file.filename}`,
-                platform: 'server',
+                platform: "server",
               });
             }
-          } else if (file.mimetype.includes('video')) {
+          } else if (file.mimetype.includes("video")) {
             //@ts-ignore
             if (file?.url) {
               obj[file.fieldname].push(file); // when image not upload imgbb then comment it
@@ -201,10 +201,10 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                 mimetype: file.mimetype,
                 filename: file.filename,
                 server_url: `videos/${file.filename}`,
-                platform: 'server',
+                platform: "server",
               });
             }
-          } else if (file.mimetype.includes('application')) {
+          } else if (file.mimetype.includes("application")) {
             //@ts-ignore
             if (file?.url) {
               obj[file.fieldname].push(file); // when image not upload imgbb then comment it
@@ -214,7 +214,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                 mimetype: file.mimetype,
                 filename: file.filename,
                 server_url: `docs/${file.filename}`,
-                platform: 'server',
+                platform: "server",
               });
             }
           } else {
@@ -222,7 +222,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
               mimetype: file.mimetype,
               filename: file.filename,
               server_url: `others/${file.filename}`,
-              platform: 'server',
+              platform: "server",
             });
           }
         });
@@ -240,11 +240,11 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
         Object.entries(req.files).forEach(
           ([key, _value]: [string, IMulterUploadFile[]]) => {
             additionalFieldsAdd[key] = _value.filter(
-              file => !file.mimetype.includes('image'),
+              file => !file.mimetype.includes("image"),
             );
 
             additionalFieldsAdd[`${key}_images`] = _value.filter(file => {
-              if (file.mimetype.includes('image')) {
+              if (file.mimetype.includes("image")) {
                 if (bytesToKbAndMb(file.size).KB > config.fileSize.image) {
                   throw new ApiError(
                     httpStatus.NOT_ACCEPTABLE,
@@ -260,7 +260,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
         try {
           const uploadPromises = Object.entries(additionalFieldsAdd).map(
             ([key, value]: [string, any]) => {
-              if (key.includes('_images')) {
+              if (key.includes("_images")) {
                 return new Promise((resolve, reject) => {
                   FileUploadHelper.uploadToCloudinaryMultiple(value)
                     .then(res => {
@@ -284,8 +284,8 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
             }
           });
           Object.entries(additionalFieldsAdd).forEach(([key, images]) => {
-            if (key.includes('_images')) {
-              const replaceKey = key.replace('_images', ''); // Get the key without the '_images' suffix
+            if (key.includes("_images")) {
+              const replaceKey = key.replace("_images", ""); // Get the key without the '_images' suffix
               const anotherMineTypeData = additionalFieldsAdd[replaceKey];
               if (
                 Array.isArray(anotherMineTypeData) &&
@@ -326,7 +326,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
              */
           });
         } catch (error: any) {
-          throw new ApiError(404, error?.message || 'File request failed');
+          throw new ApiError(404, error?.message || "File request failed");
         }
         //!--------------------end of imgbbFunctions------------
 
@@ -345,7 +345,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
               // console.log(previousData);
               const currentData = _value?.map(
                 (file: IFileAfterUpload | IMulterUploadFile | any) => {
-                  if (file.mimetype.includes('image')) {
+                  if (file.mimetype.includes("image")) {
                     return file?.url
                       ? file
                       : {
@@ -353,9 +353,9 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                           filename: file?.filename,
                           name: file?.filename,
                           server_url: `images/${file?.filename}`,
-                          platform: 'server',
+                          platform: "server",
                         };
-                  } else if (file.mimetype.includes('pdf')) {
+                  } else if (file.mimetype.includes("pdf")) {
                     return file?.url
                       ? file
                       : {
@@ -363,9 +363,9 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                           filename: file?.filename,
                           name: file?.filename,
                           server_url: `pdfs/${file?.filename}`,
-                          platform: 'server',
+                          platform: "server",
                         };
-                  } else if (file.mimetype.includes('audio')) {
+                  } else if (file.mimetype.includes("audio")) {
                     return file?.url
                       ? file
                       : {
@@ -373,9 +373,9 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                           filename: file?.filename,
                           name: file?.filename,
                           server_url: `audios/${file?.filename}`,
-                          platform: 'server',
+                          platform: "server",
                         };
-                  } else if (file.mimetype.includes('video')) {
+                  } else if (file.mimetype.includes("video")) {
                     return file?.url
                       ? file
                       : {
@@ -383,9 +383,9 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                           filename: file?.filename,
                           name: file?.filename,
                           server_url: `videos/${file?.filename}`,
-                          platform: 'server',
+                          platform: "server",
                         };
-                  } else if (file.mimetype.includes('application')) {
+                  } else if (file.mimetype.includes("application")) {
                     return file?.url
                       ? file
                       : {
@@ -393,7 +393,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                           filename: file?.filename,
                           name: file?.filename,
                           server_url: `docs/${file?.filename}`,
-                          platform: 'server',
+                          platform: "server",
                         };
                   } else {
                     return file?.url
@@ -403,7 +403,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
                           filename: file?.filename,
                           name: file?.filename,
                           server_url: `others/${file?.filename}`,
-                          platform: 'server',
+                          platform: "server",
                         };
                   }
                 },
@@ -418,7 +418,7 @@ export const RequestToFileDecodeAddBodyHandle = async (req: Request) => {
     }
     // requestToDeleteFile(req);
   } catch (error: any) {
-    throw new ApiError(400, error?.message || 'Invalid Set body value');
+    throw new ApiError(400, error?.message || "Invalid Set body value");
   }
 };
 
@@ -439,10 +439,10 @@ export const RequestTo_Aws_Multer_FileDecodeAddBodyHandle = async (
         filename: file.originalname,
         name: file.originalname,
         path: file.key,
-        url: config.aws.s3.cloudfrontCDN + '/' + file.key,
+        url: config.aws.s3.cloudfrontCDN + "/" + file.key,
         originalUrl: file.location,
         cdn: config.aws.s3.cloudfrontCDN,
-        platform: 'aws',
+        platform: "aws",
       } as IFileAfterUpload;
 
       req.body = bodyData;
@@ -457,7 +457,7 @@ export const RequestTo_Aws_Multer_FileDecodeAddBodyHandle = async (
             !obj[file.fieldname]
           ) {
             // for update--> when first time has some image then set default value
-            obj[file.fieldname] = req['body'][file.fieldname];
+            obj[file.fieldname] = req["body"][file.fieldname];
           } else if (!obj[file.fieldname]?.length) {
             obj[file.fieldname] = [];
           }
@@ -467,10 +467,10 @@ export const RequestTo_Aws_Multer_FileDecodeAddBodyHandle = async (
             filename: file.originalname,
             name: file.originalname,
             path: file.key,
-            url: config.aws.s3.cloudfrontCDN + '/' + file.key,
+            url: config.aws.s3.cloudfrontCDN + "/" + file.key,
             originalUrl: file.location,
             cdn: config.aws.s3.cloudfrontCDN,
-            platform: 'aws',
+            platform: "aws",
           });
         });
 
@@ -497,10 +497,10 @@ export const RequestTo_Aws_Multer_FileDecodeAddBodyHandle = async (
                   filename: file.originalname,
                   name: file.originalname,
                   path: file.key,
-                  url: config.aws.s3.cloudfrontCDN + '/' + file.key,
+                  url: config.aws.s3.cloudfrontCDN + "/" + file.key,
                   originalUrl: file.location,
                   cdn: config.aws.s3.cloudfrontCDN,
-                  platform: 'aws',
+                  platform: "aws",
                 }),
               );
 
@@ -514,6 +514,6 @@ export const RequestTo_Aws_Multer_FileDecodeAddBodyHandle = async (
 
     // requestToDeleteFile(req);
   } catch (error: any) {
-    throw new ApiError(400, error?.message || 'Invalid Set body value');
+    throw new ApiError(400, error?.message || "Invalid Set body value");
   }
 };

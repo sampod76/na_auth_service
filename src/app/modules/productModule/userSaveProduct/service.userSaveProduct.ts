@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { PipelineStage, Schema, Types } from "mongoose";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../../helper/lookUpResuable';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
-import { IUserRef, IUserRefAndDetails } from '../../allUser/typesAndConst';
-import { userSaveProduct_SEARCHABLE_FIELDS } from './constant.userSaveProduct';
+} from "../../../../helper/lookUpResuable";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
+import { IUserRef, IUserRefAndDetails } from "../../allUser/typesAndConst";
+import { userSaveProduct_SEARCHABLE_FIELDS } from "./constant.userSaveProduct";
 import {
   IUserSaveProduct,
   IUserSaveProductFilters,
-} from './interface.userSaveProduct';
-import { UserSaveProduct } from './model.userSaveProduct';
+} from "./interface.userSaveProduct";
+import { UserSaveProduct } from "./model.userSaveProduct";
 
 const createUserSaveProductByDb = async (
   payload: IUserSaveProduct,
@@ -55,12 +55,12 @@ const getAllUserSaveProductFromDb = async (
   } = filters;
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
   if (user.role !== ENUM_USER_ROLE.admin) {
-    filtersData['author.userId'] = user.userId.toString();
+    filtersData["author.userId"] = user.userId.toString();
   }
   const andConditions = [];
   if (searchTerm) {
@@ -68,7 +68,7 @@ const getAllUserSaveProductFromDb = async (
       $or: userSaveProduct_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -81,9 +81,9 @@ const getAllUserSaveProductFromDb = async (
         let modifyFiled;
 
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productCategoryId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productCategoryId"
         ) {
           modifyFiled = { [field]: new Types.ObjectId(value) };
         } else {
@@ -128,7 +128,7 @@ const getAllUserSaveProductFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -148,26 +148,26 @@ const getAllUserSaveProductFromDb = async (
   ];
   const collections: ILookupCollection<any>[] = []; // Use the correct type here
 
-  if (needProperty && needProperty.includes('author')) {
+  if (needProperty && needProperty.includes("author")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'author.role',
-          idFiledName: '$author.roleBaseUserId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'details',
-          margeInField: 'author',
+          roleMatchFiledName: "author.role",
+          idFiledName: "$author.roleBaseUserId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "details",
+          margeInField: "author",
           project: { name: 1, email: 1, profileImage: 1, userId: 1 },
         },
       ],
     });
   }
-  if (needProperty && needProperty.includes('productCategoryId')) {
+  if (needProperty && needProperty.includes("productCategoryId")) {
     const pipelineConnection: ILookupCollection<any> = {
-      connectionName: 'productcategories',
-      idFiledName: '$productCategoryId',
-      pipeLineMatchField: '$_id',
-      outPutFieldName: 'productCategoryDetails',
+      connectionName: "productcategories",
+      idFiledName: "$productCategoryId",
+      pipeLineMatchField: "$_id",
+      outPutFieldName: "productCategoryDetails",
     };
     collections.push(pipelineConnection);
   }
@@ -223,7 +223,7 @@ const updateUserSaveProductFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'UserSaveProduct not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "UserSaveProduct not found");
   }
   if (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -231,7 +231,7 @@ const updateUserSaveProductFromDb = async (
     isExist?._id?.toString() !== user?.roleBaseUserId?.toString() &&
     isExist.author.userId.toString() !== user?.userId?.toString()
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
   const result = await UserSaveProduct.findOneAndUpdate({ _id: id }, payload, {
     new: true,
@@ -251,7 +251,7 @@ const deleteUserSaveProductByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'UserSaveProduct not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "UserSaveProduct not found");
   }
   if (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
@@ -259,7 +259,7 @@ const deleteUserSaveProductByIdFromDb = async (
     isExist?._id?.toString() !== user?.roleBaseUserId.toString() &&
     isExist.author?.userId?.toString() !== user?.userId.toString()
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const result = await UserSaveProduct.findOneAndUpdate(
@@ -268,7 +268,7 @@ const deleteUserSaveProductByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   return result;
 };

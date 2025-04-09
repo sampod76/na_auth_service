@@ -1,18 +1,18 @@
-import express from 'express';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import authMiddleware from '../../middlewares/authMiddleware';
+import express from "express";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import authMiddleware from "../../middlewares/authMiddleware";
 
-import { z } from 'zod';
-import parseBodyData from '../../middlewares/utils/parseBodyData';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { uploadAwsS3Bucket } from '../aws/utls.aws';
-import { TipsAndGuidelineController } from './controller.TipsAndGuideline';
-import { TipsAndGuidelineValidation } from './validation.TipsAndGuideline';
+import { z } from "zod";
+import parseBodyData from "../../middlewares/utils/parseBodyData";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { uploadAwsS3Bucket } from "../aws/utls.aws";
+import { TipsAndGuidelineController } from "./controller.TipsAndGuideline";
+import { TipsAndGuidelineValidation } from "./validation.TipsAndGuideline";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   // This route is open
   .get(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.generalUser),
@@ -20,14 +20,14 @@ router
   )
   .post(
     authMiddleware(ENUM_USER_ROLE.admin),
-    uploadAwsS3Bucket.array('images'),
+    uploadAwsS3Bucket.array("images"),
     parseBodyData({}),
     validateRequestZod(
       TipsAndGuidelineValidation.createTipsAndGuidelineZodSchema,
     ),
     TipsAndGuidelineController.createTipsAndGuideline,
   );
-router.route('/serialnumber-update').patch(
+router.route("/serialnumber-update").patch(
   authMiddleware(ENUM_USER_ROLE.admin),
 
   validateRequestZod(
@@ -39,7 +39,7 @@ router.route('/serialnumber-update').patch(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   // This route is open
   .get(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.generalUser),
@@ -47,7 +47,7 @@ router
   )
   .patch(
     authMiddleware(ENUM_USER_ROLE.admin),
-    uploadAwsS3Bucket.array('images'),
+    uploadAwsS3Bucket.array("images"),
     parseBodyData({}),
     validateRequestZod(
       TipsAndGuidelineValidation.updateTipsAndGuidelineZodSchema,

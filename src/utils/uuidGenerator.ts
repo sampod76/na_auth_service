@@ -1,4 +1,4 @@
-import { v4 as uuidV4, version as uuidVersion, validate } from 'uuid';
+import { v4 as uuidV4, version as uuidVersion, validate } from "uuid";
 export const uuidGenerator = () => {
   // Generate a random UUID
   return crypto.randomUUID();
@@ -6,10 +6,10 @@ export const uuidGenerator = () => {
 
 export class UuidBuilder {
   uuid: string;
-  uuidType: 'crypto' | 'uuid';
-  constructor(uidType: 'crypto' | 'uuid' = 'crypto') {
+  uuidType: "crypto" | "uuid";
+  constructor(uidType: "crypto" | "uuid" = "crypto") {
     this.uuidType = uidType;
-    if (this.uuidType === 'crypto') {
+    if (this.uuidType === "crypto") {
       // Use crypto.randomUUID() for generating cryptographically secure UUIDs
       this.uuid = crypto.randomUUID();
     } else {
@@ -18,7 +18,7 @@ export class UuidBuilder {
     }
   }
   generateUuid(): string {
-    if (this.uuidType === 'crypto') {
+    if (this.uuidType === "crypto") {
       return uuidGenerator();
     }
     // For 'v4' type, use uuidV4 from 'uuid' library

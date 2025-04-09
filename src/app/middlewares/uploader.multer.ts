@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
-import { Request } from 'express';
+import { Request } from "express";
 
-import multer, { FileFilterCallback, StorageEngine } from 'multer';
-import path from 'path';
+import multer, { FileFilterCallback, StorageEngine } from "multer";
+import path from "path";
 
 //*******************note********* */
 // create multer.d.ts
 
 //*******************note********* */
-const uploadFilePath = '../../../../uploadFile';
+const uploadFilePath = "../../../../uploadFile";
 //-------------single file upload----start------------
 const storage: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -21,10 +21,10 @@ const storage: StorageEngine = multer.diskStorage({
   ) => {
     const fileExt = path.extname(file.originalname);
     const sanitizedFileName = file.originalname
-      .replace(fileExt, '') // Remove the file extension
+      .replace(fileExt, "") // Remove the file extension
       .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except for spaces and hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except for spaces and hyphens
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
       .trim(); // Trim extra spaces for safety
 
     const fileName = `${sanitizedFileName}-${Date.now()}${fileExt}`;
@@ -38,21 +38,21 @@ const fileFilter = (
   cb: FileFilterCallback,
 ) => {
   const allowedMimeTypes = [
-    'image/jpg',
-    'image/png',
-    'image/jpeg',
-    'image/heic',
-    'image/heif',
-    'image/gif',
-    'image/avif',
+    "image/jpg",
+    "image/png",
+    "image/jpeg",
+    "image/heic",
+    "image/heif",
+    "image/gif",
+    "image/avif",
   ];
   if (
     allowedMimeTypes.includes(file.mimetype) ||
-    file.mimetype.includes('image') // allow all image types
+    file.mimetype.includes("image") // allow all image types
   ) {
     cb(null, true);
   } else {
-    cb(new Error('Only jpg, jpeg, png,heic,heif,avif formats are allowed!'));
+    cb(new Error("Only jpg, jpeg, png,heic,heif,avif formats are allowed!"));
   }
 };
 
@@ -77,10 +77,10 @@ const videoStorage: StorageEngine = multer.diskStorage({
   ) => {
     const fileExt = path.extname(file.originalname);
     const sanitizedFileName = file.originalname
-      .replace(fileExt, '') // Remove the file extension
+      .replace(fileExt, "") // Remove the file extension
       .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except for spaces and hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except for spaces and hyphens
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
       .trim(); // Trim extra spaces for safety
 
     const fileName = `${sanitizedFileName}-${Date.now()}${fileExt}`;
@@ -96,10 +96,10 @@ const fileFilterVideo = (
   // if (file.mimetype === 'video/mp4') {
   //   cb(null, true);
   // }
-  if (file.mimetype.includes('video')) {
+  if (file.mimetype.includes("video")) {
     cb(null, true);
   } else {
-    cb(new Error('Only mp4 format is allowed!'));
+    cb(new Error("Only mp4 format is allowed!"));
   }
 };
 
@@ -123,10 +123,10 @@ const pdfStorage: StorageEngine = multer.diskStorage({
   ) => {
     const fileExt = path.extname(file.originalname);
     const sanitizedFileName = file.originalname
-      .replace(fileExt, '') // Remove the file extension
+      .replace(fileExt, "") // Remove the file extension
       .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except for spaces and hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except for spaces and hyphens
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
       .trim(); // Trim extra spaces for safety
 
     const fileName = `${sanitizedFileName}-${Date.now()}${fileExt}`;
@@ -139,10 +139,10 @@ const fileFilterPdf = (
   file: Express.Multer.File,
   cb: FileFilterCallback,
 ) => {
-  if (file.mimetype === 'file/pdf' || file.mimetype === 'application/pdf') {
+  if (file.mimetype === "file/pdf" || file.mimetype === "application/pdf") {
     cb(null, true);
   } else {
-    cb(new Error('Only pdf format is allowed!'));
+    cb(new Error("Only pdf format is allowed!"));
   }
 };
 
@@ -167,10 +167,10 @@ const audioStorage: StorageEngine = multer.diskStorage({
   ) => {
     const fileExt = path.extname(file.originalname);
     const sanitizedFileName = file.originalname
-      .replace(fileExt, '') // Remove the file extension
+      .replace(fileExt, "") // Remove the file extension
       .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except for spaces and hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except for spaces and hyphens
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
       .trim(); // Trim extra spaces for safety
 
     const fileName = `${sanitizedFileName}-${Date.now()}${fileExt}`;
@@ -183,10 +183,10 @@ const fileFilterAudio = (
   file: Express.Multer.File,
   cb: FileFilterCallback,
 ) => {
-  if (file.mimetype === 'file/mpeg' || file.mimetype === 'audio/mpeg') {
+  if (file.mimetype === "file/mpeg" || file.mimetype === "audio/mpeg") {
     cb(null, true);
   } else {
-    cb(new Error('Only audio format is allowed!'));
+    cb(new Error("Only audio format is allowed!"));
   }
 };
 
@@ -211,15 +211,15 @@ const fileStorage: StorageEngine = multer.diskStorage({
     cb: (error: Error | null, destination: string) => void,
   ) => {
     let destinationPath;
-    if (file.mimetype.includes('image')) {
+    if (file.mimetype.includes("image")) {
       destinationPath = path.join(__dirname, `${uploadFilePath}/images/`);
-    } else if (file.mimetype.includes('pdf')) {
+    } else if (file.mimetype.includes("pdf")) {
       destinationPath = path.join(__dirname, `${uploadFilePath}/pdfs/`);
-    } else if (file.mimetype.includes('application')) {
+    } else if (file.mimetype.includes("application")) {
       destinationPath = path.join(__dirname, `${uploadFilePath}/docs/`);
-    } else if (file.mimetype.includes('video')) {
+    } else if (file.mimetype.includes("video")) {
       destinationPath = path.join(__dirname, `${uploadFilePath}/videos/`);
-    } else if (file.mimetype.includes('audio')) {
+    } else if (file.mimetype.includes("audio")) {
       destinationPath = path.join(__dirname, `${uploadFilePath}/audios/`);
     } else {
       destinationPath = path.join(__dirname, `${uploadFilePath}/others/`);
@@ -233,10 +233,10 @@ const fileStorage: StorageEngine = multer.diskStorage({
   ) => {
     const fileExt = path.extname(file.originalname);
     const sanitizedFileName = file.originalname
-      .replace(fileExt, '') // Remove the file extension
+      .replace(fileExt, "") // Remove the file extension
       .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except for spaces and hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except for spaces and hyphens
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
       .trim(); // Trim extra spaces for safety
 
     const fileName = `${sanitizedFileName}-${Date.now()}${fileExt}`;
@@ -258,25 +258,25 @@ const fileFilterFun = (
     // 'image/heif',
     // 'image/gif',
     // 'image/avif',
-    'application/pdf',
-    'application/x-x509-ca-cert',
-    'application/octet-stream',
-    'application/pkix-cert',
-    'application/pkcs8',
-    'application/msword',
+    "application/pdf",
+    "application/x-x509-ca-cert",
+    "application/octet-stream",
+    "application/pkix-cert",
+    "application/pkcs8",
+    "application/msword",
   ];
 
   if (
     allowedMimeTypes.includes(file.mimetype) ||
-    file.mimetype.includes('image') // allow all image types
+    file.mimetype.includes("image") // allow all image types
   ) {
     cb(null, true);
   } else {
     cb(
       new Error(
-        'Only ' +
-          allowedMimeTypes.map(type => type.split('/')[1]).join(', ') +
-          'format is allowed!',
+        "Only " +
+          allowedMimeTypes.map(type => type.split("/")[1]).join(", ") +
+          "format is allowed!",
       ),
     );
   }

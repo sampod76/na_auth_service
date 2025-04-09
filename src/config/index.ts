@@ -1,7 +1,7 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import dotenv from "dotenv";
+import path from "path";
 // cwd = current working directory (অর্থাৎ আমরা এখন যে পাইলে আছি এটা)
-dotenv.config({ path: path.join(process.cwd(), '.env') }); // এখানে ২ টা জয়েন করে দিয়েছে
+dotenv.config({ path: path.join(process.cwd(), ".env") }); // এখানে ২ টা জয়েন করে দিয়েছে
 
 export default {
   env: process.env.NODE_ENV,
@@ -25,7 +25,7 @@ export default {
   },
   kafka: {
     url:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? process.env.KAFKA_URL_LOCAL
         : process.env.KAFKA_URL_PRODUCTION,
     clientId: process.env.KAFKA_CLIENT_ID,
@@ -52,7 +52,7 @@ export default {
     atlasUrl: process.env.DATABASE_URL_ATLAS,
   },
   database_url:
-    process.env.NODE_ENV === 'development'
+    process.env.NODE_ENV === "development"
       ? process.env.DATABASE_URL_ATLAS
       : `mongodb://${process.env.DATABASE_IP}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, //mongodb://127.0.0.1:29017/chouatamar
   default_student_pass: process.env.DEFAULT_STUDENT_PASS,
@@ -63,11 +63,11 @@ export default {
   crypto_key: process.env.ENCRYPTION_SECRET,
   resetlink: process.env.RESET_PASSWORD_LINK,
   server_side_url:
-    process.env.NODE_ENV === 'production'
+    process.env.NODE_ENV === "production"
       ? process.env.REAL_HOST_SERVER_SIDE
       : process.env.LOCALHOST_SERVER_SIDE,
   client_side_url:
-    process.env.NODE_ENV === 'production'
+    process.env.NODE_ENV === "production"
       ? process.env.REAL_HOST_CLIENT_SIDE
       : process.env.LOCALHOST_CLIENT_SIDE,
   jwt: {
@@ -84,47 +84,47 @@ export default {
   },
   stripe: {
     publishable_key:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? process.env.STRIPE_PUBLISHABLE_KEY_TEST
         : process.env.STRIPE_PUBLISHABLE_KEY_PRODUCTION,
     secret_key:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? process.env.STRIPE_SECRET_KEY_TEST
         : process.env.STRIPE_SECRET_KEY_PRODUCTION,
   },
   payment_url: {
     stripe_success_url:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? `http://${process.env.LOCAL_URL}:${process.env.PORT}/${process.env.STRIPE_SUCCESS_URL}`
         : `https://${process.env.LIVE_URL}/${process.env.STRIPE_SUCCESS_URL}`,
 
     stripe_cancel_url:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? `http://${process.env.LOCAL_URL}:${process.env.PORT}/${process.env.STRIPE_CANCEL_URL}`
         : `https://${process.env.LIVE_URL}/${process.env.STRIPE_CANCEL_URL}`,
 
     paypal_success_url:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? `http://${process.env.LOCAL_URL}:${process.env.PORT}/${process.env.PAYPAL_SUCCESS_URL}`
         : `https://${process.env.LIVE_URL}/${process.env.PAYPAL_SUCCESS_URL}`,
 
     paypal_cancel_url:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? `http://${process.env.LOCAL_URL}:${process.env.PORT}/${process.env.PAYPAL_CANCEL_URL}`
         : `https://${process.env.LIVE_URL}/${process.env.PAYPAL_CANCEL_URL}`,
   },
 
   paypal: {
     client:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? process.env.PAYPAL_CLIENT_ID
         : process.env.PAYPAL_CLIENT_ID_LIVE,
     secret:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? process.env.PAYPAL_SECRET_KEY
         : process.env.PAYPAL_SECRET_KEY_LIVE,
     mode:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === "development"
         ? process.env.PAYPAL_MODE
         : process.env.PAYPAL_MODE_LIVE,
   },

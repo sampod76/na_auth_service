@@ -1,8 +1,8 @@
-import path from 'path';
-import { createLogger, format, transports } from 'winston';
-import DailyRotateFile from 'winston-daily-rotate-file';
-import LokiTransport from 'winston-loki'; // Import LokiTransport for integration
-import config from '../../config';
+import path from "path";
+import { createLogger, format, transports } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
+import LokiTransport from "winston-loki"; // Import LokiTransport for integration
+import config from "../../config";
 const { combine, timestamp, label, printf } = format;
 /*   const levels = {
     error: 0,
@@ -22,9 +22,9 @@ const myFormat = printf(({ level, message, label, timestamp, stack }) => {
   return `${formattedDate}--> [${label}] ${level}: ${stack || message}`;
 });
 const logger = createLogger({
-  level: 'info',
+  level: "info",
   format: combine(
-    label({ label: (config.projectName as string) || 'my-app' }),
+    label({ label: (config.projectName as string) || "my-app" }),
     timestamp(),
     format.errors({ stack: true }), // Enables stack trace logging
     myFormat,
@@ -43,22 +43,22 @@ const logger = createLogger({
     new DailyRotateFile({
       filename: path.join(
         process.cwd(),
-        'logger',
-        'winston',
-        'successes',
-        'PHU-%DATE%-success.log',
+        "logger",
+        "winston",
+        "successes",
+        "PHU-%DATE%-success.log",
       ),
-      datePattern: 'YYYY-MM-DD-HH',
+      datePattern: "YYYY-MM-DD-HH",
       zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '14d',
+      maxSize: "20m",
+      maxFiles: "14d",
     }),
     new LokiTransport({
       host:
-        (config.serverMonitor.lokiServer as string) || 'http://localhost:3100', // Replace with your Loki server address
+        (config.serverMonitor.lokiServer as string) || "http://localhost:3100", // Replace with your Loki server address
       labels: {
-        app: (config.projectName as string) || 'my-app',
-        env: 'production',
+        app: (config.projectName as string) || "my-app",
+        env: "production",
       }, // Customize as needed
       json: true,
       format: format.json(),
@@ -67,37 +67,37 @@ const logger = createLogger({
 });
 
 const errorLogger = createLogger({
-  level: 'error',
+  level: "error",
   format: combine(
-    label({ label: (config.projectName as string) || 'my-app' }),
+    label({ label: (config.projectName as string) || "my-app" }),
     timestamp(),
     myFormat,
   ),
-  defaultMeta: { service: 'user-service' },
+  defaultMeta: { service: "user-service" },
   transports: [
     new transports.Console(),
     new DailyRotateFile({
       filename: path.join(
         process.cwd(),
-        'logger',
-        'winston',
-        'errors',
-        'PHU-%DATE%-error.log',
+        "logger",
+        "winston",
+        "errors",
+        "PHU-%DATE%-error.log",
         //%DATE%  -->এটা দ্বারা বোঝানো হয়েছে এইখানে ডেটটা চলে আসবে
       ),
       // datePattern: 'YYYY-MM-DD-HH', // যদি প্রতি ঘন্টায় ঘন্টায় অ্যারোর মেসেজ প্রিন্ট করতে চাই একটা নির্দিষ্ট পাইলে
-      datePattern: 'YYYY-MM-DD-HH',
+      datePattern: "YYYY-MM-DD-HH",
       zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '14d',
+      maxSize: "20m",
+      maxFiles: "14d",
     }),
     new LokiTransport({
       host:
-        (config.serverMonitor.lokiServer as string) || 'http://localhost:3100', // Replace with your Loki server address
+        (config.serverMonitor.lokiServer as string) || "http://localhost:3100", // Replace with your Loki server address
       labels: {
-        app: (config.projectName as string) || 'my-app',
-        env: 'production',
-        level: 'error',
+        app: (config.projectName as string) || "my-app",
+        env: "production",
+        level: "error",
       }, // Error-specific labels
       json: true,
       format: format.json(),

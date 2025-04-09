@@ -1,21 +1,14 @@
+import { Schema, model } from "mongoose";
 
-      import { Schema, model } from 'mongoose';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseIUserRef } from "../allUser/typesAndConst";
+import { OoptestmodualModel, IOoptestmodual } from "./interface.Ooptestmodual";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseIUserRef } from '../allUser/typesAndConst';
-import {
-  OoptestmodualModel,
-  IOoptestmodual,
-} from './interface.Ooptestmodual';
-
-const OoptestmodualSchema = new Schema<
-  IOoptestmodual,
-  OoptestmodualModel
->(
+const OoptestmodualSchema = new Schema<IOoptestmodual, OoptestmodualModel>(
   {
     productId: {
       type: Schema.Types.ObjectId,
-      ref: 'Product',
+      ref: "Product",
     },
     productTitle: String,
     author: mongooseIUserRef,
@@ -42,7 +35,7 @@ const OoptestmodualSchema = new Schema<
   },
 );
 // after findOneAndDelete then data then call this hook
-OoptestmodualSchema.post('findOneAndDelete', async function () {
+OoptestmodualSchema.post("findOneAndDelete", async function () {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     // const dataId = this.getFilter();
@@ -66,10 +59,9 @@ OoptestmodualSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 OoptestmodualSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: any & { _id: string }, next: any) {
     try {
-     
       // console.log('update');
       next();
     } catch (error: any) {
@@ -78,26 +70,21 @@ OoptestmodualSchema.post(
   },
 );
 // before save/create then data then call this hook
-OoptestmodualSchema.post(
-  'save',
-  async function (data: IOoptestmodual, next) {
-    try {
-      // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
-     
-      next();
-    } catch (error: any) {
-      next(error);
-    }
-  },
-);
+OoptestmodualSchema.post("save", async function (data: IOoptestmodual, next) {
+  try {
+    // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
+
+    next();
+  } catch (error: any) {
+    next(error);
+  }
+});
 
 export const Ooptestmodual = model<IOoptestmodual, OoptestmodualModel>(
-  'Ooptestmodual',
+  "Ooptestmodual",
   OoptestmodualSchema,
 );
 // export const TrashOoptestmodual = model<
 //   IOoptestmodual,
 //   OoptestmodualModel
 // >('TrashOoptestmodual', OoptestmodualSchema);
-     
-      

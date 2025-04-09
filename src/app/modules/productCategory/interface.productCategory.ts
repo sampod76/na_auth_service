@@ -1,8 +1,8 @@
-import { Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS } from '../../../global/enum_constant_type';
-import { I_ROLE_TYPE } from '../allUser/user/user.interface';
-import { ProductCategoryValidation } from './validation.productCategory';
+import { Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS } from "../../../global/enum_constant_type";
+import { I_ROLE_TYPE } from "../allUser/user/user.interface";
+import { ProductCategoryValidation } from "./validation.productCategory";
 
 export type IProductCategoryFilters = {
   searchTerm?: string;
@@ -13,7 +13,7 @@ export type IProductCategoryFilters = {
   delete?: string;
   children?: string;
   isDelete?: string | boolean;
-  'author.userId'?: string;
+  "author.userId"?: string;
   //
   createdAtFrom?: string;
   createdAtTo?: string;

@@ -1,5 +1,5 @@
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import { IUser } from '../allUser/user/user.interface';
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import { IUser } from "../allUser/user/user.interface";
 
 export type ILoginUser = {
   email: string;

@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const sign_url_property = z.object({
   filename: z.string({
-    required_error: 'filename is required',
+    required_error: "filename is required",
   }),
   mimetype: z.string({
-    required_error: 'mimetype is required',
+    required_error: "mimetype is required",
   }),
   uid: z.string().optional(),
 });
@@ -49,8 +49,8 @@ const createAwsUploadFilesToken = z.object({
     },
     {
       message:
-        'At least one property (image or images or documents ,nidOrPassportDocuments ,certificateDocuments ,files) must be provided',
-      path: ['body'],
+        "At least one property (image or images or documents ,nidOrPassportDocuments ,certificateDocuments ,files) must be provided",
+      path: ["body"],
     },
   ),
 });

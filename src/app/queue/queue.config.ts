@@ -1,4 +1,4 @@
-import { DefaultJobOptions } from 'bullmq';
+import { DefaultJobOptions } from "bullmq";
 
 export const defaultQueueConfig: DefaultJobOptions = {
   removeOnComplete: {
@@ -8,7 +8,7 @@ export const defaultQueueConfig: DefaultJobOptions = {
   attempts: 3,
   backoff: {
     //Backoff setting for automatic retries if the job fails
-    type: 'exponential',
+    type: "exponential",
     delay: 1000,
   },
 };

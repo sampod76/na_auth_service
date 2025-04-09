@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import rateLimit, { MemoryStore } from 'express-rate-limit';
-import { ParamsDictionary } from 'express-serve-static-core';
+import { NextFunction, Request, Response } from "express";
+import rateLimit, { MemoryStore } from "express-rate-limit";
+import { ParamsDictionary } from "express-serve-static-core";
 
 export const apiLimiter = (limit = 5, time = 15) => {
   const limiter = rateLimit({

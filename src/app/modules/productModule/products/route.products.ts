@@ -1,19 +1,19 @@
-import express from 'express';
+import express from "express";
 
-import { z } from 'zod';
+import { z } from "zod";
 
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import authMiddleware from '../../../middlewares/authMiddleware';
-import parseBodyData from '../../../middlewares/utils/parseBodyData';
-import validateRequestZod from '../../../middlewares/validateRequestZod';
-import { uploadAwsS3Bucket } from '../../aws/utls.aws';
-import { ProductController } from './controller.products';
-import { ProductValidation } from './validation.products';
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import authMiddleware from "../../../middlewares/authMiddleware";
+import parseBodyData from "../../../middlewares/utils/parseBodyData";
+import validateRequestZod from "../../../middlewares/validateRequestZod";
+import { uploadAwsS3Bucket } from "../../aws/utls.aws";
+import { ProductController } from "./controller.products";
+import { ProductValidation } from "./validation.products";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   // This route is open
   .get(
     authMiddleware(
@@ -26,12 +26,12 @@ router
   .post(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.superAdmin),
     // uploadImage.single('image'),
-    uploadAwsS3Bucket.array('images'),
+    uploadAwsS3Bucket.array("images"),
     parseBodyData({}),
     validateRequestZod(ProductValidation.createProductZodSchema),
     ProductController.createProduct,
   );
-router.route('/serialnumber-update').patch(
+router.route("/serialnumber-update").patch(
   authMiddleware(
     ENUM_USER_ROLE.admin,
     ENUM_USER_ROLE.superAdmin,
@@ -46,12 +46,12 @@ router.route('/serialnumber-update').patch(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   // This route is open
   .get(ProductController.getSingleProduct)
   .patch(
     authMiddleware(ENUM_USER_ROLE.admin, ENUM_USER_ROLE.superAdmin),
-    uploadAwsS3Bucket.array('images'),
+    uploadAwsS3Bucket.array("images"),
     parseBodyData({}),
     validateRequestZod(ProductValidation.updateProductZodSchema),
     ProductController.updateProduct,

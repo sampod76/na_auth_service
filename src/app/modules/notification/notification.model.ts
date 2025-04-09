@@ -1,17 +1,17 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { INotification, NotificationModel } from './notification.interface';
+import { INotification, NotificationModel } from "./notification.interface";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../global/schema/global.schema';
-import { USER_ROLE_ARRAY } from '../allUser/user/user.interface';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../global/schema/global.schema";
+import { USER_ROLE_ARRAY } from "../allUser/user/user.interface";
 
 const NotificationSchema = new Schema<INotification>(
   {
     userIds: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
     subject: {
@@ -46,6 +46,6 @@ const NotificationSchema = new Schema<INotification>(
 );
 
 export const Notification = model<INotification, NotificationModel>(
-  'Notification',
+  "Notification",
   NotificationSchema,
 );

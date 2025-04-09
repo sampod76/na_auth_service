@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Job, Queue, QueueEvents, Worker } from 'bullmq';
-import { redisConnectionString } from '../../redis/redis';
-import { ENUM_QUEUE_NAME } from '../consent.queus';
-import { defaultQueueConfig } from '../queue.config';
+import { Job, Queue, QueueEvents, Worker } from "bullmq";
+import { redisConnectionString } from "../../redis/redis";
+import { ENUM_QUEUE_NAME } from "../consent.queus";
+import { defaultQueueConfig } from "../queue.config";
 
 export const notificationQueue = new Queue(ENUM_QUEUE_NAME.notification, {
   connection: redisConnectionString,
@@ -16,7 +16,7 @@ const notificationQueueEvents = new QueueEvents(ENUM_QUEUE_NAME.notification);
 export const checkNotificationQueueResult = (jobId: string) => {
   return new Promise((resolve, reject) => {
     notificationQueueEvents.on(
-      'completed',
+      "completed",
       ({ jobId: completedJobId, returnvalue }) => {
         if (jobId === completedJobId) {
           resolve(returnvalue);
@@ -24,7 +24,7 @@ export const checkNotificationQueueResult = (jobId: string) => {
       },
     );
     notificationQueueEvents.on(
-      'failed',
+      "failed",
       ({ jobId: failedJobId, failedReason }) => {
         if (jobId === failedJobId) {
           reject(new Error(failedReason));

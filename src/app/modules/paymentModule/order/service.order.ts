@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { PipelineStage, Schema, Types } from 'mongoose';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { PipelineStage, Schema, Types } from "mongoose";
 
-import { ENUM_YN } from '../../../../global/enum_constant_type';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
+import { ENUM_YN } from "../../../../global/enum_constant_type";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../../helper/lookUpResuable';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
-import { IUserRef, IUserRefAndDetails } from '../../allUser/typesAndConst';
-import { IProduct } from '../../productModule/products/interface.products';
-import { ENUM_ORDER_STATUS, OrderSearchableFields } from './constants.order';
-import { IOrder, IOrderFilters } from './interface.order';
-import { Order } from './models.order';
+} from "../../../../helper/lookUpResuable";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
+import { IUserRef, IUserRefAndDetails } from "../../allUser/typesAndConst";
+import { IProduct } from "../../productModule/products/interface.products";
+import { ENUM_ORDER_STATUS, OrderSearchableFields } from "./constants.order";
+import { IOrder, IOrderFilters } from "./interface.order";
+import { Order } from "./models.order";
 
 const createOrderFromDb = async (
   data: IOrder,
@@ -42,15 +42,15 @@ const getAllOrdersFromDB = async (
     needProperty,
     ...filtersData
   } = filters;
-  console.log('🚀 ~ filters:', filters);
+  console.log("🚀 ~ filters:", filters);
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
 
   if (user?.role !== ENUM_USER_ROLE.admin) {
-    filtersData['author.userId'] = user?.userId.toString();
+    filtersData["author.userId"] = user?.userId.toString();
   }
 
   const andConditions = [];
@@ -60,7 +60,7 @@ const getAllOrdersFromDB = async (
       $or: OrderSearchableFields.map((field: string) => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -72,10 +72,10 @@ const getAllOrdersFromDB = async (
       ([field, value]: [keyof typeof filtersData, string]) => {
         let modifyFiled;
         if (
-          field === 'packageId' ||
-          field === 'paymentId' ||
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId'
+          field === "packageId" ||
+          field === "paymentId" ||
+          field === "author.userId" ||
+          field === "author.roleBaseUserId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
@@ -133,7 +133,7 @@ const getAllOrdersFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -154,41 +154,41 @@ const getAllOrdersFromDB = async (
       req?.user?.role !== ENUM_USER_ROLE.admin &&
       req?.user?.role !== ENUM_USER_ROLE.superAdmin
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access data');
+      throw new ApiError(httpStatus.FORBIDDEN, "forbidden access data");
     }
   }
   //!------------check -access validation ------------------
   //!-----------------------start --lookup-----------------
   // Define the collections array with the correct type
   const collections: ILookupCollection<any>[] = []; // Use the correct type here
-  if (needProperty && needProperty.includes('paymentId')) {
+  if (needProperty && needProperty.includes("paymentId")) {
     const pipelineConnection: ILookupCollection<any> = {
-      connectionName: 'paymenthistories',
-      idFiledName: 'paymentId',
-      pipeLineMatchField: '_id',
-      outPutFieldName: 'paymentDetails',
+      connectionName: "paymenthistories",
+      idFiledName: "paymentId",
+      pipeLineMatchField: "_id",
+      outPutFieldName: "paymentDetails",
     };
     collections.push(pipelineConnection);
   }
-  if (needProperty && needProperty.includes('productId')) {
+  if (needProperty && needProperty.includes("productId")) {
     const pipelineConnection: ILookupCollection<IProduct> = {
-      connectionName: 'products',
-      idFiledName: '$productId',
-      pipeLineMatchField: '$_id',
-      outPutFieldName: 'productDetails',
+      connectionName: "products",
+      idFiledName: "$productId",
+      pipeLineMatchField: "$_id",
+      outPutFieldName: "productDetails",
       project: { name: 1, images: 1, pricing: 1 },
     };
     collections.push(pipelineConnection);
   }
-  if (needProperty && needProperty.includes('author')) {
+  if (needProperty && needProperty.includes("author")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'author.role',
-          idFiledName: '$author.roleBaseUserId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'details',
-          margeInField: 'author',
+          roleMatchFiledName: "author.role",
+          idFiledName: "$author.roleBaseUserId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "details",
+          margeInField: "author",
           project: { name: 1, email: 1, profileImage: 1, userId: 1 },
         },
       ],
@@ -224,7 +224,7 @@ const getSingleOrderFromDB = async (
   const needProperty = req?.query?.needProperty as string;
   const data = await Order.isOrderExistMethod(id, {
     populate: true,
-    needProperty: needProperty?.split(',').map(property => property.trim()),
+    needProperty: needProperty?.split(",").map(property => property.trim()),
   });
 
   return data;
@@ -244,7 +244,7 @@ const getDashboardStatusFromDB = async (
     query[`author.userId`] = new Types.ObjectId(user?.userId);
   } else {
     if (req?.query?.authorUserId) {
-      query['author.userId'] = new Types.ObjectId(
+      query["author.userId"] = new Types.ObjectId(
         req?.query?.authorUserId as string,
       );
     }
@@ -259,7 +259,7 @@ const getDashboardStatusFromDB = async (
         totalOrder: { $sum: 1 },
 
         completedOrderBalance: {
-          $sum: '$price',
+          $sum: "$price",
         },
       },
     },
@@ -278,14 +278,14 @@ const updateOrderFromDB = async (
     _id: Schema.Types.ObjectId;
   } as IOrder;
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Order not found");
   }
   if (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
     user?.role !== ENUM_USER_ROLE.admin &&
     isExist?.author?.userId?.toString() !== user?.userId.toString()
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { ...OrderData } = data;
@@ -293,7 +293,7 @@ const updateOrderFromDB = async (
     user?.role !== ENUM_USER_ROLE.superAdmin &&
     user?.role !== ENUM_USER_ROLE.admin
   ) {
-    delete (OrderData as Partial<IOrder>)['isDelete']; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
+    delete (OrderData as Partial<IOrder>)["isDelete"]; // remove it because , any user update time to not update this field , when user apply delete route to modify this field
   }
   const updatedOrderData: Partial<IOrder> = { ...OrderData };
 
@@ -306,7 +306,7 @@ const updateOrderFromDB = async (
     },
   );
   if (!updatedOrder) {
-    throw new ApiError(400, 'Failed to update Order');
+    throw new ApiError(400, "Failed to update Order");
   }
   return updatedOrder;
 };
@@ -319,7 +319,7 @@ const orderCompleteFromDB = async (
 ): Promise<IOrder | null> => {
   const isExist = await Order.isOrderExistMethod(id, {});
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Order not found");
   }
   //when any person send order request then completed another person
   if (
@@ -327,7 +327,7 @@ const orderCompleteFromDB = async (
     user.role !== ENUM_USER_ROLE.admin &&
     user.role !== ENUM_USER_ROLE.superAdmin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access');
+    throw new ApiError(httpStatus.FORBIDDEN, "forbidden access");
   }
   if (
     isExist.orderStatus === ENUM_ORDER_STATUS.reject ||
@@ -342,7 +342,7 @@ const orderCompleteFromDB = async (
   if (isExist.orderStatus !== ENUM_ORDER_STATUS.accept) {
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      'Order cannot be reject as it is not in a pending state',
+      "Order cannot be reject as it is not in a pending state",
     );
   }
 
@@ -356,7 +356,7 @@ const orderCompleteFromDB = async (
   );
   //!bullmq --> send seller payment request
   if (!updatedOrder) {
-    throw new ApiError(400, 'Failed to update Order');
+    throw new ApiError(400, "Failed to update Order");
   }
   return updatedOrder;
 };
@@ -375,7 +375,7 @@ const deleteOrderFromDB = async (
   ])) as IOrder[];
 
   if (!isExist.length) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Order not found");
   }
 
   if (
@@ -383,7 +383,7 @@ const deleteOrderFromDB = async (
     user?.role !== ENUM_USER_ROLE.superAdmin
     // && isExist[0]?.seller?.userId?.toString() !== user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   let data;

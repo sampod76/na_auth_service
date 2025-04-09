@@ -1,12 +1,12 @@
-import { model, PipelineStage, Schema, Types } from 'mongoose';
+import { model, PipelineStage, Schema, Types } from "mongoose";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../../global/schema/global.schema';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
-import { GroupMessageModel, IGroupMessage } from './interface.groupMessage';
+} from "../../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../../global/schema/global.schema";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
+import { GroupMessageModel, IGroupMessage } from "./interface.groupMessage";
 
 const GroupMessageSchema = new Schema<IGroupMessage, GroupMessageModel>(
   {
@@ -15,11 +15,11 @@ const GroupMessageSchema = new Schema<IGroupMessage, GroupMessageModel>(
     message: String,
     groupMemberId: {
       type: Schema.Types.ObjectId,
-      ref: 'GroupMember',
+      ref: "GroupMember",
     },
     groupId: {
       type: Schema.Types.ObjectId,
-      ref: 'Group',
+      ref: "Group",
     },
     uuid: {
       type: String,
@@ -100,6 +100,6 @@ GroupMessageSchema.statics.isGroupMessageExistMethod = async function (
 }); 
 */
 export const GroupMessage = model<IGroupMessage, GroupMessageModel>(
-  'GroupMessage',
+  "GroupMessage",
   GroupMessageSchema,
 );

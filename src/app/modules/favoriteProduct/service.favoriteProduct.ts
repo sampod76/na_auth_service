@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../helper/lookUpResuable';
-import ApiError from '../../errors/ApiError';
-import { IUserRef } from '../allUser/typesAndConst';
-import { FavoriteProduct_SEARCHABLE_FIELDS } from './constant.favoriteProduct';
+} from "../../../helper/lookUpResuable";
+import ApiError from "../../errors/ApiError";
+import { IUserRef } from "../allUser/typesAndConst";
+import { FavoriteProduct_SEARCHABLE_FIELDS } from "./constant.favoriteProduct";
 import {
   IFavoriteProduct,
   IFavoriteProductFilters,
-} from './interface.favoriteProduct';
-import { FavoriteProduct } from './model.favoriteProduct';
+} from "./interface.favoriteProduct";
+import { FavoriteProduct } from "./model.favoriteProduct";
 
 const createFavoriteProductByDb = async (
   payload: IFavoriteProduct,
@@ -29,7 +29,7 @@ const createFavoriteProductByDb = async (
   const user = req.user as IUserRef;
   const [findAlreadyExists] = await Promise.all([
     FavoriteProduct.findOne({
-      'author.userId': new Types.ObjectId(user.userId),
+      "author.userId": new Types.ObjectId(user.userId),
       productId: new Types.ObjectId(payload.productId),
       isDelete: false,
     }),
@@ -59,10 +59,10 @@ const getAllFavoriteProductFromDb = async (
   } = filters;
   //***********cache start************* */
   if (user.role !== ENUM_USER_ROLE.admin) {
-    filtersData['author.userId'] = user.userId.toString();
+    filtersData["author.userId"] = user.userId.toString();
   }
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -72,7 +72,7 @@ const getAllFavoriteProductFromDb = async (
       $or: FavoriteProduct_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -91,9 +91,9 @@ const getAllFavoriteProductFromDb = async (
          } 
        */
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
@@ -142,7 +142,7 @@ const getAllFavoriteProductFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -161,24 +161,24 @@ const getAllFavoriteProductFromDb = async (
     { $limit: Number(limit) || 10 },
   ];
   const collections: ILookupCollection<any>[] = []; // Use the correct type here
-  if (needProperty?.includes('productId')) {
+  if (needProperty?.includes("productId")) {
     const pipelineConnection: ILookupCollection<any> = {
-      connectionName: 'products',
-      idFiledName: 'productId',
-      pipeLineMatchField: '_id',
-      outPutFieldName: 'productDetails',
+      connectionName: "products",
+      idFiledName: "productId",
+      pipeLineMatchField: "_id",
+      outPutFieldName: "productDetails",
     };
     collections.push(pipelineConnection);
   }
-  if (needProperty && needProperty.includes('author')) {
+  if (needProperty && needProperty.includes("author")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'author.role',
-          idFiledName: '$author.roleBaseUserId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'details',
-          margeInField: 'author',
+          roleMatchFiledName: "author.role",
+          idFiledName: "$author.roleBaseUserId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "details",
+          margeInField: "author",
           project: { name: 1, email: 1, profileImage: 1, userId: 1 },
         },
       ],
@@ -221,13 +221,13 @@ const getSingleFavoriteProductFromDb = async (
   const result = await FavoriteProduct.aggregate(pipeline);
   const dataReturn = result.length ? result[0] : null;
   if (!dataReturn) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'FavoriteProduct not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "FavoriteProduct not found");
   }
   if (
     dataReturn.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   return dataReturn;
 };
@@ -243,13 +243,13 @@ const updateFavoriteProductFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist || isExist.isDelete) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'FavoriteProduct not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "FavoriteProduct not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   const result = await FavoriteProduct.findOneAndUpdate({ _id: id }, payload, {
     new: true,
@@ -269,13 +269,13 @@ const deleteFavoriteProductByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'FavoriteProduct not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "FavoriteProduct not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
 
   const result = await FavoriteProduct.findOneAndUpdate(
@@ -284,7 +284,7 @@ const deleteFavoriteProductByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   return result;
 };

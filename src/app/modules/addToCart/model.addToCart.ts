@@ -1,14 +1,14 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseIUserRef } from '../allUser/typesAndConst';
-import { AddToCartModel, IAddToCart } from './interface.addToCart';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseIUserRef } from "../allUser/typesAndConst";
+import { AddToCartModel, IAddToCart } from "./interface.addToCart";
 
 const AddToCartSchema = new Schema<IAddToCart, AddToCartModel>(
   {
     productId: {
       type: Schema.Types.ObjectId,
-      ref: 'Product',
+      ref: "Product",
     },
     productTitle: String,
     author: mongooseIUserRef,
@@ -36,7 +36,7 @@ const AddToCartSchema = new Schema<IAddToCart, AddToCartModel>(
   },
 );
 
-AddToCartSchema.post('findOneAndDelete', async function () {
+AddToCartSchema.post("findOneAndDelete", async function () {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     // const dataId = this.getFilter();
@@ -60,7 +60,7 @@ AddToCartSchema.post('findOneAndDelete', async function () {
 });
 // after findOneAndUpdate then data then call this hook
 AddToCartSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: any & { _id: string }, next: any) {
     try {
       // if (data?.AddToCartType) {
@@ -76,7 +76,7 @@ AddToCartSchema.post(
   },
 );
 
-AddToCartSchema.post('save', async function (data: IAddToCart, next) {
+AddToCartSchema.post("save", async function (data: IAddToCart, next) {
   try {
     // const res = await redisClient.del(ENUM_REDIS_KEY.RIS_All_Categories);
     // if (data?.author) {
@@ -91,10 +91,10 @@ AddToCartSchema.post('save', async function (data: IAddToCart, next) {
 });
 
 export const AddToCart = model<IAddToCart, AddToCartModel>(
-  'AddToCart',
+  "AddToCart",
   AddToCartSchema,
 );
 export const TrashAddToCart = model<IAddToCart, AddToCartModel>(
-  'TrashAddToCart',
+  "TrashAddToCart",
   AddToCartSchema,
 );

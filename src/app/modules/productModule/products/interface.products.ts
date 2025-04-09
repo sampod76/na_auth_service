@@ -1,10 +1,10 @@
-import { Model } from 'mongoose';
-import { z } from 'zod';
+import { Model } from "mongoose";
+import { z } from "zod";
 
-import { IUserRef } from '../../allUser/typesAndConst';
+import { IUserRef } from "../../allUser/typesAndConst";
 
-import { I_STATUS } from '../../../../global/enum_constant_type';
-import { ProductValidation } from './validation.products';
+import { I_STATUS } from "../../../../global/enum_constant_type";
+import { ProductValidation } from "./validation.products";
 
 export type IProductFilters = {
   searchTerm?: string;
@@ -24,8 +24,8 @@ export type IProductFilters = {
   createdAtTo?: string;
   needProperty?: string;
   //
-  'author.userId'?: string;
-  'author.roleBaseUserId'?: string;
+  "author.userId"?: string;
+  "author.roleBaseUserId"?: string;
 };
 
 export type IProduct = z.infer<typeof ProductValidation.createProductBodyData> &

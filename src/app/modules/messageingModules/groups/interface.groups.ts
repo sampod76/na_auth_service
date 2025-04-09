@@ -1,9 +1,9 @@
-import { Model, Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, I_YN } from '../../../../global/enum_constant_type';
+import { Model, Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, I_YN } from "../../../../global/enum_constant_type";
 
-import { IUserRef } from '../../allUser/typesAndConst';
-import { GroupsValidation } from './validation.groups';
+import { IUserRef } from "../../allUser/typesAndConst";
+import { GroupsValidation } from "./validation.groups";
 
 export type IGroupsFilters = {
   authorUserId?: string;

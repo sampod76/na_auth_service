@@ -1,22 +1,22 @@
-import httpStatus from 'http-status';
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
+import httpStatus from "http-status";
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
 import {
   ENUM_DAYS_OF_WEEK,
   ENUM_MONTH,
   I_DayOfWeek,
   I_Month,
-} from '../../../global/enums/globalEnums';
-import { zodFileAfterUploadSchema } from '../../../global/schema/global.schema';
-import ApiError from '../../errors/ApiError';
+} from "../../../global/enums/globalEnums";
+import { zodFileAfterUploadSchema } from "../../../global/schema/global.schema";
+import ApiError from "../../errors/ApiError";
 import {
   I_LogType,
   LOG_TYPE_ARRAY,
-} from '../serviceLogger/constant.serviceLogger';
+} from "../serviceLogger/constant.serviceLogger";
 import {
   ENUM_SCHEDULE_TYPE_ROUTING,
   I_ScheduleType,
-} from './constant.RoutingReminder';
+} from "./constant.RoutingReminder";
 const timeStringSchema = z.string().refine(
   time => {
     const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/; // HH:MM or HH:MM:ss
@@ -43,8 +43,8 @@ const createRoutingReminder_BodyData = z.object({
   //
   cycleNumber: z.number().optional(),
   //
-  startTime: z.string({ required_error: 'Start time is required' }), // HH: MM   00-23: 00-59
-  endTime: z.string({ required_error: 'End time is required' }),
+  startTime: z.string({ required_error: "Start time is required" }), // HH: MM   00-23: 00-59
+  endTime: z.string({ required_error: "End time is required" }),
   productUseDetails: z.string().max(5000),
   applicationStepsDetails: z.string().max(5000),
   images: z.array(zodFileAfterUploadSchema).optional(),
@@ -71,28 +71,28 @@ const createRoutingReminderZodSchema = z
         }
         // Append `:00` if seconds are not included in the time strings
         const start = new Date(
-          `1970-01-01T${startTime.includes(':') && startTime.split(':').length === 2 ? startTime + ':00' : startTime}`,
+          `1970-01-01T${startTime.includes(":") && startTime.split(":").length === 2 ? startTime + ":00" : startTime}`,
         );
         const end = new Date(
-          `1970-01-01T${endTime.includes(':') && endTime.split(':').length === 2 ? endTime + ':00' : endTime}`,
+          `1970-01-01T${endTime.includes(":") && endTime.split(":").length === 2 ? endTime + ":00" : endTime}`,
         );
         // Ensure start time is before end time
         return start < end;
       }
-      if (body.scheduleType === 'date' && !body.pickDate) {
-        throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Date must be required');
+      if (body.scheduleType === "date" && !body.pickDate) {
+        throw new ApiError(httpStatus.NOT_ACCEPTABLE, "Date must be required");
       }
-      if (body.scheduleType === 'weekDay' && !body.daysOfWeek) {
+      if (body.scheduleType === "weekDay" && !body.daysOfWeek) {
         throw new ApiError(
           httpStatus.NOT_ACCEPTABLE,
-          'daysOfWeek must be required',
+          "daysOfWeek must be required",
         );
       }
       return true;
     },
     {
       message:
-        'Start time should be before End time, and both should be in valid HH:MM or HH:MM:SS format!',
+        "Start time should be before End time, and both should be in valid HH:MM or HH:MM:SS format!",
     },
   );
 

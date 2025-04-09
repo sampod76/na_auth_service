@@ -1,29 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import express, { Application, NextFunction, Request, Response } from 'express';
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Application, NextFunction, Request, Response } from "express";
 
 // create xss-clean.d.ts file after work this xss
 // import xss from 'xss-clean';
-import httpStatus from 'http-status';
-import globalErrorHandler from './app/middlewares/globalErrorHandler';
-import routers from './app/routes/index_route';
+import httpStatus from "http-status";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
+import routers from "./app/routes/index_route";
 //-------------configuring i18next----------
-import i18next from 'i18next';
-import Backend from 'i18next-fs-backend';
-import i18nextMiddleware from 'i18next-http-middleware';
+import i18next from "i18next";
+import Backend from "i18next-fs-backend";
+import i18nextMiddleware from "i18next-http-middleware";
 //----------------------------------------
 
-import compression, { CompressionOptions } from 'compression';
+import compression, { CompressionOptions } from "compression";
 //
-import promClient from 'prom-client';
-import responseTime from 'response-time';
+import promClient from "prom-client";
+import responseTime from "response-time";
 //
-import file_route from './app/routes/file_route';
-import config from './config';
-import helmetConfig from './config/helmetConfig';
-import { TestFile } from './test';
-import { rateLimiterRedisMiddleware } from './utils/DbUtlis/RateLimiterInRedis';
+import file_route from "./app/routes/file_route";
+import config from "./config";
+import helmetConfig from "./config/helmetConfig";
+import { TestFile } from "./test";
+import { rateLimiterRedisMiddleware } from "./utils/DbUtlis/RateLimiterInRedis";
 const app: Application = express();
 
 app.use(helmetConfig);
@@ -50,20 +50,20 @@ app.use(
   cors({
     origin: true,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   }),
 );
 const collectDefaultMetrics = promClient.collectDefaultMetrics;
 collectDefaultMetrics({ register: promClient.register });
 const reqResTime = new promClient.Histogram({
-  name: 'request_response_time',
-  help: 'Request-response time in milliseconds',
-  labelNames: ['method', 'route', 'status_code'],
+  name: "request_response_time",
+  help: "Request-response time in milliseconds",
+  labelNames: ["method", "route", "status_code"],
   buckets: [1, 50, 100, 200, 400, 500, 800, 1000, 2000, 3000, 5000, 10000],
 });
 const totalReqCounter = new promClient.Counter({
-  name: 'total_requests_counter',
-  help: 'Total requests',
+  name: "total_requests_counter",
+  help: "Total requests",
 });
 app.use(
   responseTime((req, res, time) => {
@@ -80,7 +80,7 @@ app.use(
 const compressionOptions: CompressionOptions = {
   threshold: 1024, // Only compress responses larger than 1KB
   filter: (req: Request, res: Response) => {
-    if (req.headers['x-no-compression']) {
+    if (req.headers["x-no-compression"]) {
       // Don't compress responses if this request header is present
       return false;
     }
@@ -105,23 +105,23 @@ i18next
   .use(i18nextMiddleware.LanguageDetector)
   .init({
     backend: {
-      loadPath: './translation/{{lng}}/translation.json',
+      loadPath: "./translation/{{lng}}/translation.json",
       // loadPath: __dirname + '/translation/{{lng}}/translation.json', --> not use __dirname and use (.) ->./translation
     },
     detection: {
-      order: ['header'],
-      caches: ['cookie'],
+      order: ["header"],
+      caches: ["cookie"],
     },
-    preload: ['en', 'fr'],
+    preload: ["en", "fr"],
     fallbackLng: config.api_response_language, // default language en= english
   });
 app.use(i18nextMiddleware.handle(i18next));
 // ----------- end i18next-------------------
 
-app.set('view engine', 'ejs');
-app.get('/metrics', async (req: Request, res: Response, next: NextFunction) => {
+app.set("view engine", "ejs");
+app.get("/metrics", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.setHeader('Content-Type', promClient.register.contentType);
+    res.setHeader("Content-Type", promClient.register.contentType);
     const metrics = await promClient.register.metrics();
     res.send(metrics);
   } catch (error) {
@@ -139,17 +139,17 @@ const waitAndRespond = async function (waitTimeInMilliseconds = 30000) {
   });
 };
 
-app.get('/api/v1/server-test', async (req, res, next) => {
+app.get("/api/v1/server-test", async (req, res, next) => {
   try {
     const query = req.query;
     console.log(req.path);
     if (query.error) {
       const errorMessages = [
-        'Unexpected server error occurred.',
-        'Something went wrong, please try again later.',
-        'Internal server malfunction detected.',
-        'Oops! The server encountered an issue.',
-        'Server glitch! Please report this incident.',
+        "Unexpected server error occurred.",
+        "Something went wrong, please try again later.",
+        "Internal server malfunction detected.",
+        "Oops! The server encountered an issue.",
+        "Server glitch! Please report this incident.",
       ];
       const randomError =
         errorMessages[Math.floor(Math.random() * errorMessages.length)];
@@ -170,10 +170,10 @@ app.get('/api/v1/server-test', async (req, res, next) => {
     next(error);
   }
 });
-app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     // res.render('serverCheck.ejs');
-    res.send({ message: 'server is running....' + process.pid });
+    res.send({ message: "server is running...." + process.pid });
   } catch (error) {
     next(error);
   }
@@ -181,8 +181,8 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 TestFile();
 //Application route
-app.use('/api/v1', routers);
-app.use('/file', file_route.fileRoute);
+app.use("/api/v1", routers);
+app.use("/file", file_route.fileRoute);
 
 // global error handlar
 app.use(globalErrorHandler);
@@ -191,11 +191,11 @@ app.use(globalErrorHandler);
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).send({
     success: false,
-    message: 'Not found route',
+    message: "Not found route",
     errorMessages: [
       {
         path: req.originalUrl,
-        message: 'api not found',
+        message: "api not found",
       },
     ],
   });

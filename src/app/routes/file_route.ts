@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import express, { RequestHandler } from 'express';
-import path from 'path';
-import catchAsync from '../share/catchAsync';
-const uploadPath = '../../../../uploadFile';
+import express, { RequestHandler } from "express";
+import path from "path";
+import catchAsync from "../share/catchAsync";
+const uploadPath = "../../../../uploadFile";
 const router = express.Router();
 const middlewareFunction: RequestHandler = catchAsync((req, res, next) => {
   const extractDirectoryName = (url: string) => {
@@ -26,7 +26,7 @@ const middlewareFunction: RequestHandler = catchAsync((req, res, next) => {
   //     .status(200)
   //     .sendFile(path.resolve(__dirname, '../public/404.jpg'));
   // }
-  if (req.query.download === 'yes') {
+  if (req.query.download === "yes") {
     return res.status(200).download(filePath);
     /* // -- second method if when not work first method then use this
       fs.promises
@@ -69,37 +69,37 @@ const run: RequestHandler = (req, res, next) => {
 };
 
 router.get(
-  '/images/:filename', // please set same upload folder name .
+  "/images/:filename", // please set same upload folder name .
   run,
   middlewareFunction,
   // express.static(path.join(__dirname, '../../uploadFile/images/')),
 );
 router.get(
-  '/profile/:filename', // please set same upload folder name .
+  "/profile/:filename", // please set same upload folder name .
   run,
   middlewareFunction,
   // express.static(path.join(__dirname, '../../uploadFile/profile/')),
 );
 router.get(
-  '/videos/:filename', // please set same upload folder name .
+  "/videos/:filename", // please set same upload folder name .
   run,
   middlewareFunction,
   // express.static(path.join(__dirname, '../../uploadFile/videos/')),
 );
 router.get(
-  '/audios/:filename', // please set same upload folder name .
+  "/audios/:filename", // please set same upload folder name .
   run,
   middlewareFunction,
   // express.static(path.join(__dirname, `../../uploadFile/audios/`)),
 );
 router.get(
-  '/docs/:filename', // please set same upload folder name .
+  "/docs/:filename", // please set same upload folder name .
   run,
   middlewareFunction,
   // express.static(path.join(__dirname, `../../uploadFile/audios/`)),
 );
 router.get(
-  '/pdfs/:filename', // please set same upload folder name .
+  "/pdfs/:filename", // please set same upload folder name .
   run,
   // (req, res, next) => {
   //   req.customData = { downloadType: 'pdf' };
@@ -109,7 +109,7 @@ router.get(
 );
 
 router.get(
-  '/pdfs/:filename', // please set same upload folder name .
+  "/pdfs/:filename", // please set same upload folder name .
   run,
   // (req, res, next) => {
   //   req.customData = { downloadType: 'pdf' };

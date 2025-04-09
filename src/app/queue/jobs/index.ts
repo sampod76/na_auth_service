@@ -1,3 +1,3 @@
-import './emailQueues';
-import './notificationQueues';
-import './paymentQueues';
+import "./emailQueues";
+import "./notificationQueues";
+import "./paymentQueues";

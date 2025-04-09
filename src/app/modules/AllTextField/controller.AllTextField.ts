@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { ALL_TEXT_FIELD_FILTERABLE_FIELDS } from './constant.AllTextField';
-import { IAllTextField } from './interface.AllTextField';
-import { AllTextFieldService } from './service.AllTextField';
+import { ALL_TEXT_FIELD_FILTERABLE_FIELDS } from "./constant.AllTextField";
+import { IAllTextField } from "./interface.AllTextField";
+import { AllTextFieldService } from "./service.AllTextField";
 
 // import { z } from 'zod'
 const createAllTextField = catchAsync(async (req: Request, res: Response) => {
@@ -24,7 +24,7 @@ const createAllTextField = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAllTextField>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully create TextField',
+    message: "successfully create TextField",
     data: result,
   });
   // next();
@@ -57,7 +57,7 @@ const getAllAllTextField = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAllTextField[]>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully Get all TextField',
+    message: "successfully Get all TextField",
     meta: result.meta,
     data: result.data,
   });
@@ -83,7 +83,7 @@ const getSingleAllTextField = catchAsync(
     sendResponse<IAllTextField>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get TextField',
+      message: "successfully get TextField",
       data: result,
     });
   },
@@ -102,7 +102,7 @@ const updateAllTextField = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAllTextField>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully update TextField',
+    message: "successfully update TextField",
     data: result,
   });
 });
@@ -117,7 +117,7 @@ const deleteAllTextField = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAllTextField>(req, res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfully delete TextField',
+    message: "successfully delete TextField",
     data: result,
   });
 });

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Redis from 'ioredis';
-import { ENUM_REDIS_KEY, subscribeArray } from './consent.redis';
-import { redisClient, subRedis } from './redis';
+import Redis from "ioredis";
+import { ENUM_REDIS_KEY, subscribeArray } from "./consent.redis";
+import { redisClient, subRedis } from "./redis";
 
 export class RedisConnectionServiceOop {
   private globalRedis: Redis;
@@ -26,8 +26,8 @@ export class RedisConnectionServiceOop {
     //   .catch(err => {
     //     console.error('Error deleting keys:', err);
     //   });
-    const res = await redisClient.flushall('ASYNC');
-    console.log('🚀 ~ Redis flushall:'.red, res);
+    const res = await redisClient.flushall("ASYNC");
+    console.log("🚀 ~ Redis flushall:".red, res);
     //------------------------- delete all keys-----------------------
     const sub = await subRedis.subscribe(...subscribeArray);
 
@@ -49,43 +49,43 @@ export class RedisAllQueryServiceOop extends RedisConnectionServiceOop {
   }
   async findDataByUserIdAndSocketId(userId: string, socketId: string) {
     const getUsers = await this.getGlobalRedis().get(
-      ENUM_REDIS_KEY.socket_user + userId + ':' + socketId,
+      ENUM_REDIS_KEY.socket_user + userId + ":" + socketId,
     );
     return getUsers;
   }
   async findAllSocketsIdsFromUserId(userId: string) {
-    let cursor = '0';
+    let cursor = "0";
     const getUsers: string[] = [];
 
     do {
       const [newCursor, keys] = await this.getGlobalRedis().scan(
         cursor,
-        'MATCH',
-        ENUM_REDIS_KEY.socket_user + userId + '*',
-        'COUNT',
+        "MATCH",
+        ENUM_REDIS_KEY.socket_user + userId + "*",
+        "COUNT",
         50, // You can adjust this count as needed
       );
       cursor = newCursor;
 
       if (keys.length) {
-        const socketIds = keys.map(id => id.split(':')[3]);
+        const socketIds = keys.map(id => id.split(":")[3]);
         getUsers.push(...socketIds);
       }
-    } while (cursor !== '0');
+    } while (cursor !== "0");
 
     //console.log('🚀 ~ socket.on ~ getUsers:', getUsers);
     return getUsers;
   }
   async findAllDataByKeyScan(key: string) {
-    let cursor = '0';
+    let cursor = "0";
     const getKeys: string[] = [];
 
     do {
       const [newCursor, keys] = await this.getGlobalRedis().scan(
         cursor,
-        'MATCH',
-        key + '*',
-        'COUNT',
+        "MATCH",
+        key + "*",
+        "COUNT",
         50, // You can adjust this count as needed
       );
       cursor = newCursor;
@@ -93,7 +93,7 @@ export class RedisAllQueryServiceOop extends RedisConnectionServiceOop {
       if (keys.length) {
         getKeys.push(...keys);
       }
-    } while (cursor !== '0');
+    } while (cursor !== "0");
 
     //console.log('🚀 ~ socket.on ~ getData:', getData);
     const keys = getKeys;
@@ -106,15 +106,15 @@ export class RedisAllQueryServiceOop extends RedisConnectionServiceOop {
   }
 
   async findAnyPatternToAllKeysScan(key: string) {
-    let cursor = '0';
+    let cursor = "0";
     const getData: string[] = [];
 
     do {
       const [newCursor, keys] = await this.getGlobalRedis().scan(
         cursor,
-        'MATCH',
-        key + '*',
-        'COUNT',
+        "MATCH",
+        key + "*",
+        "COUNT",
         50, // You can adjust this count as needed
       );
       cursor = newCursor;
@@ -122,14 +122,14 @@ export class RedisAllQueryServiceOop extends RedisConnectionServiceOop {
       if (keys.length) {
         getData.push(...keys);
       }
-    } while (cursor !== '0');
+    } while (cursor !== "0");
 
     //console.log('🚀 ~ socket.on ~ getData:', getData);
     return getData;
   }
   async getAnyDataByKey(key: string): Promise<Record<string, any> | null> {
     const getValue = await this.getGlobalRedis().get(key);
-    if (typeof getValue === 'string') {
+    if (typeof getValue === "string") {
       return JSON.parse(getValue);
     } else {
       return getValue;
@@ -161,10 +161,10 @@ export class RedisAllSetterServiceOop extends RedisConnectionServiceOop {
         promises.push(
           this.getGlobalRedis().set(
             value.key,
-            typeof value.value !== 'string'
+            typeof value.value !== "string"
               ? JSON.stringify(value.value)
               : value.value,
-            'EX',
+            "EX",
             value.ttl || ttl,
           ),
         );
@@ -177,7 +177,7 @@ export class RedisAllSetterServiceOop extends RedisConnectionServiceOop {
     }
   }
   async deleteAnyPattern(pattern: string) {
-    let cursor = '0';
+    let cursor = "0";
     const count = 200; // Reasonable count to balance performance
     let totalDeleted = 0;
     const allKeysToDelete: string[] = [];
@@ -186,9 +186,9 @@ export class RedisAllSetterServiceOop extends RedisConnectionServiceOop {
       // Use the SCAN command to find keys
       const [newCursor, foundKeys] = await this.getGlobalRedis().scan(
         cursor,
-        'MATCH',
+        "MATCH",
         pattern,
-        'COUNT',
+        "COUNT",
         count,
       );
       cursor = newCursor;
@@ -197,7 +197,7 @@ export class RedisAllSetterServiceOop extends RedisConnectionServiceOop {
         // Collect all the keys to be deleted
         allKeysToDelete.push(...foundKeys);
       }
-    } while (cursor !== '0');
+    } while (cursor !== "0");
     /**
      * @method --> //? const deleteResults = await this.getGlobalRedis().del(...allKeysToDelete);
      * @overload {del(...del)} Using the DEL command with multiple keys (del(...allKeysToDelete)) can be more efficient than issuing individual DEL commands for each key because Redis processes the request for multiple keys in a single round-trip to the server. This is typically faster than sending multiple separate DEL requests, reducing overhead.

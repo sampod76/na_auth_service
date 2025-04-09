@@ -1,11 +1,11 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
 
 import {
   IPaymentHistory,
   PaymentHistoryModel,
-} from './interface.paymentHistory';
+} from "./interface.paymentHistory";
 const PaymentHistorySchema = new Schema<IPaymentHistory, PaymentHistoryModel>(
   {
     pi_id: String,
@@ -20,15 +20,15 @@ const PaymentHistorySchema = new Schema<IPaymentHistory, PaymentHistoryModel>(
     payment_intent: String,
     status: String,
     payment_method_types: [String],
-    paymentBy: { type: String, enum: ['stripe', 'paypal', 'manual'] },
+    paymentBy: { type: String, enum: ["stripe", "paypal", "manual"] },
     //
     revenuecatPayment: Object,
     //
-    productIds: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+    productIds: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     //
     orderId: {
       type: Schema.Types.ObjectId,
-      ref: 'Order',
+      ref: "Order",
     },
     author: mongooseIUserRef,
     //
@@ -49,7 +49,7 @@ const PaymentHistorySchema = new Schema<IPaymentHistory, PaymentHistoryModel>(
     },
     //--- for --TrashPaymentHistory---
     oldRecord: {
-      refId: { type: Schema.Types.ObjectId, ref: 'PaymentHistories' },
+      refId: { type: Schema.Types.ObjectId, ref: "PaymentHistories" },
       collection: String,
     },
   },
@@ -62,7 +62,7 @@ const PaymentHistorySchema = new Schema<IPaymentHistory, PaymentHistoryModel>(
   },
 );
 
-PaymentHistorySchema.post('findOneAndDelete', async function (next) {
+PaymentHistorySchema.post("findOneAndDelete", async function (next) {
   try {
     next();
   } catch (error: any) {
@@ -71,11 +71,11 @@ PaymentHistorySchema.post('findOneAndDelete', async function (next) {
 });
 
 export const PaymentHistory = model<IPaymentHistory, PaymentHistoryModel>(
-  'PaymentHistory',
+  "PaymentHistory",
   PaymentHistorySchema,
 );
 
 export const TrashPaymentHistory = model<IPaymentHistory, PaymentHistoryModel>(
-  'TrashPaymentHistory',
+  "TrashPaymentHistory",
   PaymentHistorySchema,
 );

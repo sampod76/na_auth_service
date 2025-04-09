@@ -1,8 +1,8 @@
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { zodFileAfterUploadSchema } from '../../../global/schema/global.schema';
-import { zodCategoryChildrenObject } from '../allUser/generalUser/validation.generalUser';
-import { I_LogType, LOG_TYPE_ARRAY } from './constant.serviceLogger';
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { zodFileAfterUploadSchema } from "../../../global/schema/global.schema";
+import { zodCategoryChildrenObject } from "../allUser/generalUser/validation.generalUser";
+import { I_LogType, LOG_TYPE_ARRAY } from "./constant.serviceLogger";
 export const zodlogWashDay = z.object({
   productsUsed: z.string().max(2000).optional(),
   routineSteps: z.string().max(2000).optional(),

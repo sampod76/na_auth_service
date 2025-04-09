@@ -1,19 +1,19 @@
-import express from 'express';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import authMiddleware from '../../middlewares/authMiddleware';
+import express from "express";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import authMiddleware from "../../middlewares/authMiddleware";
 
-import { z } from 'zod';
-import parseBodyData from '../../middlewares/utils/parseBodyData';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { uploadAwsS3Bucket } from '../aws/utls.aws';
-import { ServiceLoggerController } from './controller.serviceLogger';
-import { IServiceLogger } from './interface.serviceLogger';
-import { ServiceLoggerValidation } from './validation.serviceLogger';
+import { z } from "zod";
+import parseBodyData from "../../middlewares/utils/parseBodyData";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { uploadAwsS3Bucket } from "../aws/utls.aws";
+import { ServiceLoggerController } from "./controller.serviceLogger";
+import { IServiceLogger } from "./interface.serviceLogger";
+import { ServiceLoggerValidation } from "./validation.serviceLogger";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   // This route is open
   .get(
     authMiddleware(
@@ -29,23 +29,23 @@ router
       ENUM_USER_ROLE.superAdmin,
       ENUM_USER_ROLE.generalUser,
     ),
-    uploadAwsS3Bucket.array('images'),
+    uploadAwsS3Bucket.array("images"),
     parseBodyData({}),
     (req, res, next) => {
       const payload = req.body as IServiceLogger;
-      if (typeof payload.categories === 'string') {
+      if (typeof payload.categories === "string") {
         payload.categories = JSON.parse(payload.categories);
       }
-      if (typeof payload.images === 'string') {
+      if (typeof payload.images === "string") {
         payload.images = JSON.parse(payload.images);
       }
-      console.log('🚀 ~ payload:', payload);
+      console.log("🚀 ~ payload:", payload);
       next();
     },
     validateRequestZod(ServiceLoggerValidation.createServiceLoggerZodSchema),
     ServiceLoggerController.createServiceLogger,
   );
-router.route('/serialnumber-update').patch(
+router.route("/serialnumber-update").patch(
   authMiddleware(
     ENUM_USER_ROLE.admin,
     ENUM_USER_ROLE.superAdmin,
@@ -61,7 +61,7 @@ router.route('/serialnumber-update').patch(
 );
 
 router
-  .route('/:id')
+  .route("/:id")
   // This route is open
   .get(
     authMiddleware(
@@ -77,7 +77,7 @@ router
       ENUM_USER_ROLE.superAdmin,
       ENUM_USER_ROLE.generalUser,
     ),
-    uploadAwsS3Bucket.array('images'),
+    uploadAwsS3Bucket.array("images"),
     parseBodyData({}),
     validateRequestZod(ServiceLoggerValidation.updateServiceLoggerZodSchema),
     ServiceLoggerController.updateServiceLogger,

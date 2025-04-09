@@ -1,4 +1,4 @@
-import DeviceDetector from 'node-device-detector';
+import DeviceDetector from "node-device-detector";
 export const getDeviceInfo = (user_agent: string) => {
   // if(user_agent){
 

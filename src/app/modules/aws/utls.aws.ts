@@ -8,17 +8,17 @@ import {
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
-} from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Request } from 'express';
-import mime from 'mime-types';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-import path from 'path';
-import config from '../../../config';
-import { ENUM_MIMETYPE } from '../../../global/enums/globalEnums';
-import ApiError from '../../errors/ApiError';
-import { IAwsInputFile, IAwsOutputPreUrl } from './interface.AWS';
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { Request } from "express";
+import mime from "mime-types";
+import multer from "multer";
+import multerS3 from "multer-s3";
+import path from "path";
+import config from "../../../config";
+import { ENUM_MIMETYPE } from "../../../global/enums/globalEnums";
+import ApiError from "../../errors/ApiError";
+import { IAwsInputFile, IAwsOutputPreUrl } from "./interface.AWS";
 
 //
 
@@ -49,20 +49,20 @@ const putSingleImageObjectCommandToUrl = async (
   // const modifyFileName = Date.now() + '-' + fileData.filename;
   const fileExt = path.extname(fileData.filename);
   const modifyFileName =
-    fileData.filename.replace(fileExt, '').toLowerCase().split(' ').join('-') +
-    '-' +
+    fileData.filename.replace(fileExt, "").toLowerCase().split(" ").join("-") +
+    "-" +
     Date.now() +
     fileExt;
 
-  if (fileData.mimetype.includes('image')) {
+  if (fileData.mimetype.includes("image")) {
     filePath = `upload/images/${modifyFileName}`;
-  } else if (fileData.mimetype.includes('audio')) {
+  } else if (fileData.mimetype.includes("audio")) {
     filePath = `upload/audios/${modifyFileName}`;
-  } else if (fileData.mimetype.includes('video')) {
+  } else if (fileData.mimetype.includes("video")) {
     filePath = `upload/videos/${modifyFileName}`;
-  } else if (fileData.mimetype.includes('application')) {
+  } else if (fileData.mimetype.includes("application")) {
     filePath = `upload/docs/${modifyFileName}`;
-  } else if (fileData.mimetype.includes('pdf')) {
+  } else if (fileData.mimetype.includes("pdf")) {
     filePath = `upload/pdfs/${modifyFileName}`;
   } else {
     filePath = `upload/others/${modifyFileName}`;
@@ -75,14 +75,14 @@ const putSingleImageObjectCommandToUrl = async (
   //@ts-ignore
   const url = await getSignedUrl(s3Client, commend, { expiresIn: 500 }); //100
   const res: IAwsOutputPreUrl = {
-    url: config.aws.s3.cloudfrontCDN + '/' + filePath,
-    originalUrl: url.split('?')[0],
+    url: config.aws.s3.cloudfrontCDN + "/" + filePath,
+    originalUrl: url.split("?")[0],
     pre_url: url,
     filename: fileData.filename,
     modifyFileName,
     mimetype: fileData.mimetype,
     uid: fileData?.uid,
-    platform: 'aws',
+    platform: "aws",
     path: filePath,
     cdn: config.aws.s3.cloudfrontCDN,
   };
@@ -141,14 +141,14 @@ const uploadAwsS3Bucket = multer({
     metadata: (req: Request, file, cb) => {
       cb(null, {
         fieldName: file.fieldname,
-        authorUserId: req?.user?.userId || '',
-        role: req?.user?.role || '',
+        authorUserId: req?.user?.userId || "",
+        role: req?.user?.role || "",
       });
     },
     contentType: (req, file, cb) => {
       // Force setting the content type based on the file's extension
       const ext = path.extname(file.originalname).slice(1);
-      const mimeType = mime.lookup(ext) || 'application/octet-stream';
+      const mimeType = mime.lookup(ext) || "application/octet-stream";
       cb(null, mimeType);
     },
 
@@ -174,39 +174,39 @@ const uploadAwsS3Bucket = multer({
 
       if (
         !allowedMimeTypes.includes(file.mimetype as ENUM_MIMETYPE) &&
-        !file.mimetype.includes('image') // allow all image types
+        !file.mimetype.includes("image") // allow all image types
       ) {
         cb(
           new Error(
-            'Only ' +
-              allowedMimeTypes.map(type => type.split('/')[1]).join(', ') +
-              ',image' +
-              'format is allowed!',
+            "Only " +
+              allowedMimeTypes.map(type => type.split("/")[1]).join(", ") +
+              ",image" +
+              "format is allowed!",
           ),
         );
       }
 
-      let filePath = '';
+      let filePath = "";
       const fileExt = path.extname(file.originalname);
       const modifyFileName =
         file.originalname
-          .replace(fileExt, '')
+          .replace(fileExt, "")
           .toLowerCase()
-          .split(' ')
-          .join('-') +
-        '-' +
+          .split(" ")
+          .join("-") +
+        "-" +
         Date.now() +
         fileExt;
 
-      if (file.mimetype.includes('image')) {
+      if (file.mimetype.includes("image")) {
         filePath = `upload/images/${modifyFileName}`;
-      } else if (file.mimetype.includes('audio')) {
+      } else if (file.mimetype.includes("audio")) {
         filePath = `upload/audios/${modifyFileName}`;
-      } else if (file.mimetype.includes('video')) {
+      } else if (file.mimetype.includes("video")) {
         filePath = `upload/videos/${modifyFileName}`;
-      } else if (file.mimetype.includes('application')) {
+      } else if (file.mimetype.includes("application")) {
         filePath = `upload/docs/${modifyFileName}`;
-      } else if (file.mimetype.includes('pdf')) {
+      } else if (file.mimetype.includes("pdf")) {
         filePath = `upload/pdfs/${modifyFileName}`;
       } else {
         filePath = `upload/others/${modifyFileName}`;

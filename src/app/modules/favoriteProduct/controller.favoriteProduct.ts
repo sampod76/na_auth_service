@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 // import { globalImport } from '../../../import/global_Import';
 // import ApiError from '../../errors/ApiError';
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
 
-import { CacheKeyGenerator } from '../../redis/utls.redis';
-import { IUserRef } from '../allUser/typesAndConst';
-import { RequestToRefUserObject } from '../allUser/user/user.utils';
-import { FavoriteProduct_FILTERABLE_FIELDS } from './constant.favoriteProduct';
-import { IFavoriteProduct } from './interface.favoriteProduct';
-import { FavoriteProductService } from './service.favoriteProduct';
+import { CacheKeyGenerator } from "../../redis/utls.redis";
+import { IUserRef } from "../allUser/typesAndConst";
+import { RequestToRefUserObject } from "../allUser/user/user.utils";
+import { FavoriteProduct_FILTERABLE_FIELDS } from "./constant.favoriteProduct";
+import { IFavoriteProduct } from "./interface.favoriteProduct";
+import { FavoriteProductService } from "./service.favoriteProduct";
 
 // import { z } from 'zod'
 const createFavoriteProduct = catchAsync(
@@ -29,7 +29,7 @@ const createFavoriteProduct = catchAsync(
     sendResponse<IFavoriteProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successful create FavoriteProduct',
+      message: "successful create FavoriteProduct",
       data: result,
     });
   },
@@ -38,7 +38,7 @@ const createFavoriteProduct = catchAsync(
 const getAllFavoriteProduct = catchAsync(
   async (req: Request, res: Response) => {
     const cashKey = new CacheKeyGenerator(req);
-    console.log(cashKey.generateKey(), 'cashKey.generateKey()');
+    console.log(cashKey.generateKey(), "cashKey.generateKey()");
     const filters = pick(req.query, FavoriteProduct_FILTERABLE_FIELDS);
     const paginationOptions = pick(req.query, PAGINATION_FIELDS);
 
@@ -51,7 +51,7 @@ const getAllFavoriteProduct = catchAsync(
     sendResponse<IFavoriteProduct[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully Get all FavoriteProduct',
+      message: "successfully Get all FavoriteProduct",
       meta: result.meta,
       data: result.data,
     });
@@ -78,7 +78,7 @@ const getSingleFavoriteProduct = catchAsync(
     sendResponse<IFavoriteProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully get FavoriteProduct',
+      message: "successfully get FavoriteProduct",
       data: result,
     });
   },
@@ -97,7 +97,7 @@ const updateFavoriteProduct = catchAsync(
     sendResponse<IFavoriteProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update FavoriteProduct',
+      message: "successfully update FavoriteProduct",
       data: result,
     });
   },
@@ -112,7 +112,7 @@ const updateFavoriteProductSerialNumber = catchAsync(
     sendResponse<IFavoriteProduct[]>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully update FavoriteProduct',
+      message: "successfully update FavoriteProduct",
       data: result,
     });
   },
@@ -129,7 +129,7 @@ const deleteFavoriteProduct = catchAsync(
     sendResponse<IFavoriteProduct>(req, res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'successfully delete FavoriteProduct',
+      message: "successfully delete FavoriteProduct",
       data: result,
     });
   },

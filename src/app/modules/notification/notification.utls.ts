@@ -1,5 +1,5 @@
-import { Server } from 'socket.io';
-import { I_USER_ROLE } from '../allUser/user/user.interface';
+import { Server } from "socket.io";
+import { I_USER_ROLE } from "../allUser/user/user.interface";
 
 // Define a type that requires either userId or role
 type NotificationBase<T> = {
@@ -31,20 +31,20 @@ export const sendNotificationFromDB = <T>(
 
   if (socketIo) {
     payload.forEach(data => {
-      if ('role' in data && data.role) {
+      if ("role" in data && data.role) {
         socketIo.emit(`notification_role_base::${data.role}`, {
           success: true,
           statusCode: 200,
-          message: data.message || 'Notification sent successfully',
+          message: data.message || "Notification sent successfully",
           data: data,
         });
-      } else if ('userId' in data && data.userId) {
+      } else if ("userId" in data && data.userId) {
         const { userId, ...rest } = data;
 
         socketIo.emit(`notification::${userId}`, {
           success: true,
           statusCode: 200,
-          message: data.message || 'Notification sent successfully',
+          message: data.message || "Notification sent successfully",
           //   data: Object.assign({ userId }, rest.data),
           data: {
             userId,

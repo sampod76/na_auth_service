@@ -1,16 +1,16 @@
-import { model, PipelineStage, Schema, Types } from 'mongoose';
+import { model, PipelineStage, Schema, Types } from "mongoose";
 
 import {
   ENUM_STATUS,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
+} from "../../../../global/enum_constant_type";
 
-import { mongooseFileSchema } from '../../../../global/schema/global.schema';
-import { LookupAnyRoleDetailsReusable } from '../../../../helper/lookUpResuable';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
-import { GroupsModel, IGroups } from './interface.groups';
+import { mongooseFileSchema } from "../../../../global/schema/global.schema";
+import { LookupAnyRoleDetailsReusable } from "../../../../helper/lookUpResuable";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
+import { GroupsModel, IGroups } from "./interface.groups";
 
 const GroupsSchema = new Schema<IGroups, GroupsModel>(
   {
@@ -31,7 +31,7 @@ const GroupsSchema = new Schema<IGroups, GroupsModel>(
     coverImage: mongooseFileSchema,
     profileImage: mongooseFileSchema,
     cs_id: { type: String }, //when buyer try payment first time create session then set session to session.id-->  cs_id
-    paymentId: { type: Schema.Types.ObjectId, ref: 'Payment' },
+    paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },
     //
     isDelete: {
       type: Boolean,
@@ -85,20 +85,20 @@ GroupsSchema.statics.isGroupsExistMethod = async function (
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'sender.role',
-          idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-          pipeLineMatchField: '_id', //$_id
-          outPutFieldName: 'details',
-          margeInField: 'sender',
+          roleMatchFiledName: "sender.role",
+          idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+          pipeLineMatchField: "_id", //$_id
+          outPutFieldName: "details",
+          margeInField: "sender",
           project: option.project ? option.project : { __v: 0 },
           //project: { name: 1, country: 1, profileImage: 1, email: 1 },
         },
         {
-          roleMatchFiledName: 'receiver.role',
-          idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-          pipeLineMatchField: '_id', //$_id
-          outPutFieldName: 'details',
-          margeInField: 'receiver',
+          roleMatchFiledName: "receiver.role",
+          idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+          pipeLineMatchField: "_id", //$_id
+          outPutFieldName: "details",
+          margeInField: "receiver",
           project: option.project ? option.project : { __v: 0 },
           //project: { name: 1, country: 1, profileImage: 1, email: 1 },
         },
@@ -135,12 +135,12 @@ GroupsSchema.statics.isGroupsExistMethod = async function (
 */
 
 // after save then data then call this hook
-GroupsSchema.post('save', async function (data: IGroups, next: any) {
+GroupsSchema.post("save", async function (data: IGroups, next: any) {
   try {
     await redisClient.set(
       ENUM_REDIS_KEY.RIS_Groups + data?._id,
       JSON.stringify(data),
-      'EX',
+      "EX",
       24 * 60 * 60, // 1 day to second
     );
 
@@ -151,13 +151,13 @@ GroupsSchema.post('save', async function (data: IGroups, next: any) {
 });
 // after findOneAndUpdate then data then call this hook
 GroupsSchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: IGroups, next: any) {
     try {
       await redisClient.set(
         ENUM_REDIS_KEY.RIS_Groups + data?._id + data?._id,
         JSON.stringify(data),
-        'EX',
+        "EX",
         24 * 60 * 60, // 1 day to second
       );
 
@@ -169,7 +169,7 @@ GroupsSchema.post(
 );
 // after findOneAndDelete then data then call this hook
 GroupsSchema.post(
-  'findOneAndDelete',
+  "findOneAndDelete",
   async function (data: IGroups, next: any) {
     try {
       await redisClient.del([ENUM_REDIS_KEY.RIS_Groups + data?._id]);
@@ -180,4 +180,4 @@ GroupsSchema.post(
   },
 );
 
-export const Groups = model<IGroups, GroupsModel>('Groups', GroupsSchema);
+export const Groups = model<IGroups, GroupsModel>("Groups", GroupsSchema);

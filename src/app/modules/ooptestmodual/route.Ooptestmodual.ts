@@ -1,12 +1,12 @@
-import express from 'express';
-import { z } from 'zod';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
-import authMiddleware from '../../middlewares/authMiddleware';
-import parseBodyData from '../../middlewares/utils/parseBodyData';
-import validateRequestZod from '../../middlewares/validateRequestZod';
-import { uploadAwsS3Bucket } from '../aws/utls.aws';
-import { OoptestmodualControllerClass } from './controller.Ooptestmodual';
-import { OoptestmodualValidationClass } from './validation.Ooptestmodual';
+import express from "express";
+import { z } from "zod";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
+import authMiddleware from "../../middlewares/authMiddleware";
+import parseBodyData from "../../middlewares/utils/parseBodyData";
+import validateRequestZod from "../../middlewares/validateRequestZod";
+import { uploadAwsS3Bucket } from "../aws/utls.aws";
+import { OoptestmodualControllerClass } from "./controller.Ooptestmodual";
+import { OoptestmodualValidationClass } from "./validation.Ooptestmodual";
 
 export class OoptestmodualRouteClass {
   public router: express.Router;
@@ -17,7 +17,7 @@ export class OoptestmodualRouteClass {
     this.validator = new OoptestmodualValidationClass();
     this.router = express.Router();
     this.router
-      .route('/')
+      .route("/")
       // This route is open
       .get(
         authMiddleware(
@@ -33,12 +33,12 @@ export class OoptestmodualRouteClass {
           ENUM_USER_ROLE.superAdmin,
           ENUM_USER_ROLE.generalUser,
         ),
-        uploadAwsS3Bucket.array('images'),
+        uploadAwsS3Bucket.array("images"),
         parseBodyData({}),
         validateRequestZod(this.validator.createOoptestmodualZodSchema),
         this.controller.createOoptestmodual,
       );
-    this.router.route('/serialnumber-update').patch(
+    this.router.route("/serialnumber-update").patch(
       authMiddleware(
         ENUM_USER_ROLE.admin,
         ENUM_USER_ROLE.superAdmin,
@@ -54,7 +54,7 @@ export class OoptestmodualRouteClass {
     );
 
     this.router
-      .route('/:id')
+      .route("/:id")
       // This route is open
       .get(
         authMiddleware(
@@ -70,7 +70,7 @@ export class OoptestmodualRouteClass {
           ENUM_USER_ROLE.superAdmin,
           ENUM_USER_ROLE.generalUser,
         ),
-        uploadAwsS3Bucket.array('images'),
+        uploadAwsS3Bucket.array("images"),
         parseBodyData({}),
         validateRequestZod(this.validator.updateOoptestmodualZodSchema),
         this.controller.updateOoptestmodual,

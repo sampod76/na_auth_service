@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import ApiError from '../../errors/ApiError';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
+import { Request } from "express";
+import httpStatus from "http-status";
+import ApiError from "../../errors/ApiError";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../redis/service.redis';
-import { CATEGORY_SEARCHABLE_FIELDS } from './constant.category';
-import { ICategory, ICategoryFilters } from './interface.category';
-import { Category } from './model.category';
+} from "../../redis/service.redis";
+import { CATEGORY_SEARCHABLE_FIELDS } from "./constant.category";
+import { ICategory, ICategoryFilters } from "./interface.category";
+import { Category } from "./model.category";
 
 const createCategoryByDb = async (
   payload: ICategory,
@@ -23,7 +23,7 @@ const createCategoryByDb = async (
 ): Promise<ICategory> => {
   const [findAlreadyExists, findIndex] = await Promise.all([
     Category.findOne({
-      value: { $regex: new RegExp(`^${payload.value}$`, 'i') },
+      value: { $regex: new RegExp(`^${payload.value}$`, "i") },
       categoryType: payload.categoryType,
       isDelete: false,
     }),
@@ -34,7 +34,7 @@ const createCategoryByDb = async (
   ]);
 
   if (findAlreadyExists) {
-    throw new ApiError(400, 'This Category already Exist');
+    throw new ApiError(400, "This Category already Exist");
   }
   payload.serialNumber = findIndex?.serialNumber
     ? findIndex?.serialNumber + 1
@@ -63,7 +63,7 @@ const getAllCategoryFromDb = async (
   const redisClient = redisOop.getGlobalRedis();
   const getRedis = await redisClient.get(
     filters.categoryType
-      ? ENUM_REDIS_KEY.RIS_All_Categories + ':' + filters.categoryType
+      ? ENUM_REDIS_KEY.RIS_All_Categories + ":" + filters.categoryType
       : ENUM_REDIS_KEY.RIS_All_Categories,
   );
 
@@ -82,7 +82,7 @@ const getAllCategoryFromDb = async (
   //***********cache end************* */
 
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -92,7 +92,7 @@ const getAllCategoryFromDb = async (
       $or: CATEGORY_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -110,7 +110,7 @@ const getAllCategoryFromDb = async (
          modifyFiled = { [field]: value };
          } 
        */
-        if (field === 'authorUserId') {
+        if (field === "authorUserId") {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
           };
@@ -156,7 +156,7 @@ const getAllCategoryFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -189,7 +189,7 @@ const getAllCategoryFromDb = async (
           {
             $match: whereConditions,
           },
-          { $count: 'totalData' },
+          { $count: "totalData" },
         ],
       },
     },
@@ -204,7 +204,7 @@ const getAllCategoryFromDb = async (
   const red = await redisSetterOop.redisSetter([
     {
       key: filters.categoryType
-        ? ENUM_REDIS_KEY.RIS_All_Categories + ':' + filters.categoryType
+        ? ENUM_REDIS_KEY.RIS_All_Categories + ":" + filters.categoryType
         : ENUM_REDIS_KEY.RIS_All_Categories,
       value: result,
       ttl: 1 * 60 * 60,
@@ -259,7 +259,7 @@ const deleteCategoryByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Category not found");
   }
 
   const result = await Category.findOneAndUpdate(
@@ -268,7 +268,7 @@ const deleteCategoryByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   return result;
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 type IApiResponse<T> = {
   statusCode?: number;

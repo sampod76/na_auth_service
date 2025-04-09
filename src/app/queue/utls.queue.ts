@@ -1,4 +1,4 @@
-import { I_DayOfWeek } from '../../global/enums/globalEnums';
+import { I_DayOfWeek } from "../../global/enums/globalEnums";
 
 class CornTimePicker {
   private time: string; // example: 13:25:45
@@ -6,7 +6,7 @@ class CornTimePicker {
     this.time = time;
   }
   public parseTime(): [number, number, number] {
-    const timeParts = this.time.split(':').map(Number);
+    const timeParts = this.time.split(":").map(Number);
     const [hour, minute, second = 0] = timeParts;
 
     if (
@@ -44,10 +44,10 @@ export class CronPatternGenerator extends CornTimePicker {
   private parseDays(): string {
     const cronDays = this.days
       .map(day => CronPatternGenerator.dayMap[day.toLowerCase()])
-      .join(',');
+      .join(",");
 
     if (!cronDays) {
-      throw new Error('Invalid days provided');
+      throw new Error("Invalid days provided");
     }
 
     return cronDays; //1,3,5,6
@@ -67,7 +67,7 @@ export class AnyCornPatternGenerator extends CornTimePicker {
   }
   public generateRepeatOnSpecificDay(day: number): string {
     if (day < 1 || day > 31) {
-      throw new Error('Day must be between 1 and 31');
+      throw new Error("Day must be between 1 and 31");
     }
 
     const [hour, minute, second] = this.parseTime(); // Extract hour, minute, and second from the time

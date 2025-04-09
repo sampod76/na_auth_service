@@ -1,6 +1,6 @@
-export type ILanguage = 'eng';
+export type ILanguage = "eng";
 export enum ENUM_LANGUAGE {
-  ENG = 'eng',
-  FR = 'fr',
+  ENG = "eng",
+  FR = "fr",
 }
-export type IMessage = 'notFound';
+export type IMessage = "notFound";

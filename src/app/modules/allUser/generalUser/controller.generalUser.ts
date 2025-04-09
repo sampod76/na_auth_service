@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../../global/constant/pagination';
-import catchAsync from '../../../share/catchAsync';
-import pick from '../../../share/pick';
-import sendResponse from '../../../share/sendResponse';
-import { IUserRef } from '../typesAndConst';
-import { GeneralUserFilterableFields } from './constant.generalUser';
-import { IGeneralUser } from './interface.generalUser';
-import { GeneralUserService } from './service.generalUser';
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../../global/constant/pagination";
+import catchAsync from "../../../share/catchAsync";
+import pick from "../../../share/pick";
+import sendResponse from "../../../share/sendResponse";
+import { IUserRef } from "../typesAndConst";
+import { GeneralUserFilterableFields } from "./constant.generalUser";
+import { IGeneralUser } from "./interface.generalUser";
+import { GeneralUserService } from "./service.generalUser";
 
 const createGeneralUser = catchAsync(async (req: Request, res: Response) => {
   //-----------------------fil--upload--------------------------
@@ -40,7 +40,7 @@ const createGeneralUser = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGeneralUser>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'GeneralUser created successfully',
+    message: "GeneralUser created successfully",
     data: result,
   });
 });
@@ -57,7 +57,7 @@ const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGeneralUser[]>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Get all GeneralUsers',
+    message: "Get all GeneralUsers",
     data: result.data,
     meta: result.meta,
   });
@@ -87,7 +87,7 @@ const updateGeneralUser = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGeneralUser>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'GeneralUser updated successfully',
+    message: "GeneralUser updated successfully",
     data: result,
   });
 });
@@ -98,7 +98,7 @@ const getSingleGeneralUser = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGeneralUser>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'GeneralUser find successfully',
+    message: "GeneralUser find successfully",
     data: result,
   });
 });
@@ -113,7 +113,7 @@ const deleteGeneralUser = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGeneralUser>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'GeneralUser deleted successfully',
+    message: "GeneralUser deleted successfully",
     data: result,
   });
 });

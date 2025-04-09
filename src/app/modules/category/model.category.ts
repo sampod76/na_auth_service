@@ -1,10 +1,10 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { ENUM_STATUS, STATUS_ARRAY } from '../../../global/enum_constant_type';
-import { mongooseFileSchema } from '../../../global/schema/global.schema';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
-import { redisClient } from '../../redis/redis';
-import { CategoryModel, ICategory } from './interface.category';
+import { ENUM_STATUS, STATUS_ARRAY } from "../../../global/enum_constant_type";
+import { mongooseFileSchema } from "../../../global/schema/global.schema";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
+import { redisClient } from "../../redis/redis";
+import { CategoryModel, ICategory } from "./interface.category";
 const childCategorySchema = new Schema(
   {
     value: {
@@ -91,7 +91,7 @@ const CategorySchema = new Schema<ICategory, CategoryModel>(
     },
     //--- for --TrashCategory---
     oldRecord: {
-      refId: { type: Schema.Types.ObjectId, ref: 'Category' },
+      refId: { type: Schema.Types.ObjectId, ref: "Category" },
       collection: String,
     },
   },
@@ -104,14 +104,14 @@ const CategorySchema = new Schema<ICategory, CategoryModel>(
   },
 );
 // after findOneAndUpdate then data then call this hook
-CategorySchema.post('findOneAndDelete', async function (data: ICategory) {
+CategorySchema.post("findOneAndDelete", async function (data: ICategory) {
   try {
     if (!data) {
-      console.log('No document found for deletion');
+      console.log("No document found for deletion");
       return;
     }
     //@ts-ignore
-    if (typeof data?.toObject === 'function') {
+    if (typeof data?.toObject === "function") {
       //@ts-ignore
       data = data?.toObject();
     }
@@ -123,16 +123,16 @@ CategorySchema.post('findOneAndDelete', async function (data: ICategory) {
       );
     }
   } catch (error: any) {
-    console.error('Error in post-delete hook:', error);
+    console.error("Error in post-delete hook:", error);
   }
 });
 // after findOneAndUpdate then data then call this hook
 CategorySchema.post(
-  'findOneAndUpdate',
+  "findOneAndUpdate",
   async function (data: ICategory & { _id: string }, next: any) {
     try {
       //@ts-ignore
-      if (typeof data?.toObject === 'function') {
+      if (typeof data?.toObject === "function") {
         //@ts-ignore
         data = data?.toObject();
       }
@@ -150,10 +150,10 @@ CategorySchema.post(
   },
 );
 //after save
-CategorySchema.post('save', async function (data: ICategory, next) {
+CategorySchema.post("save", async function (data: ICategory, next) {
   try {
     //@ts-ignore
-    if (typeof data?.toObject === 'function') {
+    if (typeof data?.toObject === "function") {
       //@ts-ignore
       data = data?.toObject();
     }
@@ -171,7 +171,7 @@ CategorySchema.post('save', async function (data: ICategory, next) {
 });
 
 // Before save
-CategorySchema.pre('save', async function (next) {
+CategorySchema.pre("save", async function (next) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const data = this;
@@ -183,10 +183,10 @@ CategorySchema.pre('save', async function (next) {
 });
 
 export const Category = model<ICategory, CategoryModel>(
-  'Category',
+  "Category",
   CategorySchema,
 );
 export const TrashCategory = model<ICategory, CategoryModel>(
-  'TrashCategory',
+  "TrashCategory",
   CategorySchema,
 );

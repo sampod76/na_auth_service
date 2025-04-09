@@ -1,11 +1,11 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
 
-import { z } from 'zod';
+import { z } from "zod";
 import {
   IFileAfterUpload,
   I_IMAGE_PLATFORM_ARRAY,
-} from '../../app/interface/fileUpload';
-import { ILocation } from '../../app/modules/allUser/typesAndConst';
+} from "../../app/interface/fileUpload";
+import { ILocation } from "../../app/modules/allUser/typesAndConst";
 //-------------------------------------------------------------
 export const mongooseFileSchema = new Schema<IFileAfterUpload>(
   {
@@ -21,7 +21,7 @@ export const mongooseFileSchema = new Schema<IFileAfterUpload>(
     platform: {
       type: String,
       enum: I_IMAGE_PLATFORM_ARRAY,
-      default: 'server',
+      default: "server",
     },
   },
   {
@@ -44,7 +44,7 @@ export const zodFileAfterUploadSchema = z.object(
     durl: z.string().optional(),
     platform: z.string(), // Assuming IImagePlatform is a string type
   },
-  { required_error: 'File is Required' },
+  { required_error: "File is Required" },
 );
 //-------------------------------------------------------------
 export const mongooseLocationSchema = new Schema<ILocation>(
@@ -53,7 +53,7 @@ export const mongooseLocationSchema = new Schema<ILocation>(
     latitude: Number,
     longitude: Number,
     coordinates: [Number], // Array of numbers
-    type: { type: String, default: 'Point' }, // default value 'Point'
+    type: { type: String, default: "Point" }, // default value 'Point'
   },
   {
     _id: false,
@@ -89,7 +89,7 @@ export const mongoosePricingSchema = new Schema<IPricing>(
   },
 );
 export const zodPricingSchema = z.object({
-  price: z.number({ required_error: 'Price is required' }).min(0),
+  price: z.number({ required_error: "Price is required" }).min(0),
   discount: z.number().min(0).optional(),
   vat: z.number().min(0).optional(),
   tax: z.number().min(0).optional(),

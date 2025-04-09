@@ -1,34 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import bcrypt from 'bcrypt';
-import { Request } from 'express';
-import { JwtPayload, Secret } from 'jsonwebtoken';
-import { Types } from 'mongoose';
-import config from '../../../config';
+import bcrypt from "bcrypt";
+import { Request } from "express";
+import { JwtPayload, Secret } from "jsonwebtoken";
+import { Types } from "mongoose";
+import config from "../../../config";
 
-import httpStatus from 'http-status';
-import qrcode from 'qrcode';
-import speakeasy from 'speakeasy';
-import { ENUM_STATUS } from '../../../global/enum_constant_type';
-import { jwtHelpers } from '../../../helper/jwtHelpers';
+import httpStatus from "http-status";
+import qrcode from "qrcode";
+import speakeasy from "speakeasy";
+import { ENUM_STATUS } from "../../../global/enum_constant_type";
+import { jwtHelpers } from "../../../helper/jwtHelpers";
 import {
   decryptCryptoData,
   encryptCryptoData,
-} from '../../../utils/cryptoEncryptDecrypt';
-import { sendMailHelper } from '../../../utils/sendMail';
-import ApiError from '../../errors/ApiError';
-import { IGeneralUser } from '../allUser/generalUser/interface.generalUser';
-import { ENUM_VERIFY, IUserRefAndDetails } from '../allUser/typesAndConst';
-import { IUser } from '../allUser/user/user.interface';
-import { User } from '../allUser/user/user.model';
-import { IUserLoginHistory } from '../loginHistory/loginHistory.interface';
-import { UserLoginHistory } from '../loginHistory/loginHistory.model';
+} from "../../../utils/cryptoEncryptDecrypt";
+import { sendMailHelper } from "../../../utils/sendMail";
+import ApiError from "../../errors/ApiError";
+import { IGeneralUser } from "../allUser/generalUser/interface.generalUser";
+import { ENUM_VERIFY, IUserRefAndDetails } from "../allUser/typesAndConst";
+import { IUser } from "../allUser/user/user.interface";
+import { User } from "../allUser/user/user.model";
+import { IUserLoginHistory } from "../loginHistory/loginHistory.interface";
+import { UserLoginHistory } from "../loginHistory/loginHistory.model";
 import {
   IChangePassword,
   ILoginUser,
   ILoginUserResponse,
   IRefreshTokenResponse,
-} from './auth.interface';
+} from "./auth.interface";
 const loginUser = async (
   payload: ILoginUser,
   req: Request,
@@ -41,11 +41,11 @@ const loginUser = async (
   )) as IUser & { roleInfo: IGeneralUser };
   // console.log('🚀 ~ isUserExist:', isUserExist);
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'User does not exist');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, "User does not exist");
   } else if (isUserExist.isDelete) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'The account is deleted');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, "The account is deleted");
   } else if (isUserExist.status === ENUM_STATUS.INACTIVE) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Your account is inactive');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, "Your account is inactive");
   } else if (isUserExist.status === ENUM_STATUS.BLOCK) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, `Your account is blocked`);
     //@ts-ignore
@@ -59,7 +59,7 @@ const loginUser = async (
     isUserExist.password &&
     !(await User.isPasswordMatchMethod(password, isUserExist.password))
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Password is incorrect');
+    throw new ApiError(httpStatus.FORBIDDEN, "Password is incorrect");
   }
 
   //create access token & refresh token
@@ -99,7 +99,7 @@ const loginOutFromDb = async (
   const checkLoginHistory = await UserLoginHistory.findOne({
     //@ts-ignore
     user: req?.user?.userId,
-    user_agent: req.headers['user-agent'],
+    user_agent: req.headers["user-agent"],
     token: req?.cookies?.refreshToken,
   });
   let result = null;
@@ -110,7 +110,7 @@ const loginOutFromDb = async (
     // );
     result = await UserLoginHistory.findByIdAndDelete(id);
   } else {
-    throw new ApiError(httpStatus.FORBIDDEN, 'You are not allowed to');
+    throw new ApiError(httpStatus.FORBIDDEN, "You are not allowed to");
   }
 
   // const result = await UserLoginHistory.findByIdAndDelete(id);
@@ -128,11 +128,11 @@ const loginUserBySocialMedia = async (payload: {
   );
 
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+    throw new ApiError(httpStatus.NOT_FOUND, "User does not exist");
   } else if (isUserExist.isDelete === true) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'The account is deleted');
+    throw new ApiError(httpStatus.NOT_FOUND, "The account is deleted");
   } else if (isUserExist.status === ENUM_STATUS.INACTIVE) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Your account is inactive');
+    throw new ApiError(httpStatus.NOT_FOUND, "Your account is inactive");
   } else if (isUserExist.status === ENUM_STATUS.BLOCK) {
     throw new ApiError(httpStatus.NOT_FOUND, `Your account is blocked`);
   } else if (isUserExist.verify !== ENUM_VERIFY.ACCEPT) {
@@ -204,7 +204,7 @@ const enableTwoFactorAuthFromDb = async (
     isUserExist.password &&
     !(await User.isPasswordMatchMethod(data?.password, isUserExist.password))
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Password is incorrect');
+    throw new ApiError(httpStatus.FORBIDDEN, "Password is incorrect");
   }
   // Generate a secret for the user--> any object
   const secret = speakeasy.generateSecret({
@@ -233,11 +233,11 @@ const verifyTwoFactorAuthFromDb = async (
 
   const isVerify = speakeasy.totp.verify({
     secret: decryptCryptoData(isExist.secret, config.crypto_key as string),
-    encoding: 'base32',
+    encoding: "base32",
     token: data.otp,
   });
   if (!isVerify) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'OTP is incorrect'); // OTP is incorrect - synchronous
+    throw new ApiError(httpStatus.FORBIDDEN, "OTP is incorrect"); // OTP is incorrect - synchronous
   }
   return isVerify;
 };
@@ -256,9 +256,9 @@ const refreshToken = async (
       config.jwt.refresh_secret as Secret,
     );
   } catch (err) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid Refresh Token');
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid Refresh Token");
   }
-  const user_agent = req.headers['user-agent'];
+  const user_agent = req.headers["user-agent"];
   const { userId } = verifiedToken;
 
   const promises = [
@@ -277,11 +277,11 @@ const refreshToken = async (
 
   const isUserExist = resolver[0] as IUser;
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+    throw new ApiError(httpStatus.NOT_FOUND, "User does not exist");
   }
   // checking old password
   else if (isUserExist.status === ENUM_STATUS.INACTIVE) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Your account is deactivated');
+    throw new ApiError(httpStatus.NOT_FOUND, "Your account is deactivated");
   } else if (isUserExist.isDelete) {
     throw new ApiError(httpStatus.NOT_FOUND, `Your account is deleted`);
   } else if (isUserExist.status === ENUM_STATUS.BLOCK) {
@@ -291,17 +291,17 @@ const refreshToken = async (
   const checkLoginHistory = resolver.length && resolver[1];
 
   if (!checkLoginHistory) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Unauthorized.Please login again');
+    throw new ApiError(httpStatus.FORBIDDEN, "Unauthorized.Please login again");
   }
   if (checkLoginHistory.status === ENUM_STATUS.INACTIVE) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
-      'Unauthorized.Inactive Please login again',
+      "Unauthorized.Inactive Please login again",
     );
   } else if (checkLoginHistory.status === ENUM_STATUS.BLOCK) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
-      'Unauthorized.Block Please login again',
+      "Unauthorized.Block Please login again",
     );
   }
   const { role, _id, roleInfo, userUniqueId } = isUserExist as any;
@@ -330,18 +330,18 @@ const changePassword = async (
   const isUserExist = (await User.findOne({
     _id: user?.userId,
     isDelete: false,
-  }).select('+password')) as any;
+  }).select("+password")) as any;
 
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+    throw new ApiError(httpStatus.NOT_FOUND, "User does not exist");
   }
 
   if (isUserExist?._id?.toString() !== user?.userId) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
   // checking old password
   else if (isUserExist.status === ENUM_STATUS.INACTIVE) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Your account is deactivated');
+    throw new ApiError(httpStatus.NOT_FOUND, "Your account is deactivated");
   } else if (isUserExist.isDelete) {
     throw new ApiError(httpStatus.NOT_FOUND, `Your account is deleted`);
   }
@@ -355,7 +355,7 @@ const changePassword = async (
     isUserExist.password &&
     !(await User.isPasswordMatchMethod(oldPassword, isUserExist.password))
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Old Password is incorrect');
+    throw new ApiError(httpStatus.FORBIDDEN, "Old Password is incorrect");
   }
 
   // // hash password before saving
@@ -397,9 +397,9 @@ const forgotPass = async (payload: { email: string }, req: Request) => {
   // }
 
   if (!profile?.email) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email not found!');
+    throw new ApiError(httpStatus.BAD_REQUEST, "Email not found!");
   } else if (profile.status === ENUM_STATUS.INACTIVE) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Your account is deactivated');
+    throw new ApiError(httpStatus.NOT_FOUND, "Your account is deactivated");
   } else if (profile.isDelete) {
     throw new ApiError(httpStatus.NOT_FOUND, `Your account is deleted`);
   }
@@ -407,7 +407,7 @@ const forgotPass = async (payload: { email: string }, req: Request) => {
   const passResetToken = await jwtHelpers.createResetToken(
     { email: profile.email, role: profile.role, id: profile._id },
     config.jwt.forgetPassword as string,
-    '50m',
+    "50m",
   );
 
   const resetLink: string =
@@ -427,8 +427,8 @@ const forgotPass = async (payload: { email: string }, req: Request) => {
   // console.log('profile: ', profile);
   const result = {
     receiver_email: profile.email,
-    title: 'Forget Password',
-    subject: 'Forget Password',
+    title: "Forget Password",
+    subject: "Forget Password",
     body_text: ` <div style="text-align: center;">
     <h1 style=" padding: 10px 15px; background-color: #2ecc71; color: #fff; text-decoration: none; border-radius: 5px;">${authData.otp}</h1>
   </div>`,
@@ -466,7 +466,7 @@ const checkOtpFromDb = async (
   };
 
   if (!profile?._id) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!');
+    throw new ApiError(httpStatus.BAD_REQUEST, "User not found!");
   }
 
   // if (profile?.authentication?.status !== ENUM_STATUS.ACTIVE) {
@@ -476,18 +476,18 @@ const checkOtpFromDb = async (
   //   );
   // }
   if (profile?.authentication?.otp !== Number(otp)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Otp not matching');
+    throw new ApiError(httpStatus.BAD_REQUEST, "Otp not matching");
   }
   if (
     profile?.authentication?.timeOut &&
     new Date(profile?.authentication?.timeOut).getTime() < Date.now()
   ) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'OTP has expired');
+    throw new ApiError(httpStatus.BAD_REQUEST, "OTP has expired");
   }
 
   const result = await User.findOneAndUpdate(
     { email },
-    { 'authentication.status': ENUM_STATUS.INACTIVE }, //not change because token is need verification
+    { "authentication.status": ENUM_STATUS.INACTIVE }, //not change because token is need verification
   );
 
   return result;
@@ -508,11 +508,11 @@ const tokenToSetPasswordFromDb = async (
       config.jwt.forgetPassword as Secret,
     );
   } catch (error) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   if (!verifiedUser.id) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const modifyPassword = await bcrypt.hash(
@@ -521,14 +521,14 @@ const tokenToSetPasswordFromDb = async (
   );
   const userData = await User.findById(verifiedUser.id);
   if (userData?.authentication?.jwtToken !== token) {
-    throw new ApiError(403, 'forbidden access token is expired');
+    throw new ApiError(403, "forbidden access token is expired");
   }
 
   await User.findOneAndUpdate(
     { _id: verifiedUser.id },
     {
       password: modifyPassword,
-      authentication: { token: '', status: ENUM_STATUS.INACTIVE },
+      authentication: { token: "", status: ENUM_STATUS.INACTIVE },
       // $unset:{authentication:""}
     },
   );

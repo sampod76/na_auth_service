@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { NotificationService } from './notification.service';
+import { NotificationService } from "./notification.service";
 
-import httpStatus from 'http-status';
-import { PAGINATION_FIELDS } from '../../../global/constant/pagination';
+import httpStatus from "http-status";
+import { PAGINATION_FIELDS } from "../../../global/constant/pagination";
 
-import catchAsync from '../../share/catchAsync';
-import pick from '../../share/pick';
-import sendResponse from '../../share/sendResponse';
-import { Notification_FilterableFields } from './notification.constant';
+import catchAsync from "../../share/catchAsync";
+import pick from "../../share/pick";
+import sendResponse from "../../share/sendResponse";
+import { Notification_FilterableFields } from "./notification.constant";
 
-import config from '../../../config';
-import { ENUM_YN } from '../../../global/enum_constant_type';
-import { INotification } from './notification.interface';
+import config from "../../../config";
+import { ENUM_YN } from "../../../global/enum_constant_type";
+import { INotification } from "./notification.interface";
 
 // import { ENUM_YN } from '../../../enums/globalEnums';
 
@@ -33,7 +33,7 @@ const createNotification = catchAsync(async (req: Request, res: Response) => {
   sendResponse<INotification>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'notification create successfully',
+    message: "notification create successfully",
     data: result,
   });
 });
@@ -55,7 +55,7 @@ const sendNotificationByUser = catchAsync(
     sendResponse<INotification>(req, res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'notification create successfully',
+      message: "notification create successfully",
       data: result,
     });
   },
@@ -71,7 +71,7 @@ const getAllNotifications = catchAsync(async (req: Request, res: Response) => {
   sendResponse<INotification[]>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'notifications fetched successfully',
+    message: "notifications fetched successfully",
     data: result.data,
     meta: result.meta,
   });
@@ -88,7 +88,7 @@ const updateNotification = catchAsync(async (req: Request, res: Response) => {
   sendResponse<INotification>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'notification updated successfully',
+    message: "notification updated successfully",
     data: result,
   });
 });
@@ -103,7 +103,7 @@ const getSingleNotification = catchAsync(
     sendResponse<INotification>(req, res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'notification fetched successfully',
+      message: "notification fetched successfully",
       data: result,
     });
   },
@@ -119,7 +119,7 @@ const deleteNotification = catchAsync(async (req: Request, res: Response) => {
   sendResponse<INotification>(req, res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'notification deleted successfully',
+    message: "notification deleted successfully",
     data: result,
   });
 });

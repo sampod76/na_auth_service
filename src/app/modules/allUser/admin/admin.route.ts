@@ -1,24 +1,24 @@
-import express from 'express';
-import { z } from 'zod';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import authMiddleware from '../../../middlewares/authMiddleware';
-import parseBodyData from '../../../middlewares/utils/parseBodyData';
-import validateRequestZod from '../../../middlewares/validateRequestZod';
-import { uploadAwsS3Bucket } from '../../aws/utls.aws';
-import { AdminController } from './admin.controller';
-import { AdminValidation } from './admin.validation';
+import express from "express";
+import { z } from "zod";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import authMiddleware from "../../../middlewares/authMiddleware";
+import parseBodyData from "../../../middlewares/utils/parseBodyData";
+import validateRequestZod from "../../../middlewares/validateRequestZod";
+import { uploadAwsS3Bucket } from "../../aws/utls.aws";
+import { AdminController } from "./admin.controller";
+import { AdminValidation } from "./admin.validation";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   .get(
     authMiddleware(ENUM_USER_ROLE.superAdmin, ENUM_USER_ROLE.admin),
     AdminController.getAllAdmins,
   );
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(
     authMiddleware(ENUM_USER_ROLE.superAdmin, ENUM_USER_ROLE.admin),
     AdminController.getSingleAdmin,
@@ -27,7 +27,7 @@ router
     authMiddleware(ENUM_USER_ROLE.superAdmin, ENUM_USER_ROLE.admin),
     // uploadAwsS3Bucket.fields([{ name: 'profileImage', maxCount: 1 }]),
     // uploadImage.single('profileImage'),
-    uploadAwsS3Bucket.single('profileImage'),
+    uploadAwsS3Bucket.single("profileImage"),
     parseBodyData({}),
     validateRequestZod(AdminValidation.updateAdminZodSchema),
     AdminController.updateAdmin,
@@ -37,7 +37,7 @@ router
     validateRequestZod(
       z.object({
         body: z.object({
-          password: z.string({ required_error: 'Password is required' }),
+          password: z.string({ required_error: "Password is required" }),
         }),
       }),
     ),

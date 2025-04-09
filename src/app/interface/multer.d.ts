@@ -11,8 +11,8 @@
 //                 Oliver Emery <https://github.com/thrymgjol>
 //                 Piotr Błażejewicz <https://github.com/peterblazejewicz>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-import { Request, RequestHandler } from 'express';
-import { Readable } from 'stream';
+import { Request, RequestHandler } from "express";
+import { Readable } from "stream";
 
 declare global {
   namespace Express {
@@ -78,13 +78,13 @@ declare namespace multer {
   function memoryStorage(): StorageEngine;
 
   type ErrorCode =
-    | 'LIMIT_PART_COUNT'
-    | 'LIMIT_FILE_SIZE'
-    | 'LIMIT_FILE_COUNT'
-    | 'LIMIT_FIELD_KEY'
-    | 'LIMIT_FIELD_VALUE'
-    | 'LIMIT_FIELD_COUNT'
-    | 'LIMIT_UNEXPECTED_FILE';
+    | "LIMIT_PART_COUNT"
+    | "LIMIT_FILE_SIZE"
+    | "LIMIT_FILE_COUNT"
+    | "LIMIT_FIELD_KEY"
+    | "LIMIT_FIELD_VALUE"
+    | "LIMIT_FIELD_COUNT"
+    | "LIMIT_UNEXPECTED_FILE";
 
   class MulterError extends Error {
     constructor(code: ErrorCode, field?: string);

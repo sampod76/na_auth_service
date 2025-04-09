@@ -1,34 +1,34 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-this-alias */
-import bcrypt from 'bcrypt';
-import { model, PipelineStage, Schema, Types } from 'mongoose';
-import config from '../../../../config';
+import bcrypt from "bcrypt";
+import { model, PipelineStage, Schema, Types } from "mongoose";
+import config from "../../../../config";
 
 import {
   ENUM_SOCKET_STATUS,
   ENUM_STATUS,
   SOCKET_STATUS_ARRAY,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { mongooseLocationSchema } from '../../../../global/schema/global.schema';
-import ApiError from '../../../errors/ApiError';
-import { Admin } from '../admin/admin.model';
+} from "../../../../global/enum_constant_type";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { mongooseLocationSchema } from "../../../../global/schema/global.schema";
+import ApiError from "../../../errors/ApiError";
+import { Admin } from "../admin/admin.model";
 
-import { LookupAnyRoleDetailsReusable } from '../../../../helper/lookUpResuable';
+import { LookupAnyRoleDetailsReusable } from "../../../../helper/lookUpResuable";
 
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
 
-import { GeneralUser } from '../generalUser/model.generalUser';
-import { ENUM_VERIFY, VERIFY_ARRAY } from '../typesAndConst';
+import { GeneralUser } from "../generalUser/model.generalUser";
+import { ENUM_VERIFY, VERIFY_ARRAY } from "../typesAndConst";
 import {
   ENUM_ACCOUNT_TYPE,
   I_AccountTypeArray,
   IUser,
   USER_ROLE_ARRAY,
   UserModel,
-} from './user.interface';
+} from "./user.interface";
 
 const userSchema = new Schema<IUser, UserModel>(
   {
@@ -170,10 +170,10 @@ userSchema.statics.isUserFindMethod = async function (
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'role',
-          idFiledName: '$_id',
-          pipeLineMatchField: '$userId',
-          outPutFieldName: 'roleInfo',
+          roleMatchFiledName: "role",
+          idFiledName: "$_id",
+          pipeLineMatchField: "$userId",
+          outPutFieldName: "roleInfo",
         },
       ],
     });
@@ -192,7 +192,7 @@ userSchema.statics.isPasswordMatchMethod = async function (
   return await bcrypt.compare(givenPassword, savedPassword);
 };
 // before save then data then call this hook
-userSchema.pre('save', async function (next) {
+userSchema.pre("save", async function (next) {
   try {
     const user = this;
     /*
@@ -211,10 +211,10 @@ userSchema.pre('save', async function (next) {
     }
 
     if (roleUser) {
-      throw new ApiError(400, 'Email is already available');
+      throw new ApiError(400, "Email is already available");
     }
 
-    if (user.isModified('password')) {
+    if (user.isModified("password")) {
       user.password = await bcrypt.hash(
         user.password,
         Number(config.bycrypt_salt_rounds),
@@ -227,14 +227,14 @@ userSchema.pre('save', async function (next) {
 });
 
 // after then save data then call this hook
-userSchema.post('save', async function (data, next) {
+userSchema.post("save", async function (data, next) {
   try {
-    data.password = '';
+    data.password = "";
 
     await redisClient.set(
       ENUM_REDIS_KEY.REDIS_IN_SAVE_ALL_USERS + data?._id,
       JSON.stringify(data),
-      'EX',
+      "EX",
       24 * 60 * 60, // 1 day to second
     );
     next();
@@ -243,9 +243,9 @@ userSchema.post('save', async function (data, next) {
   }
 });
 // after then save data then call this hook
-userSchema.post('findOneAndUpdate', async function (data, next) {
+userSchema.post("findOneAndUpdate", async function (data, next) {
   try {
-    data.password = '';
+    data.password = "";
     const updatedFields = this.getUpdate();
     // let roleUser;
     // //@ts-ignore
@@ -261,7 +261,7 @@ userSchema.post('findOneAndUpdate', async function (data, next) {
     await redisClient.set(
       ENUM_REDIS_KEY.REDIS_IN_SAVE_ALL_USERS + data?._id,
       JSON.stringify(data),
-      'EX',
+      "EX",
       24 * 60 * 60, // 1 day to second
     );
     next();
@@ -270,7 +270,7 @@ userSchema.post('findOneAndUpdate', async function (data, next) {
   }
 });
 // after then save data then call this hook
-userSchema.post('findOneAndDelete', async function (data, next) {
+userSchema.post("findOneAndDelete", async function (data, next) {
   try {
     // data.password = '';
     await redisClient.del(ENUM_REDIS_KEY.REDIS_IN_SAVE_ALL_USERS + data?._id);
@@ -280,7 +280,7 @@ userSchema.post('findOneAndDelete', async function (data, next) {
   }
 });
 
-export const User = model<IUser, UserModel>('User', userSchema);
+export const User = model<IUser, UserModel>("User", userSchema);
 //@ts-ignore
 const tempUserSchema = new Schema(
   {
@@ -334,4 +334,4 @@ const tempUserSchema = new Schema(
   },
 );
 
-export const TempUser = model<IUser, UserModel>('TempUser', tempUserSchema);
+export const TempUser = model<IUser, UserModel>("TempUser", tempUserSchema);

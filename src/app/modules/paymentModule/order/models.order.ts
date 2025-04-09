@@ -1,29 +1,29 @@
-import { model, PipelineStage, Schema, Types } from 'mongoose';
+import { model, PipelineStage, Schema, Types } from "mongoose";
 
 import {
   ENUM_STATUS,
   ENUM_YN,
   STATUS_ARRAY,
-} from '../../../../global/enum_constant_type';
+} from "../../../../global/enum_constant_type";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../../helper/lookUpResuable';
-import { logger } from '../../../share/logger';
-import { mongooseIUserRef } from '../../allUser/typesAndConst';
-import { NotificationService } from '../../notification/notification.service';
-import { IOrder, OrderModel } from './interface.order';
-import { ORDER_STATUS_ARRAY } from './validation.order';
+} from "../../../../helper/lookUpResuable";
+import { logger } from "../../../share/logger";
+import { mongooseIUserRef } from "../../allUser/typesAndConst";
+import { NotificationService } from "../../notification/notification.service";
+import { IOrder, OrderModel } from "./interface.order";
+import { ORDER_STATUS_ARRAY } from "./validation.order";
 
 const OrderSchema = new Schema<IOrder, OrderModel>(
   {
     author: mongooseIUserRef,
     cs_id: { type: String }, //when buyer try payment first time create session then set session to session.id-->  cs_id
     pi_id: { type: String },
-    paymentId: { type: Schema.Types.ObjectId, ref: 'Payment' }, //when successfully payment then set paymentId(my database)
-    paymentBy: { type: String, enum: ['stripe', 'paypal', 'manual'] },
-    productId: { type: Schema.Types.ObjectId, ref: 'Product' },
+    paymentId: { type: Schema.Types.ObjectId, ref: "Payment" }, //when successfully payment then set paymentId(my database)
+    paymentBy: { type: String, enum: ["stripe", "paypal", "manual"] },
+    productId: { type: Schema.Types.ObjectId, ref: "Product" },
     quantity: { type: Number, default: 1 },
     note: String,
     orderStatus: { type: String, enum: ORDER_STATUS_ARRAY },
@@ -76,27 +76,27 @@ OrderSchema.statics.isOrderExistMethod = async function (
     // Define the collections array with the correct type
     const collections: ILookupCollection<any>[] = []; // Use the correct type here
 
-    if (option.needProperty && option.needProperty.includes('author')) {
+    if (option.needProperty && option.needProperty.includes("author")) {
       LookupAnyRoleDetailsReusable(pipeline, {
         collections: [
           {
-            roleMatchFiledName: 'author.role',
-            idFiledName: '$author.roleBaseUserId',
-            pipeLineMatchField: '$_id',
-            outPutFieldName: 'details',
-            margeInField: 'author',
+            roleMatchFiledName: "author.role",
+            idFiledName: "$author.roleBaseUserId",
+            pipeLineMatchField: "$_id",
+            outPutFieldName: "details",
+            margeInField: "author",
             project: { name: 1, email: 1, profileImage: 1, userId: 1 },
           },
         ],
       });
     }
 
-    if (option.needProperty && option.needProperty.includes('paymentId')) {
+    if (option.needProperty && option.needProperty.includes("paymentId")) {
       const pipelineConnection: ILookupCollection<any> = {
-        connectionName: 'paymenthistories',
-        idFiledName: 'paymentId',
-        pipeLineMatchField: '_id',
-        outPutFieldName: 'paymentDetails',
+        connectionName: "paymenthistories",
+        idFiledName: "paymentId",
+        pipeLineMatchField: "_id",
+        outPutFieldName: "paymentDetails",
       };
       collections.push(pipelineConnection);
     }
@@ -114,14 +114,14 @@ OrderSchema.statics.isOrderExistMethod = async function (
   return data;
 };
 // before save then data then call this hook
-OrderSchema.pre('save', async function (next) {
+OrderSchema.pre("save", async function (next) {
   try {
     const data = this as unknown as IOrder;
     try {
       await NotificationService.createNotificationToDB(
         {
           userIds: [data.author.userId],
-          subject: 'New Order',
+          subject: "New Order",
           bodyText: `Get new order`,
         },
         ENUM_YN.YES,
@@ -134,7 +134,7 @@ OrderSchema.pre('save', async function (next) {
     next(error);
   }
 });
-OrderSchema.post('findOneAndUpdate', async function (data, next) {
+OrderSchema.post("findOneAndUpdate", async function (data, next) {
   try {
     next();
   } catch (error: any) {
@@ -142,4 +142,4 @@ OrderSchema.post('findOneAndUpdate', async function (data, next) {
   }
 });
 
-export const Order = model<IOrder, OrderModel>('Order', OrderSchema);
+export const Order = model<IOrder, OrderModel>("Order", OrderSchema);

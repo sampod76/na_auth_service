@@ -1,35 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import mongoose, { PipelineStage, Schema, Types } from 'mongoose';
-import { ENUM_USER_ROLE } from '../../../../global/enums/users';
-import { paginationHelper } from '../../../../helper/paginationHelper';
-import ApiError from '../../../errors/ApiError';
-import { IGenericResponse } from '../../../interface/common';
-import { IPaginationOption } from '../../../interface/pagination';
+import { Request } from "express";
+import httpStatus from "http-status";
+import mongoose, { PipelineStage, Schema, Types } from "mongoose";
+import { ENUM_USER_ROLE } from "../../../../global/enums/users";
+import { paginationHelper } from "../../../../helper/paginationHelper";
+import ApiError from "../../../errors/ApiError";
+import { IGenericResponse } from "../../../interface/common";
+import { IPaginationOption } from "../../../interface/pagination";
 
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../../helper/lookUpResuable';
+} from "../../../../helper/lookUpResuable";
 
-import { produceUpdateGroupMemberListSortKafka } from '../../../kafka/producer.kafka';
-import { ENUM_REDIS_KEY } from '../../../redis/consent.redis';
-import { redisClient } from '../../../redis/redis';
+import { produceUpdateGroupMemberListSortKafka } from "../../../kafka/producer.kafka";
+import { ENUM_REDIS_KEY } from "../../../redis/consent.redis";
+import { redisClient } from "../../../redis/redis";
 import {
   RedisAllQueryServiceOop,
   RedisAllSetterServiceOop,
-} from '../../../redis/service.redis';
+} from "../../../redis/service.redis";
 
-import { IUserRef, IUserRefAndDetails } from '../../allUser/typesAndConst';
-import { validateUserInDbOrRedis } from '../../allUser/user/user.utils';
+import { IUserRef, IUserRefAndDetails } from "../../allUser/typesAndConst";
+import { validateUserInDbOrRedis } from "../../allUser/user/user.utils";
 
-import { GroupMember } from '../groupUserMember/models.groupUserMember';
-import { GroupsSearchableFields } from './constants.groups';
-import { IGroups, IGroupsFilters } from './interface.groups';
-import { Groups } from './models.groups';
+import { GroupMember } from "../groupUserMember/models.groupUserMember";
+import { GroupsSearchableFields } from "./constants.groups";
+import { IGroups, IGroupsFilters } from "./interface.groups";
+import { Groups } from "./models.groups";
 
 const createGroups = async (
   data: IGroups,
@@ -37,13 +37,13 @@ const createGroups = async (
   req: Request,
 ): Promise<IGroups | null> => {
   const findData = await Groups.findOne({
-    name: { $regex: new RegExp(data.name.trim(), 'i') },
+    name: { $regex: new RegExp(data.name.trim(), "i") },
     author: new Types.ObjectId(data.author.userId),
     isDelete: false,
   });
 
   if (findData) {
-    throw new ApiError(httpStatus.CONFLICT, 'Groups already exists');
+    throw new ApiError(httpStatus.CONFLICT, "Groups already exists");
   }
 
   const session = await mongoose.startSession();
@@ -53,7 +53,7 @@ const createGroups = async (
     // Create the group in a transaction
     group = await Groups.create([data], { session });
     if (!group) {
-      throw new Error('Failed to create group');
+      throw new Error("Failed to create group");
     }
     const groupData = {
       groupId: group[0]._id, // Note: `res` will be an array due to `create([data])`
@@ -62,12 +62,12 @@ const createGroups = async (
         role: requestUser.role,
         roleBaseUserId: requestUser.roleBaseUserId,
       },
-      role: 'admin',
+      role: "admin",
     };
     // Create the group member in a transaction
     const createMember = await GroupMember.create([groupData], { session });
     if (!createMember) {
-      throw new Error('Failed to create group member');
+      throw new Error("Failed to create group member");
     }
     // If all operations succeed, commit the transaction
     await session.commitTransaction();
@@ -107,7 +107,7 @@ const checkUserIdToExistGroupsFromDb = async (
   for (const stringGroupsString of findRedisStringData) {
     //loop
     //[string,null]
-    if (stringGroupsString && typeof stringGroupsString === 'string') {
+    if (stringGroupsString && typeof stringGroupsString === "string") {
       const stringGroupsObjectDate: any = JSON.parse(stringGroupsString);
       //-- I only check if the user ID of the user I want to be friends with is online.
       if (stringGroupsObjectDate.sender.userId === userId) {
@@ -142,14 +142,14 @@ const checkUserIdToExistGroupsFromDb = async (
       $match: {
         $or: [
           {
-            'sender.userId': new Types.ObjectId(userId as string),
-            'receiver.userId': new Types.ObjectId(
+            "sender.userId": new Types.ObjectId(userId as string),
+            "receiver.userId": new Types.ObjectId(
               requestUser?.userId as string,
             ),
           },
           {
-            'sender.userId': new Types.ObjectId(requestUser?.userId as string),
-            'receiver.userId': new Types.ObjectId(userId as string),
+            "sender.userId": new Types.ObjectId(requestUser?.userId as string),
+            "receiver.userId": new Types.ObjectId(userId as string),
           },
         ],
       },
@@ -159,20 +159,20 @@ const checkUserIdToExistGroupsFromDb = async (
   LookupAnyRoleDetailsReusable(pipeline, {
     collections: [
       {
-        roleMatchFiledName: 'sender.role',
-        idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'sender',
+        roleMatchFiledName: "sender.role",
+        idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "sender",
 
         project: { name: 1, country: 1, profileImage: 1, email: 1 },
       },
       {
-        roleMatchFiledName: 'receiver.role',
-        idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'receiver',
+        roleMatchFiledName: "receiver.role",
+        idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "receiver",
 
         project: { name: 1, country: 1, profileImage: 1, email: 1 },
       },
@@ -240,7 +240,7 @@ const getAllGroupssFromDB = async (
     ...filtersData
   } = filters;
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -251,7 +251,7 @@ const getAllGroupssFromDB = async (
       $or: GroupsSearchableFields.map((field: string) => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -262,17 +262,17 @@ const getAllGroupssFromDB = async (
       //@ts-ignore
       ([field, value]: [keyof typeof filtersData, string]) => {
         let modifyFiled;
-        if (field === 'orderId' || field === 'paymentId') {
+        if (field === "orderId" || field === "paymentId") {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
           };
-        } else if (field === 'authorUserId') {
+        } else if (field === "authorUserId") {
           modifyFiled = {
-            ['author.userId']: new Types.ObjectId(value),
+            ["author.userId"]: new Types.ObjectId(value),
           };
-        } else if (field === 'authorRoleBaseId') {
+        } else if (field === "authorRoleBaseId") {
           modifyFiled = {
-            ['author.roleBaseUserId']: new Types.ObjectId(value),
+            ["author.roleBaseUserId"]: new Types.ObjectId(value),
           };
         }
         //  else if (field === 'from') {
@@ -343,7 +343,7 @@ const getAllGroupssFromDB = async (
     paginationHelper.calculatePagination(paginationOptions);
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
 
   //****************pagination end ***************/
@@ -358,7 +358,7 @@ const getAllGroupssFromDB = async (
       req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
       check?.author?.userId.toString() !== req?.user?.userId
     ) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access data');
+      throw new ApiError(httpStatus.FORBIDDEN, "forbidden access data");
     }
   }
   //!------------check -access validation ------------------
@@ -371,27 +371,27 @@ const getAllGroupssFromDB = async (
 
   //-----------------needProperty--lookup--------------------
   if (
-    needProperty?.toLowerCase()?.includes('senderinfo') ||
-    needProperty?.toLowerCase()?.includes('receiverinfo')
+    needProperty?.toLowerCase()?.includes("senderinfo") ||
+    needProperty?.toLowerCase()?.includes("receiverinfo")
   ) {
     const collections = [];
-    if (needProperty?.toLowerCase()?.includes('senderinfo')) {
+    if (needProperty?.toLowerCase()?.includes("senderinfo")) {
       collections.push({
-        roleMatchFiledName: 'sender.role',
-        idFiledName: 'sender.roleBaseUserId', //$sender.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'sender',
+        roleMatchFiledName: "sender.role",
+        idFiledName: "sender.roleBaseUserId", //$sender.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "sender",
         project: { name: 1, email: 1, profileImage: 1, userId: 1 },
       });
     }
-    if (needProperty?.toLowerCase()?.includes('receiverinfo')) {
+    if (needProperty?.toLowerCase()?.includes("receiverinfo")) {
       collections.push({
-        roleMatchFiledName: 'receiver.role',
-        idFiledName: 'receiver.roleBaseUserId', //$receiver.roleBaseUserId
-        pipeLineMatchField: '_id', //$_id
-        outPutFieldName: 'details',
-        margeInField: 'receiver',
+        roleMatchFiledName: "receiver.role",
+        idFiledName: "receiver.roleBaseUserId", //$receiver.roleBaseUserId
+        pipeLineMatchField: "_id", //$_id
+        outPutFieldName: "details",
+        margeInField: "receiver",
         project: { name: 1, email: 1, profileImage: 1, userId: 1 },
       });
     }
@@ -405,21 +405,21 @@ const getAllGroupssFromDB = async (
   //
   const collections: ILookupCollection<any>[] = [];
 
-  if (needProperty && needProperty.includes('lastMessage')) {
+  if (needProperty && needProperty.includes("lastMessage")) {
     const lastMessagePipeline: PipelineStage[] = [
       {
         $lookup: {
-          from: 'chatmessages',
-          let: { id: '$_id' },
+          from: "chatmessages",
+          let: { id: "$_id" },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$GroupsId', '$$id'] },
+                    { $eq: ["$GroupsId", "$$id"] },
                     {
                       $eq: [
-                        '$sender.userId',
+                        "$sender.userId",
                         new Types.ObjectId(req?.user?.userId),
                       ],
                     },
@@ -441,24 +441,24 @@ const getAllGroupssFromDB = async (
                 createTime: 1,
                 files: {
                   $cond: {
-                    if: { $eq: [{ $type: '$files' }, 'array'] }, // Check if `files` exists and is an array
-                    then: { $size: '$files' }, // If it exists, get the array size
+                    if: { $eq: [{ $type: "$files" }, "array"] }, // Check if `files` exists and is an array
+                    then: { $size: "$files" }, // If it exists, get the array size
                     else: 0, // If it doesn't exist, set to 0
                   },
                 },
               },
             },
           ],
-          as: 'lastMessageDetails',
+          as: "lastMessageDetails",
         },
       },
       {
         $addFields: {
           lastMessageDetails: {
             $cond: {
-              if: { $eq: [{ $size: '$lastMessageDetails' }, 0] },
+              if: { $eq: [{ $size: "$lastMessageDetails" }, 0] },
               then: {},
-              else: { $arrayElemAt: ['$lastMessageDetails', 0] },
+              else: { $arrayElemAt: ["$lastMessageDetails", 0] },
             },
           },
         },
@@ -506,7 +506,7 @@ const getAllGroupssFromDB = async (
         req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
         group?.author?.userId.toString() !== req?.user?.userId
       ) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'forbidden access data');
+        throw new ApiError(httpStatus.FORBIDDEN, "forbidden access data");
       }
     });
   }
@@ -529,14 +529,14 @@ const updateGroupsFromDB = async (
     _id: Schema.Types.ObjectId;
   } as IGroups;
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Groups not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Groups not found");
   }
   if (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     req?.user?.role !== ENUM_USER_ROLE.admin &&
     isExist?.author?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   const { ...GroupsData } = data;
@@ -544,7 +544,7 @@ const updateGroupsFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     req?.user?.role !== ENUM_USER_ROLE.admin
   ) {
-    delete (GroupsData as Partial<IGroups>)['isDelete']; // remove it because , any user
+    delete (GroupsData as Partial<IGroups>)["isDelete"]; // remove it because , any user
   }
 
   const updatedGroupsData: Partial<IGroups> = { ...GroupsData };
@@ -558,7 +558,7 @@ const updateGroupsFromDB = async (
     },
   );
   if (!updatedGroups) {
-    throw new ApiError(400, 'Failed to update Groups');
+    throw new ApiError(400, "Failed to update Groups");
   }
   return updatedGroups;
 };
@@ -597,7 +597,7 @@ const deleteGroupsFromDB = async (
   ])) as IGroups[];
 
   if (!isExist.length) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Groups not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Groups not found");
   }
 
   if (
@@ -605,13 +605,13 @@ const deleteGroupsFromDB = async (
     req?.user?.role !== ENUM_USER_ROLE.superAdmin &&
     isExist[0]?.author?.userId?.toString() !== req?.user?.userId
   ) {
-    throw new ApiError(403, 'forbidden access');
+    throw new ApiError(403, "forbidden access");
   }
 
   let data;
 
   if (
-    query.delete == 'yes' && // this is permanently delete but store trash collection
+    query.delete == "yes" && // this is permanently delete but store trash collection
     (req?.user?.role == ENUM_USER_ROLE.admin ||
       req?.user?.role == ENUM_USER_ROLE.superAdmin)
   ) {

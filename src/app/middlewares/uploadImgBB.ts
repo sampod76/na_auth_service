@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import config from '../../config';
-import { unlinkFile } from '../../utils/unlinkFile';
-import ApiError from '../errors/ApiError';
-import { IFileAfterUpload, IMulterUploadFile } from '../interface/fileUpload';
+import config from "../../config";
+import { unlinkFile } from "../../utils/unlinkFile";
+import ApiError from "../errors/ApiError";
+import { IFileAfterUpload, IMulterUploadFile } from "../interface/fileUpload";
 //@ts-ignore
-import imgbbUploader from 'imgbb-uploader';
+import imgbbUploader from "imgbb-uploader";
 type ImageData = {
   filename: string;
   name: string;
@@ -40,7 +40,7 @@ const uploadSingleFileImgbb = async (
           server_url: `images/${file.filename}`,
           url: response?.url,
           durl: response?.delete_url,
-          platform: 'imgbb',
+          platform: "imgbb",
           fieldname: file?.fieldname, //it is important because it  is use body
         };
         return resolve(modifyAndAddImage);
@@ -65,7 +65,7 @@ const uploadMultipleFileImgbb = async (
             server_url: `images/${file.filename}`,
             url: response?.url,
             durl: response?.delete_url,
-            platform: 'imgbb',
+            platform: "imgbb",
             fieldname: file?.fieldname, //not use
           };
           return resolve(modifyAndAddImage);
@@ -81,7 +81,7 @@ const uploadMultipleFileImgbb = async (
     files.forEach(file => {
       unlinkFile(file.path);
     });
-    throw new ApiError(400, 'Error uploading');
+    throw new ApiError(400, "Error uploading");
   }
 };
 

@@ -1,5 +1,5 @@
-import { Types } from 'mongoose';
-import { z } from 'zod';
+import { Types } from "mongoose";
+import { z } from "zod";
 
 // Define the schema for a non-subscription transaction
 export const NonSubscriptionTransaction = z.object({
@@ -13,7 +13,7 @@ export const NonSubscriptionTransaction = z.object({
 const Entitlements = z.object({
   all: z.object({}).optional(),
   active: z.object({}).optional(),
-  verification: z.enum(['VerificationResult.notRequested']),
+  verification: z.enum(["VerificationResult.notRequested"]),
 });
 
 // // Define the schema for purchase dates

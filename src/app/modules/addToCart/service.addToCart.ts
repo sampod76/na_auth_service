@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../helper/lookUpResuable';
-import ApiError from '../../errors/ApiError';
-import { ENUM_REDIS_KEY } from '../../redis/consent.redis';
-import { RedisAllSetterServiceOop } from '../../redis/service.redis';
-import { IUserRef } from '../allUser/typesAndConst';
-import { AddToCart_SEARCHABLE_FIELDS } from './constant.addToCart';
-import { IAddToCart, IAddToCartFilters } from './interface.addToCart';
-import { AddToCart } from './model.addToCart';
-import { AddToCartOop } from './utls.addToCart';
+} from "../../../helper/lookUpResuable";
+import ApiError from "../../errors/ApiError";
+import { ENUM_REDIS_KEY } from "../../redis/consent.redis";
+import { RedisAllSetterServiceOop } from "../../redis/service.redis";
+import { IUserRef } from "../allUser/typesAndConst";
+import { AddToCart_SEARCHABLE_FIELDS } from "./constant.addToCart";
+import { IAddToCart, IAddToCartFilters } from "./interface.addToCart";
+import { AddToCart } from "./model.addToCart";
+import { AddToCartOop } from "./utls.addToCart";
 
 const createAddToCartByDb = async (
   payload: IAddToCart,
@@ -30,7 +30,7 @@ const createAddToCartByDb = async (
 
   const [findAlreadyExists] = await Promise.all([
     AddToCart.findOne({
-      'author.userId': new Types.ObjectId(user.userId),
+      "author.userId": new Types.ObjectId(user.userId),
       productId: new Types.ObjectId(payload.productId),
       isDelete: false,
     }),
@@ -65,10 +65,10 @@ const getAllAddToCartFromDb = async (
   } = filters;
   //***********cache start************* */
   if (user.role !== ENUM_USER_ROLE.admin) {
-    filtersData['author.userId'] = user.userId.toString();
+    filtersData["author.userId"] = user.userId.toString();
   }
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -78,7 +78,7 @@ const getAllAddToCartFromDb = async (
       $or: AddToCart_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -97,9 +97,9 @@ const getAllAddToCartFromDb = async (
          } 
        */
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
@@ -148,7 +148,7 @@ const getAllAddToCartFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -167,24 +167,24 @@ const getAllAddToCartFromDb = async (
     { $limit: Number(limit) || 10 },
   ];
   const collections: ILookupCollection<any>[] = []; // Use the correct type here
-  if (needProperty?.includes('productId')) {
+  if (needProperty?.includes("productId")) {
     const pipelineConnection: ILookupCollection<any> = {
-      connectionName: 'products',
-      idFiledName: 'productId',
-      pipeLineMatchField: '_id',
-      outPutFieldName: 'productDetails',
+      connectionName: "products",
+      idFiledName: "productId",
+      pipeLineMatchField: "_id",
+      outPutFieldName: "productDetails",
     };
     collections.push(pipelineConnection);
   }
-  if (needProperty && needProperty.includes('author')) {
+  if (needProperty && needProperty.includes("author")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'author.role',
-          idFiledName: '$author.roleBaseUserId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'details',
-          margeInField: 'author',
+          roleMatchFiledName: "author.role",
+          idFiledName: "$author.roleBaseUserId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "details",
+          margeInField: "author",
           project: { name: 1, email: 1, profileImage: 1, userId: 1 },
         },
       ],
@@ -227,13 +227,13 @@ const getSingleAddToCartFromDb = async (
   const result = await AddToCart.aggregate(pipeline);
   const dataReturn = result.length ? result[0] : null;
   if (!dataReturn) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'AddToCart not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "AddToCart not found");
   }
   if (
     dataReturn.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   return dataReturn;
 };
@@ -248,13 +248,13 @@ const updateAddToCartFromDb = async (
   const cartOop = new AddToCartOop(id);
   const isExist = await cartOop.getAndSetCase();
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'AddToCart not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "AddToCart not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   const result = await AddToCart.findOneAndUpdate({ _id: id }, payload, {
     new: true,
@@ -274,13 +274,13 @@ const deleteAddToCartByIdFromDb = async (
   const isExist = await cartOop.getAndSetCase();
 
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'AddToCart not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "AddToCart not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
 
   const result = await AddToCart.findOneAndUpdate(
@@ -289,7 +289,7 @@ const deleteAddToCartByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   const setter = new RedisAllSetterServiceOop();
   await setter.deleteAnyPattern(

@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PipelineStage, Schema, Types } from 'mongoose';
-import { paginationHelper } from '../../../helper/paginationHelper';
+import { PipelineStage, Schema, Types } from "mongoose";
+import { paginationHelper } from "../../../helper/paginationHelper";
 
-import { IGenericResponse } from '../../interface/common';
-import { IPaginationOption } from '../../interface/pagination';
+import { IGenericResponse } from "../../interface/common";
+import { IPaginationOption } from "../../interface/pagination";
 
-import { Request } from 'express';
-import httpStatus from 'http-status';
-import { ENUM_USER_ROLE } from '../../../global/enums/users';
+import { Request } from "express";
+import httpStatus from "http-status";
+import { ENUM_USER_ROLE } from "../../../global/enums/users";
 import {
   ILookupCollection,
   LookupAnyRoleDetailsReusable,
   LookupReusable,
-} from '../../../helper/lookUpResuable';
-import ApiError from '../../errors/ApiError';
-import { IUserRef, IUserRefAndDetails } from '../allUser/typesAndConst';
-import { TipsAndGuideline_SEARCHABLE_FIELDS } from './constant.TipsAndGuideline';
+} from "../../../helper/lookUpResuable";
+import ApiError from "../../errors/ApiError";
+import { IUserRef, IUserRefAndDetails } from "../allUser/typesAndConst";
+import { TipsAndGuideline_SEARCHABLE_FIELDS } from "./constant.TipsAndGuideline";
 import {
   ITipsAndGuideline,
   ITipsAndGuidelineFilters,
-} from './interface.TipsAndGuideline';
-import { TipsAndGuideline } from './model.TipsAndGuideline';
+} from "./interface.TipsAndGuideline";
+import { TipsAndGuideline } from "./model.TipsAndGuideline";
 
 const createTipsAndGuidelineByDb = async (
   payload: ITipsAndGuideline,
@@ -61,7 +61,7 @@ const getAllTipsAndGuidelineFromDb = async (
   //   filtersData['author.userId'] = user.userId.toString();
   // }
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -71,7 +71,7 @@ const getAllTipsAndGuidelineFromDb = async (
       $or: TipsAndGuideline_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -116,9 +116,9 @@ const getAllTipsAndGuidelineFromDb = async (
          } 
        */
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
@@ -167,7 +167,7 @@ const getAllTipsAndGuidelineFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -186,24 +186,24 @@ const getAllTipsAndGuidelineFromDb = async (
     { $limit: Number(limit) || 10 },
   ];
   const collections: ILookupCollection<any>[] = []; // Use the correct type here
-  if (needProperty?.includes('productId')) {
+  if (needProperty?.includes("productId")) {
     const pipelineConnection: ILookupCollection<any> = {
-      connectionName: 'products',
-      idFiledName: 'productId',
-      pipeLineMatchField: '_id',
-      outPutFieldName: 'productDetails',
+      connectionName: "products",
+      idFiledName: "productId",
+      pipeLineMatchField: "_id",
+      outPutFieldName: "productDetails",
     };
     collections.push(pipelineConnection);
   }
-  if (needProperty && needProperty.includes('author')) {
+  if (needProperty && needProperty.includes("author")) {
     LookupAnyRoleDetailsReusable(pipeline, {
       collections: [
         {
-          roleMatchFiledName: 'author.role',
-          idFiledName: '$author.roleBaseUserId',
-          pipeLineMatchField: '$_id',
-          outPutFieldName: 'details',
-          margeInField: 'author',
+          roleMatchFiledName: "author.role",
+          idFiledName: "$author.roleBaseUserId",
+          pipeLineMatchField: "$_id",
+          outPutFieldName: "details",
+          margeInField: "author",
           project: { name: 1, email: 1, profileImage: 1, userId: 1 },
         },
       ],
@@ -252,7 +252,7 @@ const getAllMyTipsAndGuidelineFromDb = async (
   //   filtersData['author.userId'] = user.userId.toString();
   // }
   filtersData.isDelete = filtersData.isDelete
-    ? filtersData.isDelete == 'true'
+    ? filtersData.isDelete == "true"
       ? true
       : false
     : false;
@@ -262,7 +262,7 @@ const getAllMyTipsAndGuidelineFromDb = async (
       $or: TipsAndGuideline_SEARCHABLE_FIELDS.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $options: "i",
         },
       })),
     });
@@ -281,9 +281,9 @@ const getAllMyTipsAndGuidelineFromDb = async (
          } 
        */
         if (
-          field === 'author.userId' ||
-          field === 'author.roleBaseUserId' ||
-          field === 'productId'
+          field === "author.userId" ||
+          field === "author.roleBaseUserId" ||
+          field === "productId"
         ) {
           modifyFiled = {
             [field]: new Types.ObjectId(value),
@@ -332,7 +332,7 @@ const getAllMyTipsAndGuidelineFromDb = async (
 
   const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -381,7 +381,7 @@ const getSingleTipsAndGuidelineFromDb = async (
   const result = await TipsAndGuideline.aggregate(pipeline);
   const dataReturn = result.length ? result[0] : null;
   if (!dataReturn) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'TipsAndGuideline not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "TipsAndGuideline not found");
   }
 
   return dataReturn;
@@ -399,13 +399,13 @@ const updateTipsAndGuidelineFromDb = async (
   };
 
   if (!isExist || isExist.isDelete) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'TipsAndGuideline not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "TipsAndGuideline not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
   const result = await TipsAndGuideline.findOneAndUpdate({ _id: id }, payload, {
     new: true,
@@ -425,13 +425,13 @@ const deleteTipsAndGuidelineByIdFromDb = async (
     _id: Schema.Types.ObjectId;
   };
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'TipsAndGuideline not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "TipsAndGuideline not found");
   }
   if (
     isExist.author.userId.toString() !== user.userId.toString() &&
     user.role !== ENUM_USER_ROLE.admin
   ) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Not authorized to delete');
+    throw new ApiError(httpStatus.FORBIDDEN, "Not authorized to delete");
   }
 
   const result = await TipsAndGuideline.findOneAndUpdate(
@@ -440,7 +440,7 @@ const deleteTipsAndGuidelineByIdFromDb = async (
     { new: true, runValidators: true },
   );
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete');
+    throw new ApiError(httpStatus.NOT_FOUND, "Failed to delete");
   }
   return result;
 };

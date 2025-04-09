@@ -1,23 +1,23 @@
-import { Types } from 'mongoose';
-import { z } from 'zod';
-import { I_STATUS, STATUS_ARRAY } from '../../../../global/enum_constant_type';
-import { zodFileAfterUploadSchema } from '../../../../global/schema/global.schema';
+import { Types } from "mongoose";
+import { z } from "zod";
+import { I_STATUS, STATUS_ARRAY } from "../../../../global/enum_constant_type";
+import { zodFileAfterUploadSchema } from "../../../../global/schema/global.schema";
 
 const createProductBodyData = z.object({
   name: z.string({
-    required_error: 'Title is required',
+    required_error: "Title is required",
   }),
   subTitle: z.string().optional(),
   images: z.array(zodFileAfterUploadSchema).optional(),
   productCategoryId: z.union([
-    z.string({ required_error: 'Product Category is required' }),
+    z.string({ required_error: "Product Category is required" }),
     z.instanceof(Types.ObjectId), // Assuming IProductCategory is an array of strings
   ]),
   productCategoryName: z.string().optional(),
   pricing: z.object({
-    price: z.number({ required_error: 'Price is required' }),
+    price: z.number({ required_error: "Price is required" }),
     discount: z.number().optional(),
-    currency: z.string().default('usd'), // Assuming ICurrency is a string type
+    currency: z.string().default("usd"), // Assuming ICurrency is a string type
     vat: z.number().optional(),
   }),
   description: z.string().optional(),

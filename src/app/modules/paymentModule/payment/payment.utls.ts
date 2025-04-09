@@ -1,12 +1,12 @@
-import Stripe from 'stripe';
-import config from '../../../../config';
-import { ENUM_YN } from '../../../../global/enum_constant_type';
-import { INotification } from '../../notification/notification.interface';
-import { NotificationService } from '../../notification/notification.service';
-import { PaymentHistory } from '../paymentHistory/model.paymentHistory';
+import Stripe from "stripe";
+import config from "../../../../config";
+import { ENUM_YN } from "../../../../global/enum_constant_type";
+import { INotification } from "../../notification/notification.interface";
+import { NotificationService } from "../../notification/notification.service";
+import { PaymentHistory } from "../paymentHistory/model.paymentHistory";
 
 export const stripe = new Stripe(config.stripe.secret_key as string, {
-  apiVersion: '2023-10-16',
+  apiVersion: "2023-10-16",
   typescript: true,
 });
 
@@ -125,14 +125,14 @@ export const refundFunc = async ({
     );
   }
 
-  if (refund?.status === 'succeeded') {
+  if (refund?.status === "succeeded") {
     if (usersAndMessage && usersAndMessage[0].user) {
       const data: INotification = {
         userIds: [usersAndMessage[0].user],
-        subject: 'Refund',
+        subject: "Refund",
         bodyText:
           usersAndMessage[0].message ||
-          `${'Refund your transaction'}) : ${refund.id} .${'Amount'}: ${refund.amount}`,
+          `${"Refund your transaction"}) : ${refund.id} .${"Amount"}: ${refund.amount}`,
       };
       await NotificationService.createNotificationToDB(data);
     }
