@@ -1,0 +1,21 @@
+
+node_modules
+/node_modules
+
+.env
+# .env.zip
+
+# .vercel
+
+logger
+
+dist
+/dist
+
+Archive.zip
+/Archive.zip
+# .vscode
+
+/uploadFile
+uploadFile
+.vercel
