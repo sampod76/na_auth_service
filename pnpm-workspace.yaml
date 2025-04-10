@@ -1,8 +1,0 @@
-ignoredBuiltDependencies:
-  - '@prisma/engines'
-  - bcrypt
-  - core-js
-  - esbuild
-  - msgpackr-extract
-  - prisma
-  - protobufjs
