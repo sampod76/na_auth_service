@@ -67,9 +67,9 @@ export class OoptestmodualServiceClass {
       ...filtersData
     } = filters;
     //***********cache start************* */
-    if (user.role !== ENUM_USER_ROLE.admin) {
-      filtersData["author.userId"] = user.userId.toString();
-    }
+    // if (user.role !== ENUM_USER_ROLE.admin) {
+    //   filtersData["author.userId"] = user?.userId?.toString();
+    // }
     filtersData.isDelete = filtersData.isDelete
       ? filtersData.isDelete == "true"
         ? true

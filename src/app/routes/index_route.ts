@@ -18,6 +18,7 @@ import { GeneralUserRoutes } from "../modules/allUser/generalUser/route.generalU
 import { FavoriteProductRoute } from "../modules/favoriteProduct/route.favoriteProduct";
 import { FriendShipsRoute } from "../modules/messageingModules/friendship/friendship.route";
 import { ChatMessageRoute } from "../modules/messageingModules/message/messages.route";
+import { OoptestmodualRouteClass } from "../modules/ooptestmodual/route.Ooptestmodual";
 import { OrdersRoute } from "../modules/paymentModule/order/route.order";
 import { PaymentRoute } from "../modules/paymentModule/payment/payment.router";
 import { PaymentHistoryRoute } from "../modules/paymentModule/paymentHistory/route.paymentHistory";
@@ -127,6 +128,10 @@ const moduleRoutes = [
   {
     path: "/aws",
     route: AWSRoute,
+  },
+  {
+    path: "/test-oop",
+    route: new OoptestmodualRouteClass().router,
   },
 ];
 

@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import { z } from "zod";
 import { I_STATUS, I_YN } from "../../../global/enum_constant_type";
 import { IUserRef } from "../allUser/typesAndConst";
-import { OoptestmodualValidation } from "./validation.Ooptestmodual";
+import { OoptestmodualValidationClass } from "./validation.Ooptestmodual";
 
 export type IOoptestmodualFilters = {
   searchTerm?: string;
@@ -21,6 +21,7 @@ export type IOoptestmodualFilters = {
   needProperty?: string;
   //
 };
+const OoptestmodualValidation = new OoptestmodualValidationClass();
 
 export type IOoptestmodual = z.infer<
   typeof OoptestmodualValidation.createOoptestmodual_BodyData
