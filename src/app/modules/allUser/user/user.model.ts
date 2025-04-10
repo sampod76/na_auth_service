@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-this-alias */
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { model, PipelineStage, Schema, Types } from "mongoose";
 import config from "../../../../config";
 

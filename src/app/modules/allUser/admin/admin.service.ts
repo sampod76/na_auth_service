@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { Request } from "express";
 import httpStatus from "http-status";
 import mongoose, { PipelineStage, Schema, Types } from "mongoose";

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { Request } from "express";
 import { JwtPayload, Secret } from "jsonwebtoken";
 import { Types } from "mongoose";
