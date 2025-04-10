@@ -1,5 +1,5 @@
 {
-  "name": "fergin_hair_care",
+  "name": "nariaauthservice",
   "version": "1.0.0",
   "main": "server.ts",
   "engines": {
@@ -118,6 +118,7 @@
     "lint-staged": "^13.2.2",
     "pinst": "^3.0.0",
     "prettier": "3.3.0",
+    "prisma": "^6.6.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   }
