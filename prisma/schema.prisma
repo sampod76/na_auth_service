@@ -13,12 +13,41 @@ datasource db {
   url      = env("DATABASE_URL_POSTGRESSQL")
 }
 
+model Role {
+  id          String   @id @default(cuid())
+  // unique_id   Int      @unique @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  permissions String?  @db.VarChar(255)
+  is_active   Int      @default(1)
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+
+  @@map("roles")
+}
+
+enum UserRole {
+  admin
+  b2c
+  b2b
+  guest
+}
+
 model User {
-  id        String   @default(cuid())
-  name      String
-  email     String   @unique
+  id        String    @id @default(cuid()) // <-- Add @id here
+  role_id   String?
+  user_type UserRole? @default(guest)
+  full_name String
+  username  String    @unique @db.VarChar(255)
+  email     String    @unique @db.VarChar(255)
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // role      Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Role      Role?     @relation(fields: [role_id], references: [id])
+
+  // Composite unique key for role_id + email
+  @@unique([role_id, email], name: "user_role_email_unique")
+  @@map("users")
 }

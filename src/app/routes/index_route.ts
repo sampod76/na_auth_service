@@ -25,9 +25,6 @@ import { PaymentHistoryRoute } from "../modules/paymentModule/paymentHistory/rou
 import { ProductCategoryRoute } from "../modules/productCategory/route.productCategory";
 import { ProductRoute } from "../modules/productModule/products/route.products";
 import { UserSaveProductRoute } from "../modules/productModule/userSaveProduct/route.userSaveProduct";
-import { RoutingReminderRoute } from "../modules/routingReminder/route.RoutingReminder";
-import { ServiceLoggerRoute } from "../modules/serviceLogger/route.serviceLogger";
-import { TipsAndGuidelineRoute } from "../modules/tipsAndGuideline/route.TipsAndGuideline";
 
 const router = express.Router();
 
@@ -79,19 +76,7 @@ const moduleRoutes = [
     path: "/favorite-products",
     route: FavoriteProductRoute,
   },
-  {
-    path: "/service-logger",
-    route: ServiceLoggerRoute,
-  },
-  {
-    path: "/routing-reminder",
-    route: RoutingReminderRoute,
-  },
 
-  {
-    path: "/tips-guideline",
-    route: TipsAndGuidelineRoute,
-  },
   {
     path: "/friend-ship",
     route: FriendShipsRoute,

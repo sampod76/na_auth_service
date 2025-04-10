@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { Application, NextFunction, Request, Response } from "express";
+import express, {
+  Application,
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from "express";
 
 // create xss-clean.d.ts file after work this xss
 // import xss from 'xss-clean';
@@ -14,18 +20,29 @@ import Backend from "i18next-fs-backend";
 import i18nextMiddleware from "i18next-http-middleware";
 //----------------------------------------
 
-import compression, { CompressionOptions } from "compression";
 //
 import promClient from "prom-client";
 import responseTime from "response-time";
 //
+import swaggerUi from "swagger-ui-express";
 import file_route from "./app/routes/file_route";
 import config from "./config";
 import helmetConfig from "./config/helmetConfig";
 import { TestFile } from "./test";
 import { rateLimiterRedisMiddleware } from "./utils/DbUtlis/RateLimiterInRedis";
+import {
+  swaggerApiSpecification,
+  swaggerUiOptions,
+} from "./utils/swagger/swagger.spec";
 const app: Application = express();
-
+app.use(
+  "/api-docs",
+  swaggerUi.serve as unknown as RequestHandler,
+  swaggerUi.setup(
+    swaggerApiSpecification,
+    swaggerUiOptions,
+  ) as unknown as RequestHandler,
+);
 app.use(helmetConfig);
 
 // app.use(
@@ -77,16 +94,6 @@ app.use(
       .observe(time);
   }),
 );
-const compressionOptions: CompressionOptions = {
-  threshold: 1024, // Only compress responses larger than 1KB
-  filter: (req: Request, res: Response) => {
-    if (req.headers["x-no-compression"]) {
-      // Don't compress responses if this request header is present
-      return false;
-    }
-    return compression.filter(req, res);
-  },
-};
 
 // app.use(xss());
 app.use(express.json());
@@ -138,7 +145,9 @@ const waitAndRespond = async function (waitTimeInMilliseconds = 30000) {
     }, waitTimeInMilliseconds);
   });
 };
-
+app.get("/api-docs-json", (req, res) => {
+  res.json(swaggerApiSpecification);
+});
 app.get("/api/v1/server-test", async (req, res, next) => {
   try {
     const query = req.query;
