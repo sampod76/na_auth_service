@@ -54,16 +54,17 @@ const userSchema = new Schema<IUser, UserModel>(
       enum: USER_ROLE_ARRAY,
       default: ENUM_USER_ROLE.generalUser,
     },
-    accountType: {
-      type: String,
-      enum: I_AccountTypeArray,
-      default: ENUM_ACCOUNT_TYPE.custom,
-    },
     password: {
       type: String,
       required: true,
       select: 0,
     },
+    accountType: {
+      type: String,
+      enum: I_AccountTypeArray,
+      default: ENUM_ACCOUNT_TYPE.custom,
+    },
+
     //
     //
     authentication: {

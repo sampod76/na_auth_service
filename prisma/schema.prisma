@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
@@ -13,17 +14,55 @@ datasource db {
   url      = env("DATABASE_URL_POSTGRESSQL")
 }
 
-model Role {
+model Module {
   id          String   @id @default(cuid())
   // unique_id   Int      @unique @default(autoincrement())
   name        String   @db.VarChar(255)
-  description String?  @db.VarChar(255)
-  permissions String?  @db.VarChar(255)
-  is_active   Int      @default(1)
+  //
+  description String?  @db.VarChar(1000)
+  is_active   Boolean  @default(true)
   isDeleted   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  users       User[]
+
+  @@map("modules")
+}
+
+model RolePermission {
+  id                String  @id @default(cuid())
+  // unique_id   Int      @unique @default(autoincrement())
+  name              String  @db.VarChar(255)
+  role_id           String
+  read_permission   Boolean @default(false)
+  write_permission  Boolean @default(false)
+  update_permission Boolean @default(false)
+  delete_permission Boolean @default(false)
+
+  // additional fields
+  description String?  @db.VarChar(1000)
+  is_active   Boolean  @default(true)
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  //
+  role        Role     @relation(fields: [role_id], references: [id])
+
+  @@map("roles_permissions")
+}
+
+model Role {
+  id              String           @id @default(cuid())
+  // unique_id   Int      @unique @default(autoincrement())
+  name            String           @db.VarChar(255)
+  // additional fields
+  description     String?          @db.VarChar(1000)
+  is_active       Boolean          @default(true)
+  isDeleted       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  // relations
+  users           User[]
+  rolePermissions RolePermission[]
 
   @@map("roles")
 }
@@ -35,19 +74,38 @@ enum UserRole {
   guest
 }
 
+enum UserGender {
+  male
+  female
+  other
+}
+
 model User {
-  id        String    @id @default(cuid()) // <-- Add @id here
-  role_id   String?
-  user_type UserRole? @default(guest)
-  full_name String
-  username  String    @unique @db.VarChar(255)
-  email     String    @unique @db.VarChar(255)
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Role      Role?     @relation(fields: [role_id], references: [id])
+  id          String     @id @default(cuid()) // <-- Add @id here
+  role_id     String?
+  user_type   UserRole?  @default(guest)
+  full_name   String
+  username    String     @unique @db.VarChar(255)
+  email       String     @db.VarChar(255)
+  password    String
+  gender      UserGender @default(male)
+  phone       String?    @db.VarChar(255)
+  address     String?    @db.VarChar(255)
+  image_id    String?
+  image       Image?     @relation(fields: [image_id], references: [id])
+  //
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  isDeleted   Boolean    @default(false)
+  is_active   Boolean    @default(true)
+  is_verified Boolean    @default(false)
+  is_block    Boolean    @default(false)
+  // relations
+  role        Role?      @relation(fields: [role_id], references: [id])
 
   // Composite unique key for role_id + email
   @@unique([role_id, email], name: "user_role_email_unique")
   @@map("users")
 }
+
+// Import all model definitions

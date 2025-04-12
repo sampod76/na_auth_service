@@ -1,0 +1,22 @@
+enum ImagePlatform {
+    imgbb
+    cloudinary
+    server
+    aws
+    // Optionally add fallback for custom strings
+    // custom
+}
+
+model Image {
+    id          String        @id @default(cuid())
+    url         String
+    originalUrl String?
+    mimetype    String
+    filename    String
+    path        String
+    cdn         String?
+    platform    ImagePlatform
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    User        User[]
+}

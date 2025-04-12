@@ -9,6 +9,7 @@ export const createProducer = async () => {
   if (producer) return producer;
   // const _producer = kafkaClient.producer();
   const _producer = kafkaClient.producer({
+    allowAutoTopicCreation: true,
     createPartitioner: Partitioners.DefaultPartitioner,
     retry: {
       retries: 5,
